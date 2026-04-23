@@ -23,15 +23,43 @@ namespace UI
             // 1. Validate
             if (string.IsNullOrWhiteSpace(txtSoDen.Text))
             {
-                MessageBox.Show("Vui lòng nhập Số đến");
+                MessageBox.Show("Vui lòng nhập Số đến", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtSoDen.Focus();
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtSoVanBan.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Số văn bản", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtSoVanBan.Focus();
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtNguoiKy.Text))
+            {
+                MessageBox.Show("Vui lòng nhập Người ký", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtNguoiKy.Focus();
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(cbNoiGui.Text))
+            {
+                MessageBox.Show("Vui lòng nhập hoặc chọn Nơi gửi", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cbNoiGui.Focus();
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(txtTrichYeu.Text))
             {
-                MessageBox.Show("Vui lòng nhập Trích yếu");
+                MessageBox.Show("Vui lòng nhập Trích yếu", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtTrichYeu.Focus();
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtFile.Text))
+            {
+                MessageBox.Show("Vui lòng chọn File đính kèm", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                btnChonFile.Focus();
                 return;
             }
 

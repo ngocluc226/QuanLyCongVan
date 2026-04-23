@@ -110,6 +110,12 @@
     <EmbeddedResource Include="formCongVanDenList.resx">
       <DependentUpon>formCongVanDenList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="formCongVanDiCreate.resx">
+      <DependentUpon>formCongVanDiCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formCongVanDiList.resx">
+      <DependentUpon>formCongVanDiList.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="formFileViewer.resx">
       <DependentUpon>formFileViewer.cs</DependentUpon>
     </EmbeddedResource>

@@ -48,17 +48,13 @@ namespace UI
             else if (ext == ".doc" || ext == ".docx")
             {
                 // Word mở ngoài
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
-                {
-                    FileName = _filePath,
-                    UseShellExecute = true
-                });
-
+                System.Diagnostics.Process.Start(_filePath);
                 this.Close();
             }
             else
             {
-                MessageBox.Show("Không hỗ trợ xem loại file này!");
+                System.Diagnostics.Process.Start(_filePath);
+                this.Close();
             }
         }
     }
