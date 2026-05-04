@@ -35,6 +35,14 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Common, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.Common.4.3.0\lib\net451\System.Data.Common.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -70,11 +78,29 @@
     <Compile Include="formCongVanDiList.Designer.cs">
       <DependentUpon>formCongVanDiList.cs</DependentUpon>
     </Compile>
+    <Compile Include="formFileViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formFileViewer.Designer.cs">
+      <DependentUpon>formFileViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="formLogin.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="formLogin.Designer.cs">
       <DependentUpon>formLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="formMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formMenu.Designer.cs">
+      <DependentUpon>formMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="formQuanLyUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formQuanLyUser.Designer.cs">
+      <DependentUpon>formQuanLyUser.cs</DependentUpon>
     </Compile>
     <Compile Include="formSendMail.cs">
       <SubType>Form</SubType>
@@ -84,6 +110,30 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="formCongVanDenCreate.resx">
+      <DependentUpon>formCongVanDenCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formCongVanDenList.resx">
+      <DependentUpon>formCongVanDenList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formCongVanDiCreate.resx">
+      <DependentUpon>formCongVanDiCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formCongVanDiList.resx">
+      <DependentUpon>formCongVanDiList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formFileViewer.resx">
+      <DependentUpon>formFileViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formLogin.resx">
+      <DependentUpon>formLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formMenu.resx">
+      <DependentUpon>formMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formQuanLyUser.resx">
+      <DependentUpon>formQuanLyUser.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -93,6 +143,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -105,6 +156,23 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="image\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BLL\BLL.csproj">
+      <Project>{29993f9f-ac5c-4863-a466-a991d5824a4f}</Project>
+      <Name>BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DAL\DAL.csproj">
+      <Project>{598d999f-c8db-470f-aab5-31a9deeac9cf}</Project>
+      <Name>DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DTO\DTO.csproj">
+      <Project>{c577f8aa-e5c7-47d6-a470-0ee9f934d05a}</Project>
+      <Name>DTO</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
