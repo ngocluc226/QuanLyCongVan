@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BLL;
+using DTO;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -75,8 +77,7 @@ namespace UI
                 TrichYeu = txtTrichYeu.Text.Trim(),
                 DoKhan = cbDoKhan.Text,
                 DoMat = cbDoMat.Text,
-                FileDinhKem = txtFile.Text,
-                TrangThai = "Chưa xử lý"
+                FileDinhKem = txtFile.Text
             };
 
             // 3. Gọi BLL
@@ -85,6 +86,7 @@ namespace UI
             // 4. Kết quả
             if (result)
             {
+                LogBLL.Instance.WriteLog("Thêm công văn", Session.UserName);
                 MessageBox.Show("Thêm công văn thành công!");
 
                 ClearForm();   // reset form để nhập tiếp

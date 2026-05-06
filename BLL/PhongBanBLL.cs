@@ -22,5 +22,19 @@ namespace BLL
         {
             return PhongBanDAL.Instance.GetAll();
         }
+        public bool Insert(string ma, string ten)
+        {
+            return PhongBanDAL.Instance.Insert(ma, ten) > 0;
+        }
+
+        public bool Update(string ma, string ten)
+        {
+            return PhongBanDAL.Instance.Update(ma, ten) > 0;
+        }
+
+        public bool Delete(string ma)
+        {
+            return PhongBanDAL.Instance.Delete(ma) > 0;
+        }
     }
 }

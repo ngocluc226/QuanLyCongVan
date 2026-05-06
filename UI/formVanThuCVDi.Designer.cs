@@ -1,6 +1,6 @@
 ﻿namespace UI
 {
-    partial class formSendMail
+    partial class formVanThuCVDi
     {
         /// <summary>
         /// Required designer variable.
@@ -30,13 +30,14 @@
         {
             this.SuspendLayout();
             // 
-            // formSendMail
+            // formVanThuCVDi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(788, 497);
-            this.Name = "formSendMail";
-            this.Text = "formSendMail";
+            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Name = "formVanThuCVDi";
+            this.Text = "formVanThuCVDi";
             this.ResumeLayout(false);
 
         }

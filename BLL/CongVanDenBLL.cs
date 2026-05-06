@@ -1,5 +1,8 @@
-﻿using System;
+﻿using DAL;
+using DTO;
+using System;
 using System.Data;
+using System.Data.SqlClient;
 
 namespace BLL
 {
@@ -26,11 +29,42 @@ namespace BLL
             if (string.IsNullOrEmpty(cv.SoDen))
                 return false;
 
+            // Set trạng thái chuẩn
+            cv.TrangThai = TrangThaiCongVanDen.DA_NHAP;
+
+            LogBLL.Instance.WriteLog("Thêm công văn: " + cv.SoDen, Session.UserName);
+
             return DAL.CongVanDenDAL.Instance.Insert(cv) > 0;
+        }
+        public bool TrinhLanhDao(int id)
+        {
+            LogBLL.Instance.WriteLog("Trình lãnh đạo", Session.UserName);
+            return DAL.CongVanDenDAL.Instance.UpdateTrangThai(id, TrangThaiCongVanDen.DA_TRINH) > 0;
+        }
+        public bool PhanCong(int congVanId, string maNguoiDung, string maPhongBan, string yKien)
+        {
+            var result = PhanCongDAL.Instance.Insert(congVanId, maNguoiDung, maPhongBan, yKien);
+
+            if (result > 0)
+            {
+                DAL.CongVanDenDAL.Instance.UpdateTrangThai(congVanId, TrangThaiCongVanDen.DA_PHAN_CONG);
+                return true;
+            }
+
+            return false;
+        }
+        public bool CapNhatXuLy(int congVanId, string trangThai)
+        {
+            return DAL.CongVanDenDAL.Instance.UpdateTrangThai(congVanId, trangThai) > 0;
+        }
+        public bool HoanThanh(int congVanId)
+        {
+            return DAL.CongVanDenDAL.Instance.UpdateTrangThai(congVanId, TrangThaiCongVanDen.HOAN_THANH) > 0;
         }
 
         public bool Delete(int id)
         {
+            LogBLL.Instance.WriteLog("Xóa công văn ID: " + id, Session.UserName);
             return DAL.CongVanDenDAL.Instance.Delete(id) > 0;
         }
         public string GenerateSoDen()
@@ -41,6 +75,10 @@ namespace BLL
         public DataTable GetByDateRange(DateTime fromDate, DateTime toDate)
         {
             return DAL.CongVanDenDAL.Instance.GetByDateRange(fromDate, toDate);
+        }
+        public DataTable GetByTrangThai(string trangThai)
+        {
+            return DAL.CongVanDenDAL.Instance.GetByTrangThai(trangThai);
         }
     }
 }

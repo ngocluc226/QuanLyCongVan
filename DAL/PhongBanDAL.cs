@@ -1,4 +1,5 @@
 using System.Data;
+using System.Data.SqlClient;
 
 namespace DAL
 {
@@ -22,6 +23,28 @@ namespace DAL
             return DBHelper.Instance.ExecuteQuery(
                 "SELECT MaPhongBan, TenPhongBan FROM PhongBan"
             );
+        }
+        public int Insert(string ma, string ten)
+        {
+            string sql = "INSERT INTO PhongBan (MaPhongBan, TenPhongBan) VALUES (@ma, @ten)";
+            return DBHelper.Instance.ExecuteNonQuery(sql,
+                new SqlParameter("@ma", ma),
+                new SqlParameter("@ten", ten));
+        }
+
+        public int Update(string ma, string ten)
+        {
+            string sql = "UPDATE PhongBan SET TenPhongBan = @ten WHERE MaPhongBan = @ma";
+            return DBHelper.Instance.ExecuteNonQuery(sql,
+                new SqlParameter("@ma", ma),
+                new SqlParameter("@ten", ten));
+        }
+
+        public int Delete(string ma)
+        {
+            string sql = "DELETE FROM PhongBan WHERE MaPhongBan = @ma";
+            return DBHelper.Instance.ExecuteNonQuery(sql,
+                new SqlParameter("@ma", ma));
         }
     }
 }

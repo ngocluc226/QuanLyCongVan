@@ -214,10 +214,10 @@
             // 
             this.cbQuyen.FormattingEnabled = true;
             this.cbQuyen.Items.AddRange(new object[] {
-            "nhanVienVanThu",
-            "nhanVienXuLy",
-            "lanhDao",
-            "admin"});
+            "VanThu",
+            "NhanVienXuLy",
+            "LanhDao",
+            "Admin"});
             this.cbQuyen.Location = new System.Drawing.Point(608, 91);
             this.cbQuyen.Margin = new System.Windows.Forms.Padding(2);
             this.cbQuyen.Name = "cbQuyen";

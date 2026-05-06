@@ -104,5 +104,31 @@ namespace DAL
             return DBHelper.Instance.ExecuteQuery(sql,
                 new SqlParameter("@value", "%" + value + "%"));
         }
+        public User Login(string username, string password)
+        {
+            string sql = @"SELECT * FROM NguoiDung 
+                   WHERE TenDangNhap = @user AND MatKhau = @pass";
+
+            DataTable dt = DBHelper.Instance.ExecuteQuery(sql,
+                new SqlParameter("@user", username),
+                new SqlParameter("@pass", password));
+
+            if (dt.Rows.Count == 0)
+                return null;
+
+            DataRow r = dt.Rows[0];
+
+            return new DTO.User()
+            {
+                MaNguoiDung = r["MaNguoiDung"].ToString(),
+                TenNguoiDung = r["TenNguoiDung"].ToString(),
+                TenDangNhap = r["TenDangNhap"].ToString(),
+                MatKhau = r["MatKhau"].ToString(),
+                Quyen = r["Quyen"].ToString(),
+                MaPhongBan = r["MaPhongBan"]?.ToString(),
+                SDT = r["SDT"]?.ToString(),
+                Email = r["Email"]?.ToString()
+            };
+        }
     }
 }

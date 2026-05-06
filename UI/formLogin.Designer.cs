@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.label5 = new System.Windows.Forms.Label();
-            this.txbPass = new System.Windows.Forms.TextBox();
+            this.txtPass = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.btnThoat = new System.Windows.Forms.Button();
-            this.txbUser = new System.Windows.Forms.TextBox();
+            this.txtUser = new System.Windows.Forms.TextBox();
             this.btnLogin = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -50,15 +50,16 @@
             this.label5.TabIndex = 22;
             this.label5.Text = "HỆ THỐNG QUẢN LÝ CÔNG VĂN";
             // 
-            // txbPass
+            // txtPass
             // 
-            this.txbPass.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-            this.txbPass.Location = new System.Drawing.Point(292, 336);
-            this.txbPass.Name = "txbPass";
-            this.txbPass.PasswordChar = '*';
-            this.txbPass.Size = new System.Drawing.Size(188, 26);
-            this.txbPass.TabIndex = 17;
-            this.txbPass.UseSystemPasswordChar = true;
+            this.txtPass.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+            this.txtPass.Location = new System.Drawing.Point(292, 336);
+            this.txtPass.Name = "txtPass";
+            this.txtPass.PasswordChar = '*';
+            this.txtPass.Size = new System.Drawing.Size(188, 26);
+            this.txtPass.TabIndex = 17;
+            this.txtPass.UseSystemPasswordChar = true;
+            this.txtPass.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtPass_KeyDown);
             // 
             // label3
             // 
@@ -84,15 +85,16 @@
             this.btnThoat.TabIndex = 21;
             this.btnThoat.Text = "Thoát";
             this.btnThoat.UseVisualStyleBackColor = false;
+            this.btnThoat.Click += new System.EventHandler(this.btnThoat_Click);
             // 
-            // txbUser
+            // txtUser
             // 
-            this.txbUser.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-            this.txbUser.ForeColor = System.Drawing.Color.Red;
-            this.txbUser.Location = new System.Drawing.Point(292, 273);
-            this.txbUser.Name = "txbUser";
-            this.txbUser.Size = new System.Drawing.Size(188, 26);
-            this.txbUser.TabIndex = 16;
+            this.txtUser.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+            this.txtUser.ForeColor = System.Drawing.Color.Red;
+            this.txtUser.Location = new System.Drawing.Point(292, 273);
+            this.txtUser.Name = "txtUser";
+            this.txtUser.Size = new System.Drawing.Size(188, 26);
+            this.txtUser.TabIndex = 16;
             // 
             // btnLogin
             // 
@@ -107,6 +109,7 @@
             this.btnLogin.TabIndex = 20;
             this.btnLogin.Text = "Đăng nhập";
             this.btnLogin.UseVisualStyleBackColor = false;
+            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
             // label2
             // 
@@ -149,15 +152,16 @@
             this.ClientSize = new System.Drawing.Size(654, 582);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.txbPass);
+            this.Controls.Add(this.txtPass);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btnThoat);
-            this.Controls.Add(this.txbUser);
+            this.Controls.Add(this.txtUser);
             this.Controls.Add(this.btnLogin);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "formLogin";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.formLogin_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -166,10 +170,10 @@
         #endregion
 
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox txbPass;
+        private System.Windows.Forms.TextBox txtPass;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnThoat;
-        private System.Windows.Forms.TextBox txbUser;
+        private System.Windows.Forms.TextBox txtUser;
         private System.Windows.Forms.Button btnLogin;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;

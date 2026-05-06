@@ -48,5 +48,12 @@ namespace BLL
         {
             return UserDAL.Instance.Search(column, text);
         }
+        public User Login(string username, string password)
+        {
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+                return null;
+
+            return UserDAL.Instance.Login(username, password);
+        }
     }
 }

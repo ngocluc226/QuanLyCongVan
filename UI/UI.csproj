@@ -54,6 +54,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="formAdmin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formAdmin.Designer.cs">
+      <DependentUpon>formAdmin.cs</DependentUpon>
+    </Compile>
     <Compile Include="formCongVanDenCreate.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -84,6 +90,30 @@
     <Compile Include="formFileViewer.Designer.cs">
       <DependentUpon>formFileViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="formLanhDao.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formLanhDao.Designer.cs">
+      <DependentUpon>formLanhDao.cs</DependentUpon>
+    </Compile>
+    <Compile Include="formLanhDaoCVDen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formLanhDaoCVDen.Designer.cs">
+      <DependentUpon>formLanhDaoCVDen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="formLanhDaoCVDi.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formLanhDaoCVDi.Designer.cs">
+      <DependentUpon>formLanhDaoCVDi.cs</DependentUpon>
+    </Compile>
+    <Compile Include="formLogHethong.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formLogHethong.Designer.cs">
+      <DependentUpon>formLogHethong.cs</DependentUpon>
+    </Compile>
     <Compile Include="formLogin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,6 +125,36 @@
     </Compile>
     <Compile Include="formMenu.Designer.cs">
       <DependentUpon>formMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="formNhanVien.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formNhanVien.Designer.cs">
+      <DependentUpon>formNhanVien.cs</DependentUpon>
+    </Compile>
+    <Compile Include="formNhanVienCVDen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formNhanVienCVDen.Designer.cs">
+      <DependentUpon>formNhanVienCVDen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="formNhanVienCVDi.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formNhanVienCVDi.Designer.cs">
+      <DependentUpon>formNhanVienCVDi.cs</DependentUpon>
+    </Compile>
+    <Compile Include="formPhanCong.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formPhanCong.Designer.cs">
+      <DependentUpon>formPhanCong.cs</DependentUpon>
+    </Compile>
+    <Compile Include="formPhongBan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formPhongBan.Designer.cs">
+      <DependentUpon>formPhongBan.cs</DependentUpon>
     </Compile>
     <Compile Include="formQuanLyUser.cs">
       <SubType>Form</SubType>
@@ -108,8 +168,30 @@
     <Compile Include="formSendMail.Designer.cs">
       <DependentUpon>formSendMail.cs</DependentUpon>
     </Compile>
+    <Compile Include="formVanThu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formVanThu.Designer.cs">
+      <DependentUpon>formVanThu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="formVanThuCVDen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formVanThuCVDen.Designer.cs">
+      <DependentUpon>formVanThuCVDen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="formVanThuCVDi.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formVanThuCVDi.Designer.cs">
+      <DependentUpon>formVanThuCVDi.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils.cs" />
+    <EmbeddedResource Include="formAdmin.resx">
+      <DependentUpon>formAdmin.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="formCongVanDenCreate.resx">
       <DependentUpon>formCongVanDenCreate.cs</DependentUpon>
     </EmbeddedResource>
@@ -125,14 +207,53 @@
     <EmbeddedResource Include="formFileViewer.resx">
       <DependentUpon>formFileViewer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="formLanhDao.resx">
+      <DependentUpon>formLanhDao.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formLanhDaoCVDen.resx">
+      <DependentUpon>formLanhDaoCVDen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formLanhDaoCVDi.resx">
+      <DependentUpon>formLanhDaoCVDi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formLogHethong.resx">
+      <DependentUpon>formLogHethong.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="formLogin.resx">
       <DependentUpon>formLogin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="formMenu.resx">
       <DependentUpon>formMenu.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="formNhanVien.resx">
+      <DependentUpon>formNhanVien.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formNhanVienCVDen.resx">
+      <DependentUpon>formNhanVienCVDen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formNhanVienCVDi.resx">
+      <DependentUpon>formNhanVienCVDi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formPhanCong.resx">
+      <DependentUpon>formPhanCong.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formPhongBan.resx">
+      <DependentUpon>formPhongBan.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="formQuanLyUser.resx">
       <DependentUpon>formQuanLyUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formSendMail.resx">
+      <DependentUpon>formSendMail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formVanThu.resx">
+      <DependentUpon>formVanThu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formVanThuCVDen.resx">
+      <DependentUpon>formVanThuCVDen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formVanThuCVDi.resx">
+      <DependentUpon>formVanThuCVDi.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

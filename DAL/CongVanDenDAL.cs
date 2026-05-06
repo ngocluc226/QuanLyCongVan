@@ -24,7 +24,16 @@ namespace DAL
             string query = "SELECT * FROM CongVanDen ORDER BY NgayDen DESC";
             return DBHelper.Instance.ExecuteQuery(query);
         }
+        public int UpdateTrangThai(int id, string trangThai)
+        {
+            string query = "UPDATE CongVanDen SET TrangThai = @TrangThai WHERE Id = @Id";
 
+            return DBHelper.Instance.ExecuteNonQuery(
+                query,
+                new SqlParameter("@TrangThai", trangThai),
+                new SqlParameter("@Id", id)
+            );
+        }
         // 🔹 Thêm công văn
         public int Insert(CongVanDen cv)
         {
@@ -90,6 +99,13 @@ namespace DAL
                 new SqlParameter("@FromDate", fromDate),
                 new SqlParameter("@ToDate", toDate)
             );
+        }
+        public DataTable GetByTrangThai(string trangThai)
+        {
+            string query = "SELECT * FROM CongVanDen WHERE TrangThai = @tt";
+
+            return DBHelper.Instance.ExecuteQuery(query,
+                new SqlParameter("@tt", trangThai));
         }
     }
 }
