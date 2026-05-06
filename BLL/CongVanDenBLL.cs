@@ -36,6 +36,17 @@ namespace BLL
 
             return DAL.CongVanDenDAL.Instance.Insert(cv) > 0;
         }
+
+        public bool Update(DTO.CongVanDen cv)
+        {
+            if (string.IsNullOrEmpty(cv.SoDen) || cv.Id <= 0)
+                return false;
+
+            LogBLL.Instance.WriteLog("Cập nhật công văn: " + cv.SoDen, Session.UserName);
+
+            return DAL.CongVanDenDAL.Instance.Update(cv) > 0;
+        }
+
         public bool TrinhLanhDao(int id)
         {
             LogBLL.Instance.WriteLog("Trình lãnh đạo", Session.UserName);

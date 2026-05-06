@@ -42,6 +42,11 @@ namespace BLL
             return DAL.CongVanDiDAL.Instance.UpdateTrangThai(id, trangThai, ghiChu) > 0;
         }
 
+        public bool UpdatePhatHanh(int id, DateTime ngayBanHanh, string noiNhan)
+        {
+            return DAL.CongVanDiDAL.Instance.UpdatePhatHanh(id, ngayBanHanh, noiNhan) > 0;
+        }
+
         public bool Delete(int id)
         {
             return DAL.CongVanDiDAL.Instance.Delete(id) > 0;

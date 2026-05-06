@@ -88,9 +88,10 @@ namespace UI
 
             int id = Convert.ToInt32(this.dtgDanhSach.SelectedRows[0].Cells["Id"].Value);
 
-            // TODO: Lấy đầy đủ CVD để cập nhật lại ngày, nơi nhận và trạng thái 
-            // Giả định dùng UpdateTrangThai + thông tin thêm
-            bool kq = CongVanDiBLL.Instance.UpdateTrangThai(id, "Đã phát hành", null);
+            DateTime ngayBanHanh = dtpNgayPhatHanh.Value;
+            string noiNhan = txtNoiNhan.Text.Trim();
+
+            bool kq = CongVanDiBLL.Instance.UpdatePhatHanh(id, ngayBanHanh, noiNhan);
             if (kq)
             {
                 MessageBox.Show("Phát hành công văn thành công!");

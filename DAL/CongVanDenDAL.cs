@@ -58,6 +58,31 @@ namespace DAL
             );
         }
 
+        // 🔹 Cập nhật công văn
+        public int Update(CongVanDen cv)
+        {
+            string query = @"UPDATE CongVanDen SET 
+            SoDen = @SoDen, SoVanBan = @SoVanBan, NgayDen = @NgayDen, NgayBanHanh = @NgayBanHanh, 
+            NoiGui = @NoiGui, NguoiKy = @NguoiKy, TrichYeu = @TrichYeu, DoKhan = @DoKhan, 
+            DoMat = @DoMat, FileDinhKem = @FileDinhKem
+            WHERE Id = @Id";
+
+            return DBHelper.Instance.ExecuteNonQuery(
+                query,
+                new SqlParameter("@SoDen", cv.SoDen),
+                new SqlParameter("@SoVanBan", (object)cv.SoVanBan ?? DBNull.Value),
+                new SqlParameter("@NgayDen", cv.NgayDen),
+                new SqlParameter("@NgayBanHanh", (object)cv.NgayBanHanh ?? DBNull.Value),
+                new SqlParameter("@NoiGui", (object)cv.NoiGui ?? DBNull.Value),
+                new SqlParameter("@NguoiKy", (object)cv.NguoiKy ?? DBNull.Value),
+                new SqlParameter("@TrichYeu", cv.TrichYeu),
+                new SqlParameter("@DoKhan", (object)cv.DoKhan ?? DBNull.Value),
+                new SqlParameter("@DoMat", (object)cv.DoMat ?? DBNull.Value),
+                new SqlParameter("@FileDinhKem", (object)cv.FileDinhKem ?? DBNull.Value),
+                new SqlParameter("@Id", cv.Id)
+            );
+        }
+
         // 🔹 Xóa công văn
         public int Delete(int id)
         {

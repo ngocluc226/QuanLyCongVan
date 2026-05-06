@@ -49,6 +49,11 @@ namespace BLL
             UserDAL.Instance.Delete(id);
         }
 
+        public User GetUserById(string id)
+        {
+            return UserDAL.Instance.GetUserById(id);
+        }
+
         public DataTable SearchUsers(string column, string text)
         {
             return UserDAL.Instance.Search(column, text);

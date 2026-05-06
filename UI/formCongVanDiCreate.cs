@@ -201,7 +201,14 @@ namespace UI
             if (result)
             {
                 MessageBox.Show("Đã gửi duyệt thành công!");
-                // (Bỏ qua gửi email lúc này)
+                
+                // Gửi email tự động
+                var leader = UserService.Instance.GetUserById(cv.NguoiDuyetId);
+                if (leader != null && !string.IsNullOrWhiteSpace(leader.Email))
+                {
+                    EmailService.SendMailToLeader(leader.Email, cv.SoDi, cv.TrichYeu);
+                }
+
                 ClearForm();
             }
             else

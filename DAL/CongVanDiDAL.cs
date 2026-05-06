@@ -90,6 +90,18 @@ namespace DAL
             );
         }
 
+        // 🔹 Phát hành công văn (Cập nhật ngày ban hành và nơi nhận)
+        public int UpdatePhatHanh(int id, DateTime ngayBanHanh, string noiNhan)
+        {
+            string query = "UPDATE CongVanDi SET TrangThai = N'Đã phát hành', NgayBanHanh = @NgayBanHanh, NoiNhan = @NoiNhan WHERE Id = @Id";
+            return DBHelper.Instance.ExecuteNonQuery(
+                query,
+                new SqlParameter("@NgayBanHanh", ngayBanHanh),
+                new SqlParameter("@NoiNhan", noiNhan),
+                new SqlParameter("@Id", id)
+            );
+        }
+
         // 🔹 Xóa công văn
         public int Delete(int id)
         {
