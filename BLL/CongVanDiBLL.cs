@@ -29,6 +29,19 @@ namespace BLL
             return DAL.CongVanDiDAL.Instance.Insert(cv) > 0;
         }
 
+        public bool Update(DTO.CongVanDi cv)
+        {
+            if (string.IsNullOrEmpty(cv.SoDi))
+                return false;
+
+            return DAL.CongVanDiDAL.Instance.Update(cv) > 0;
+        }
+
+        public bool UpdateTrangThai(int id, string trangThai, string ghiChu = null)
+        {
+            return DAL.CongVanDiDAL.Instance.UpdateTrangThai(id, trangThai, ghiChu) > 0;
+        }
+
         public bool Delete(int id)
         {
             return DAL.CongVanDiDAL.Instance.Delete(id) > 0;

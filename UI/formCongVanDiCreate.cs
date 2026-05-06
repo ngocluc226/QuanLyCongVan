@@ -15,9 +15,15 @@ namespace UI
 {
     public partial class formCongVanDiCreate : Form
     {
+        private ComboBox cbNguoiDuyet;
+        private Label lblNguoiDuyet;
+        private Button btnGuiDuyet;
+
         public formCongVanDiCreate()
         {
             InitializeComponent();
+
+            InitializeApprovalControls();
 
             // Gán sự kiện cho các nút điều khiển
             this.Load += new System.EventHandler(this.formCongVanDiCreate_Load);
@@ -29,10 +35,43 @@ namespace UI
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
         }
 
+        private void InitializeApprovalControls()
+        {
+            this.lblNguoiDuyet = new Label();
+            this.lblNguoiDuyet.Text = "Người phê duyệt:";
+            this.lblNguoiDuyet.Location = new Point(btnAdd.Location.X - 250, btnAdd.Location.Y - 40); // Tạm đặt vị trí tương đối
+            this.lblNguoiDuyet.AutoSize = true;
+
+            this.cbNguoiDuyet = new ComboBox();
+            this.cbNguoiDuyet.Location = new Point(this.lblNguoiDuyet.Location.X + 120, this.lblNguoiDuyet.Location.Y - 3);
+            this.cbNguoiDuyet.Width = 150;
+            this.cbNguoiDuyet.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            this.btnGuiDuyet = new Button();
+            this.btnGuiDuyet.Text = "Gửi duyệt";
+            this.btnGuiDuyet.Location = new Point(this.cbNguoiDuyet.Location.X + 160, this.cbNguoiDuyet.Location.Y - 2);
+            this.btnGuiDuyet.Click += BtnGuiDuyet_Click;
+
+            // Them vao form
+            this.dtgvvbdi.Controls.Add(lblNguoiDuyet);
+            this.dtgvvbdi.Controls.Add(cbNguoiDuyet);
+            this.dtgvvbdi.Controls.Add(btnGuiDuyet);
+        }
+
+        private void loadDanhSachLanhDao()
+        {
+            DataTable dt = UserService.Instance.GetDanhSachLanhDao();
+            cbNguoiDuyet.DataSource = dt;
+            cbNguoiDuyet.DisplayMember = "TenNguoiDung";
+            cbNguoiDuyet.ValueMember = "MaNguoiDung";
+            cbNguoiDuyet.SelectedIndex = -1;
+        }
+
         private void formCongVanDiCreate_Load(object sender, EventArgs e)
         {
             txtSoDi.Text = CongVanDiBLL.Instance.GenerateSoDi();
             txtSoDi.Enabled = false;
+            loadDanhSachLanhDao();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -93,7 +132,7 @@ namespace UI
                 DoKhan = cbDoKhan.Text,
                 DoMat = cbDoMat.Text,
                 FileDinhKem = txtFile.Text,
-                TrangThai = "Chưa xử lý"
+                TrangThai = "Soạn thảo"
             };
 
             // 3. Gọi BLL
@@ -128,6 +167,47 @@ namespace UI
             // Generate số đi tiếp theo
             txtSoDi.Text = CongVanDiBLL.Instance.GenerateSoDi();
             txtSoVanBan.Focus();
+        }
+
+        private void BtnGuiDuyet_Click(object sender, EventArgs e)
+        {
+            // Kiểm tra các trường
+            if (string.IsNullOrWhiteSpace(txtSoDi.Text)) return;
+            if (cbNguoiDuyet.SelectedValue == null)
+            {
+                MessageBox.Show("Vui lòng chọn người lãnh đạo để gửi duyệt!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Gọi insert (nếu mới) hoặc update. Ở đây giả sử form này lúc lưu chỉ tạo mới, nên ta tạo mới với trạng thái Chờ duyệt.
+            // Nếu cv đã lưu rồi (nằm ở DB) thì update. Ta sẽ insert luôn.
+            CongVanDi cv = new CongVanDi()
+            {
+                SoDi = txtSoDi.Text.Trim(),
+                SoVanBan = txtSoVanBan.Text.Trim(),
+                NgayDi = dtpNgayDi.Value,
+                NgayBanHanh = dtpNgayBanHanh.Value,
+                NoiNhan = cbNoiNhan.Text,
+                NguoiKy = txtNguoiKy.Text.Trim(),
+                TrichYeu = txtTrichYeu.Text.Trim(),
+                DoKhan = cbDoKhan.Text,
+                DoMat = cbDoMat.Text,
+                FileDinhKem = txtFile.Text,
+                TrangThai = "Chờ duyệt",
+                NguoiDuyetId = cbNguoiDuyet.SelectedValue.ToString()
+            };
+
+            bool result = CongVanDiBLL.Instance.Insert(cv);
+            if (result)
+            {
+                MessageBox.Show("Đã gửi duyệt thành công!");
+                // (Bỏ qua gửi email lúc này)
+                ClearForm();
+            }
+            else
+            {
+                MessageBox.Show("Lỗi gửi duyệt!");
+            }
         }
 
         private void btnAdd_Click(object sender, EventArgs e)

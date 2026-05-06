@@ -29,6 +29,12 @@ namespace DAL
             return DBHelper.Instance.ExecuteQuery(sql);
         }
 
+        public DataTable GetDanhSachLanhDao()
+        {
+            string sql = "SELECT MaNguoiDung, TenNguoiDung, Email FROM NguoiDung WHERE Quyen = N'Lãnh đạo'";
+            return DBHelper.Instance.ExecuteQuery(sql);
+        }
+
         public int Insert(User u)
         {
             string sql = @"INSERT INTO NguoiDung 

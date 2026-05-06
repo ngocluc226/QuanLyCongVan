@@ -23,6 +23,13 @@ namespace UI
             this.btnShow.Click += new System.EventHandler(this.btnShow_Click);
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
+            
+            // Xoá btnRefresh để fix lỗi CS1061 do Designer không có biến này
+        }
+
+        private void BtnRefresh_Click(object sender, EventArgs e)
+        {
+            LoadData();
         }
 
         private void LoadData()
@@ -159,6 +166,13 @@ namespace UI
 
             foreach (DataGridViewRow row in dgvVanBan.SelectedRows)
             {
+                string trangThai = row.Cells["TrangThai"].Value?.ToString();
+                if (trangThai == "Đã phát hành" || trangThai == "Đã duyệt")
+                {
+                    MessageBox.Show($"Không thể xoá công văn [{row.Cells["SoDi"].Value}] vì đang ở trạng thái {trangThai}!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    continue;
+                }
+
                 int id = Convert.ToInt32(row.Cells["Id"].Value);
 
                 if (CongVanDiBLL.Instance.Delete(id))
@@ -172,6 +186,7 @@ namespace UI
             LoadData();
         }
 
+        // Khôi phục lại btnShow_Click
         private void btnShow_Click(object sender, EventArgs e)
         {
             DateTime fromDate = dtpFrom.Value.Date;
@@ -187,10 +202,10 @@ namespace UI
             }
 
             DataTable dt = CongVanDiBLL.Instance.GetByDateRange(fromDate, toDate);
-
-            dgvVanBan.DataSource = dt;
-
-            lblTong.Text = "Tổng: " + dt.Rows.Count.ToString();
+            DataView dv = dt.DefaultView;
+            
+            dgvVanBan.DataSource = dv;
+            lblTong.Text = "Tổng: " + dv.Count.ToString();
         }
 
         private void btnOpen_Click(object sender, EventArgs e)

@@ -24,6 +24,11 @@ namespace BLL
             return UserDAL.Instance.GetAll();
         }
 
+        public DataTable GetDanhSachLanhDao()
+        {
+            return UserDAL.Instance.GetDanhSachLanhDao();
+        }
+
         public DataTable GetAllPhongBan()
         {
             return PhongBanBLL.Instance.GetAll();
