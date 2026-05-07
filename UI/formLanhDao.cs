@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -34,6 +34,17 @@ namespace UI
         private void formLanhDao_Load(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Maximized;
+
+            // Đếm số lượng công văn đang chờ duyệt
+            DataTable dt = BLL.CongVanDiBLL.Instance.GetAll();
+            DataView dv = dt.DefaultView;
+            dv.RowFilter = "TrangThai = 'Chờ duyệt'";
+            int count = dv.Count;
+
+            if (count > 0)
+            {
+                MessageBox.Show($"Bạn có {count} công văn đi đang chờ phê duyệt!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }

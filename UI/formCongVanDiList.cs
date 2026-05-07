@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -23,8 +23,40 @@ namespace UI
             this.btnShow.Click += new System.EventHandler(this.btnShow_Click);
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             
             // Xoá btnRefresh để fix lỗi CS1061 do Designer không có biến này
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            string keyword = txtSearch.Text.Trim().ToLower();
+            if (dgvVanBan.DataSource is DataView dv)
+            {
+                if (string.IsNullOrEmpty(keyword))
+                {
+                    dv.RowFilter = "";
+                }
+                else
+                {
+                    dv.RowFilter = $"SoDi LIKE '%{keyword}%' OR SoVanBan LIKE '%{keyword}%' OR TrichYeu LIKE '%{keyword}%'";
+                }
+                lblTong.Text = "Tổng: " + dv.Count.ToString();
+            }
+            else if (dgvVanBan.DataSource is DataTable dt)
+            {
+                DataView newDv = dt.DefaultView;
+                if (string.IsNullOrEmpty(keyword))
+                {
+                    newDv.RowFilter = "";
+                }
+                else
+                {
+                    newDv.RowFilter = $"SoDi LIKE '%{keyword}%' OR SoVanBan LIKE '%{keyword}%' OR TrichYeu LIKE '%{keyword}%'";
+                }
+                dgvVanBan.DataSource = newDv;
+                lblTong.Text = "Tổng: " + newDv.Count.ToString();
+            }
         }
 
         private void BtnRefresh_Click(object sender, EventArgs e)
