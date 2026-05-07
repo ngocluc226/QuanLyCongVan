@@ -21,7 +21,7 @@ namespace DAL
 
         private DBHelper()
         {
-            _connectionString = @"Server=NGOCLUC-DESKTOP\SQLEXPRESS;Database=QUANLYCONGVAN;Trusted_Connection=True;";
+            _connectionString = @"Server=DESKTOP-IHI30RF;Database=QUANLYCONGVAN;Trusted_Connection=True;";
         }
 
         private SqlConnection GetConnection()

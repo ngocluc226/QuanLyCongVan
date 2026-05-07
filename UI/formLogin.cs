@@ -1,4 +1,4 @@
-﻿using DTO;
+using DTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -58,12 +58,16 @@ namespace UI
                 case "Admin":
                     f = new formAdmin();
                     break;
+                case "Văn thư":
                 case "VanThu":
                     f = new formVanThu();
                     break;
+                case "Lãnh đạo":
                 case "LanhDao":
                     f = new formLanhDao();
                     break;
+                case "Nhân viên":
+                case "NhanVien":
                 default:
                     f = new formNhanVien();
                     break;

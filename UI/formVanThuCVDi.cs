@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,6 +16,10 @@ namespace UI
     {
         private DataGridView dtgDanhSach;
         private Button btnPhatHanh;
+        private Button btnThem;
+        private Button btnTrinh;
+        private Button btnSua;
+        private Button btnXoa;
         private TextBox txtNoiNhan;
         private Label lblNoiNhan;
         private DateTimePicker dtpNgayPhatHanh;
@@ -35,8 +39,34 @@ namespace UI
             this.dtgDanhSach.Size = new Size(760, 300);
             this.dtgDanhSach.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             this.dtgDanhSach.AllowUserToAddRows = false;
+            this.dtgDanhSach.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             this.dtgDanhSach.CellClick += DtgDanhSach_CellClick;
+            this.dtgDanhSach.ReadOnly = true;
             this.Controls.Add(this.dtgDanhSach);
+
+            // Nút Thêm mới
+            this.btnThem = new Button { Text = "Thêm mới", Location = new Point(12, 370), Width = 100, Height = 30, BackColor = Color.LightBlue, FlatStyle = FlatStyle.Flat };
+            this.btnThem.Click += (s, e) => {
+                formCongVanDiCreate f = new formCongVanDiCreate();
+                f.ShowDialog();
+                LoadData();
+            };
+            this.Controls.Add(this.btnThem);
+
+            // Nút Sửa
+            this.btnSua = new Button { Text = "Sửa", Location = new Point(120, 370), Width = 100, Height = 30, BackColor = Color.LightYellow, FlatStyle = FlatStyle.Flat };
+            this.btnSua.Click += (s, e) => SuaCongVan();
+            this.Controls.Add(this.btnSua);
+
+            // Nút Xóa
+            this.btnXoa = new Button { Text = "Xóa", Location = new Point(230, 370), Width = 100, Height = 30, BackColor = Color.LightCoral, FlatStyle = FlatStyle.Flat };
+            this.btnXoa.Click += (s, e) => XoaCongVan();
+            this.Controls.Add(this.btnXoa);
+
+            // Nút Trình
+            this.btnTrinh = new Button { Text = "Trình lãnh đạo", Location = new Point(340, 370), Width = 120, Height = 30, BackColor = Color.LightGreen, FlatStyle = FlatStyle.Flat };
+            this.btnTrinh.Click += (s, e) => TrinhLanhDao();
+            this.Controls.Add(this.btnTrinh);
 
             this.lblNgayPhatHanh = new Label { Text = "Ngày phát hành:", Location = new Point(12, 335), AutoSize = true };
             this.Controls.Add(this.lblNgayPhatHanh);
@@ -50,9 +80,67 @@ namespace UI
             this.txtNoiNhan = new TextBox { Location = new Point(340, 332), Width = 200 };
             this.Controls.Add(this.txtNoiNhan);
 
-            this.btnPhatHanh = new Button { Text = "Phát hành", Location = new Point(560, 330) };
+            this.btnPhatHanh = new Button { Text = "Phát hành", Location = new Point(560, 330), Width = 100, Height = 30, BackColor = Color.LightGray, FlatStyle = FlatStyle.Flat };
             this.btnPhatHanh.Click += BtnPhatHanh_Click;
             this.Controls.Add(this.btnPhatHanh);
+        }
+
+        private void SuaCongVan()
+        {
+            if (dtgDanhSach.SelectedRows.Count == 0) return;
+            int id = Convert.ToInt32(dtgDanhSach.SelectedRows[0].Cells["Id"].Value);
+            string tt = dtgDanhSach.SelectedRows[0].Cells["TrangThai"].Value?.ToString();
+
+            if (tt == "Đã phát hành" || tt == "Đã duyệt")
+            {
+                MessageBox.Show("Không thể sửa công văn đã được duyệt hoặc phát hành!");
+                return;
+            }
+
+            formCongVanDiCreate f = new formCongVanDiCreate(id);
+            f.ShowDialog();
+            LoadData();
+        }
+
+        private void XoaCongVan()
+        {
+            if (dtgDanhSach.SelectedRows.Count == 0) return;
+            int id = Convert.ToInt32(dtgDanhSach.SelectedRows[0].Cells["Id"].Value);
+            string tt = dtgDanhSach.SelectedRows[0].Cells["TrangThai"].Value?.ToString();
+
+            if (tt == "Đã phát hành" || tt == "Đã duyệt")
+            {
+                MessageBox.Show("Không thể xóa công văn đã được duyệt hoặc phát hành!");
+                return;
+            }
+
+            if (MessageBox.Show("Xác nhận xóa?", "Xác nhận", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                if (CongVanDiBLL.Instance.Delete(id))
+                {
+                    MessageBox.Show("Đã xóa!");
+                    LoadData();
+                }
+            }
+        }
+
+        private void TrinhLanhDao()
+        {
+            if (this.dtgDanhSach.SelectedRows.Count == 0) return;
+            int id = Convert.ToInt32(this.dtgDanhSach.SelectedRows[0].Cells["Id"].Value);
+            string trangThai = this.dtgDanhSach.SelectedRows[0].Cells["TrangThai"].Value?.ToString();
+
+            if (trangThai != "Soạn thảo" && trangThai != "Yêu cầu chỉnh sửa" && trangThai != "Bị từ chối")
+            {
+                MessageBox.Show("Chỉ trình các bản soạn thảo, yêu cầu sửa hoặc bị từ chối!");
+                return;
+            }
+
+            if (CongVanDiBLL.Instance.UpdateTrangThai(id, "Chờ duyệt"))
+            {
+                MessageBox.Show("Đã trình!");
+                LoadData();
+            }
         }
 
         private void FormVanThuCVDi_Load(object sender, EventArgs e)
@@ -63,10 +151,8 @@ namespace UI
         private void LoadData()
         {
             DataTable dt = CongVanDiBLL.Instance.GetAll();
-            DataView dv = dt.DefaultView;
-            // Chỉ thấy những công văn Đã duyệt
-            dv.RowFilter = "TrangThai = 'Đã duyệt'"; 
-            this.dtgDanhSach.DataSource = dv;
+            this.dtgDanhSach.DataSource = dt;
+            if (dtgDanhSach.Columns["Id"] != null) dtgDanhSach.Columns["Id"].Visible = false;
         }
 
         private void DtgDanhSach_CellClick(object sender, DataGridViewCellEventArgs e)

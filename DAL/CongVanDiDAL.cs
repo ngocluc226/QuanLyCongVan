@@ -145,5 +145,11 @@ namespace DAL
                 new SqlParameter("@ToDate", toDate)
             );
         }
+
+        public DataTable GetById(int id)
+        {
+            string query = "SELECT * FROM CongVanDi WHERE Id = @Id";
+            return DBHelper.Instance.ExecuteQuery(query, new SqlParameter("@Id", id));
+        }
     }
 }

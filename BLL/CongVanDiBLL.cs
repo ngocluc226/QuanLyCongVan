@@ -62,5 +62,10 @@ namespace BLL
         {
             return DAL.CongVanDiDAL.Instance.GetByDateRange(fromDate, toDate);
         }
+
+        public DataTable GetById(int id)
+        {
+            return DAL.CongVanDiDAL.Instance.GetById(id);
+        }
     }
 }

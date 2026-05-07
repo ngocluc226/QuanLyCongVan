@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -18,13 +18,13 @@ namespace UI
         private ComboBox cbNguoiDuyet;
         private Label lblNguoiDuyet;
         private Button btnGuiDuyet;
+        private int editingId = -1;
 
         public formCongVanDiCreate()
         {
             InitializeComponent();
-
             InitializeApprovalControls();
-
+            
             // Gán sự kiện cho các nút điều khiển
             this.Load += new System.EventHandler(this.formCongVanDiCreate_Load);
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -33,6 +33,12 @@ namespace UI
             this.btnMoFile.Click += new System.EventHandler(this.btnMoFile_Click);
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+        }
+
+        public formCongVanDiCreate(int id) : this()
+        {
+            this.editingId = id;
+            this.label1.Text = "CHỈNH SỬA CÔNG VĂN ĐI";
         }
 
         private void InitializeApprovalControls()
@@ -69,9 +75,32 @@ namespace UI
 
         private void formCongVanDiCreate_Load(object sender, EventArgs e)
         {
-            txtSoDi.Text = CongVanDiBLL.Instance.GenerateSoDi();
-            txtSoDi.Enabled = false;
             loadDanhSachLanhDao();
+            
+            if (editingId > 0)
+            {
+                DataTable dt = CongVanDiBLL.Instance.GetById(editingId);
+                if (dt.Rows.Count > 0)
+                {
+                    DataRow dr = dt.Rows[0];
+                    txtSoDi.Text = dr["SoDi"].ToString();
+                    txtSoVanBan.Text = dr["SoVanBan"]?.ToString();
+                    dtpNgayDi.Value = Convert.ToDateTime(dr["NgayDi"]);
+                    if (dr["NgayBanHanh"] != DBNull.Value) dtpNgayBanHanh.Value = Convert.ToDateTime(dr["NgayBanHanh"]);
+                    cbNoiNhan.Text = dr["NoiNhan"]?.ToString();
+                    txtNguoiKy.Text = dr["NguoiKy"]?.ToString();
+                    txtTrichYeu.Text = dr["TrichYeu"]?.ToString();
+                    cbDoKhan.Text = dr["DoKhan"]?.ToString();
+                    cbDoMat.Text = dr["DoMat"]?.ToString();
+                    txtFile.Text = dr["FileDinhKem"]?.ToString();
+                    cbNguoiDuyet.SelectedValue = dr["NguoiDuyetId"]?.ToString();
+                }
+            }
+            else
+            {
+                txtSoDi.Text = CongVanDiBLL.Instance.GenerateSoDi();
+            }
+            txtSoDi.Enabled = false;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -122,6 +151,7 @@ namespace UI
             // 2. Tạo DTO
             CongVanDi cv = new CongVanDi()
             {
+                Id = editingId,
                 SoDi = txtSoDi.Text.Trim(), 
                 SoVanBan = txtSoVanBan.Text.Trim(),
                 NgayDi = dtpNgayDi.Value,
@@ -132,21 +162,27 @@ namespace UI
                 DoKhan = cbDoKhan.Text,
                 DoMat = cbDoMat.Text,
                 FileDinhKem = txtFile.Text,
-                TrangThai = "Soạn thảo"
+                TrangThai = "Soạn thảo",
+                NguoiDuyetId = cbNguoiDuyet.SelectedValue?.ToString()
             };
 
             // 3. Gọi BLL
-            bool result = CongVanDiBLL.Instance.Insert(cv);
+            bool result;
+            if (editingId > 0)
+                result = CongVanDiBLL.Instance.Update(cv);
+            else
+                result = CongVanDiBLL.Instance.Insert(cv);
 
             // 4. Kết quả
             if (result)
             {
-                MessageBox.Show("Thêm công văn đi thành công!");
-                ClearForm();   // reset form để nhập tiếp
+                MessageBox.Show("Lưu công văn đi thành công!");
+                if (editingId > 0) this.Close();
+                else ClearForm();
             }
             else
             {
-                MessageBox.Show("Thêm thất bại!");
+                MessageBox.Show("Lưu thất bại!");
             }
         }
 
@@ -179,10 +215,10 @@ namespace UI
                 return;
             }
 
-            // Gọi insert (nếu mới) hoặc update. Ở đây giả sử form này lúc lưu chỉ tạo mới, nên ta tạo mới với trạng thái Chờ duyệt.
-            // Nếu cv đã lưu rồi (nằm ở DB) thì update. Ta sẽ insert luôn.
+            // Gọi insert (nếu mới) hoặc update.
             CongVanDi cv = new CongVanDi()
             {
+                Id = editingId,
                 SoDi = txtSoDi.Text.Trim(),
                 SoVanBan = txtSoVanBan.Text.Trim(),
                 NgayDi = dtpNgayDi.Value,
@@ -197,7 +233,12 @@ namespace UI
                 NguoiDuyetId = cbNguoiDuyet.SelectedValue.ToString()
             };
 
-            bool result = CongVanDiBLL.Instance.Insert(cv);
+            bool result;
+            if (editingId > 0)
+                result = CongVanDiBLL.Instance.Update(cv);
+            else
+                result = CongVanDiBLL.Instance.Insert(cv);
+
             if (result)
             {
                 MessageBox.Show("Đã gửi duyệt thành công!");
@@ -209,7 +250,8 @@ namespace UI
                     EmailService.SendMailToLeader(leader.Email, cv.SoDi, cv.TrichYeu);
                 }
 
-                ClearForm();
+                if (editingId > 0) this.Close();
+                else ClearForm();
             }
             else
             {
