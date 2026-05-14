@@ -1,4 +1,4 @@
-﻿namespace UI
+namespace UI
 {
     partial class formCongVanDiCreate
     {
@@ -61,7 +61,7 @@
             this.btnChonFile = new System.Windows.Forms.Button();
             this.txtFile = new System.Windows.Forms.TextBox();
             this.label21 = new System.Windows.Forms.Label();
-            this.txtNguoiKy = new System.Windows.Forms.TextBox();
+            this.cbNguoiKy = new System.Windows.Forms.ComboBox();
             this.cbNoiNhan = new System.Windows.Forms.ComboBox();
             this.label15 = new System.Windows.Forms.Label();
             this.txtTrichYeu = new System.Windows.Forms.TextBox();
@@ -372,7 +372,7 @@
             this.groupBox7.Controls.Add(this.btnChonFile);
             this.groupBox7.Controls.Add(this.txtFile);
             this.groupBox7.Controls.Add(this.label21);
-            this.groupBox7.Controls.Add(this.txtNguoiKy);
+            this.groupBox7.Controls.Add(this.cbNguoiKy);
             this.groupBox7.Controls.Add(this.cbNoiNhan);
             this.groupBox7.Controls.Add(this.label15);
             this.groupBox7.Controls.Add(this.txtTrichYeu);
@@ -521,14 +521,15 @@
             this.label21.TabIndex = 25;
             this.label21.Text = "File đính kèm*";
             // 
-            // txtNguoiKy
+            // cbNguoiKy
             // 
-            this.txtNguoiKy.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtNguoiKy.Location = new System.Drawing.Point(444, 79);
-            this.txtNguoiKy.Margin = new System.Windows.Forms.Padding(4);
-            this.txtNguoiKy.Name = "txtNguoiKy";
-            this.txtNguoiKy.Size = new System.Drawing.Size(161, 27);
-            this.txtNguoiKy.TabIndex = 24;
+            this.cbNguoiKy.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbNguoiKy.FormattingEnabled = true;
+            this.cbNguoiKy.Location = new System.Drawing.Point(444, 79);
+            this.cbNguoiKy.Margin = new System.Windows.Forms.Padding(4);
+            this.cbNguoiKy.Name = "cbNguoiKy";
+            this.cbNguoiKy.Size = new System.Drawing.Size(161, 27);
+            this.cbNguoiKy.TabIndex = 24;
             // 
             // cbNoiNhan
             // 
@@ -697,7 +698,7 @@
         private System.Windows.Forms.Button btnChonFile;
         private System.Windows.Forms.TextBox txtFile;
         private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.TextBox txtNguoiKy;
+        private System.Windows.Forms.ComboBox cbNguoiKy;
         private System.Windows.Forms.ComboBox cbNoiNhan;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TextBox txtTrichYeu;

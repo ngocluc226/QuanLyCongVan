@@ -13,63 +13,79 @@ namespace UI
 {
     public partial class formNhanVienCVDi : Form
     {
-        private DataGridView dgvCVDi;
-        private Button btnThem;
-        private Button btnTrinh;
-        private Button btnSua;
-        private Button btnXoa;
-
         public formNhanVienCVDi()
         {
             InitializeComponent();
-            InitUI();
-            this.Load += (s, e) => LoadData();
-        }
-
-        private void InitUI()
-        {
-            // Thiết kế bảng danh sách
-            dgvCVDi = new DataGridView 
-            { 
-                Location = new Point(10, 10), 
-                Size = new Size(780, 350), 
-                SelectionMode = DataGridViewSelectionMode.FullRowSelect, 
-                AllowUserToAddRows = false,
-                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
-                ReadOnly = true
+            
+            // Đăng ký sự kiện
+            this.Load += (s, e) => {
+                dtpTuNgay.Value = DateTime.Now.AddMonths(-1);
+                cbTrangThai.SelectedIndex = 0; // "Tất cả"
+                LoadData();
             };
-            this.Controls.Add(dgvCVDi);
 
-            // Nút Thêm mới
-            btnThem = new Button { Text = "Thêm mới", Location = new Point(10, 370), Width = 100, Height = 35, BackColor = Color.LightBlue, FlatStyle = FlatStyle.Flat };
+            btnTimKiem.Click += (s, e) => LoadData();
             btnThem.Click += (s, e) => {
                 formCongVanDiCreate f = new formCongVanDiCreate();
                 f.ShowDialog();
                 LoadData();
             };
-            this.Controls.Add(btnThem);
-
-            // Nút Sửa
-            btnSua = new Button { Text = "Sửa", Location = new Point(120, 370), Width = 100, Height = 35, BackColor = Color.LightYellow, FlatStyle = FlatStyle.Flat };
             btnSua.Click += (s, e) => SuaCongVan();
-            this.Controls.Add(btnSua);
-
-            // Nút Xóa
-            btnXoa = new Button { Text = "Xóa", Location = new Point(230, 370), Width = 100, Height = 35, BackColor = Color.LightCoral, FlatStyle = FlatStyle.Flat };
             btnXoa.Click += (s, e) => XoaCongVan();
-            this.Controls.Add(btnXoa);
-
-            // Nút Trình lãnh đạo
-            btnTrinh = new Button { Text = "Trình lãnh đạo", Location = new Point(340, 370), Width = 130, Height = 35, BackColor = Color.LightGreen, FlatStyle = FlatStyle.Flat };
             btnTrinh.Click += (s, e) => TrinhLanhDao();
-            this.Controls.Add(btnTrinh);
+            btnXemFile.Click += (s, e) => XemFile();
         }
 
         private void LoadData()
         {
-            DataTable dt = CongVanDiBLL.Instance.GetAll();
-            dgvCVDi.DataSource = dt;
+            DateTime tuNgay = dtpTuNgay.Value.Date;
+            DateTime denNgay = dtpDenNgay.Value.Date.AddDays(1).AddSeconds(-1);
+            string keyword = txtTimKiem.Text.Trim().ToLower();
+            string selectedStatus = cbTrangThai.SelectedItem?.ToString();
+
+            DataTable dt = CongVanDiBLL.Instance.GetByDateRange(tuNgay, denNgay);
+            DataView dv = dt.DefaultView;
+            
+            string filter = "1=1"; // Mặc định luôn đúng
+            
+            // Lọc theo trạng thái
+            if (!string.IsNullOrEmpty(selectedStatus) && selectedStatus != "Tất cả")
+            {
+                filter += string.Format(" AND TrangThai = '{0}'", selectedStatus);
+            }
+
+            // Lọc theo từ khóa
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                filter += string.Format(" AND (SoDi LIKE '%{0}%' OR SoVanBan LIKE '%{0}%' OR TrichYeu LIKE '%{0}%' OR NguoiKy LIKE '%{0}%')", keyword);
+            }
+
+            dv.RowFilter = filter;
+            dgvCVDi.DataSource = dv.ToTable();
+
             if (dgvCVDi.Columns["Id"] != null) dgvCVDi.Columns["Id"].Visible = false;
+            if (dgvCVDi.Columns["FileDinhKem"] != null) dgvCVDi.Columns["FileDinhKem"].Visible = false;
+        }
+
+        private void XemFile()
+        {
+            if (dgvCVDi.SelectedRows.Count == 0) return;
+            string filePath = dgvCVDi.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
+
+            if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath))
+            {
+                MessageBox.Show("File không tồn tại hoặc chưa được đính kèm!");
+                return;
+            }
+
+            try
+            {
+                System.Diagnostics.Process.Start(filePath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Không thể mở file: " + ex.Message);
+            }
         }
 
         private void SuaCongVan()
@@ -130,6 +146,25 @@ namespace UI
                 if (CongVanDiBLL.Instance.UpdateTrangThai(id, "Chờ duyệt"))
                 {
                     MessageBox.Show("Đã trình lãnh đạo thành công!");
+                    
+                    // Gửi email thông báo cho lãnh đạo
+                    var dtCv = CongVanDiBLL.Instance.GetById(id);
+                    if (dtCv.Rows.Count > 0)
+                    {
+                        string nDuyetId = dtCv.Rows[0]["NguoiDuyetId"]?.ToString();
+                        string soDi = dtCv.Rows[0]["SoDi"]?.ToString();
+                        string trichYeu = dtCv.Rows[0]["TrichYeu"]?.ToString();
+                        
+                        if (!string.IsNullOrEmpty(nDuyetId))
+                        {
+                            var leader = UserService.Instance.GetUserById(nDuyetId);
+                            if (leader != null && !string.IsNullOrWhiteSpace(leader.Email))
+                            {
+                                EmailService.SendMailToLeader(leader.Email, soDi, trichYeu);
+                            }
+                        }
+                    }
+
                     LoadData();
                 }
             }

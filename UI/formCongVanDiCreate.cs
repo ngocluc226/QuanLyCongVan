@@ -67,10 +67,22 @@ namespace UI
         private void loadDanhSachLanhDao()
         {
             DataTable dt = UserService.Instance.GetDanhSachLanhDao();
+            
+            // Load cho cbNguoiDuyet (giữ nguyên logic cũ)
             cbNguoiDuyet.DataSource = dt;
             cbNguoiDuyet.DisplayMember = "TenNguoiDung";
             cbNguoiDuyet.ValueMember = "MaNguoiDung";
             cbNguoiDuyet.SelectedIndex = -1;
+
+            // Load cho cbNguoiKy (mới)
+            // Tạo bản sao của DataTable để tránh xung đột DataSource nếu cần, 
+            // hoặc gán thẳng nếu ComboBox không bị reset. 
+            // Ở đây tôi dùng chung nhưng gán DisplayMember là TenNguoiDung.
+            DataTable dt2 = dt.Copy();
+            cbNguoiKy.DataSource = dt2;
+            cbNguoiKy.DisplayMember = "TenNguoiDung";
+            cbNguoiKy.ValueMember = "TenNguoiDung"; // Lưu tên vào NguoiKy thay vì ID
+            cbNguoiKy.SelectedIndex = -1;
         }
 
         private void formCongVanDiCreate_Load(object sender, EventArgs e)
@@ -88,7 +100,7 @@ namespace UI
                     dtpNgayDi.Value = Convert.ToDateTime(dr["NgayDi"]);
                     if (dr["NgayBanHanh"] != DBNull.Value) dtpNgayBanHanh.Value = Convert.ToDateTime(dr["NgayBanHanh"]);
                     cbNoiNhan.Text = dr["NoiNhan"]?.ToString();
-                    txtNguoiKy.Text = dr["NguoiKy"]?.ToString();
+                    cbNguoiKy.Text = dr["NguoiKy"]?.ToString();
                     txtTrichYeu.Text = dr["TrichYeu"]?.ToString();
                     cbDoKhan.Text = dr["DoKhan"]?.ToString();
                     cbDoMat.Text = dr["DoMat"]?.ToString();
@@ -120,10 +132,10 @@ namespace UI
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(txtNguoiKy.Text))
+            if (string.IsNullOrWhiteSpace(cbNguoiKy.Text))
             {
-                MessageBox.Show("Vui lòng nhập Người ký", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtNguoiKy.Focus();
+                MessageBox.Show("Vui lòng chọn Người ký", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cbNguoiKy.Focus();
                 return;
             }
 
@@ -157,7 +169,7 @@ namespace UI
                 NgayDi = dtpNgayDi.Value,
                 NgayBanHanh = dtpNgayBanHanh.Value,
                 NoiNhan = cbNoiNhan.Text,
-                NguoiKy = txtNguoiKy.Text.Trim(),
+                NguoiKy = cbNguoiKy.Text.Trim(),
                 TrichYeu = txtTrichYeu.Text.Trim(),
                 DoKhan = cbDoKhan.Text,
                 DoMat = cbDoMat.Text,
@@ -189,7 +201,8 @@ namespace UI
         private void ClearForm()
         {
             txtSoVanBan.Clear();
-            txtNguoiKy.Clear();
+            cbNguoiKy.SelectedIndex = -1;
+            cbNguoiKy.Text = "";
             txtTrichYeu.Clear();
             txtFile.Clear();
 
@@ -224,7 +237,7 @@ namespace UI
                 NgayDi = dtpNgayDi.Value,
                 NgayBanHanh = dtpNgayBanHanh.Value,
                 NoiNhan = cbNoiNhan.Text,
-                NguoiKy = txtNguoiKy.Text.Trim(),
+                NguoiKy = cbNguoiKy.Text.Trim(),
                 TrichYeu = txtTrichYeu.Text.Trim(),
                 DoKhan = cbDoKhan.Text,
                 DoMat = cbDoMat.Text,
