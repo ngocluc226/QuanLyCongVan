@@ -107,5 +107,19 @@ namespace DAL
             return DBHelper.Instance.ExecuteQuery(query,
                 new SqlParameter("@tt", trangThai));
         }
+        public DataTable GetCongVanTheoPhong(string maPhongBan)
+        {
+            string sql = @"
+        SELECT cv.*
+        FROM CongVanDen cv
+        JOIN PhanCongCongVan pc ON cv.Id = pc.CongVanId
+        WHERE pc.MaPhongBan = @pb
+          AND pc.MaNguoiDung IS NULL
+        ORDER BY pc.NgayPhanCong DESC";
+
+            return DBHelper.Instance.ExecuteQuery(sql,
+                new SqlParameter("@pb", maPhongBan)
+            );
+        }
     }
 }

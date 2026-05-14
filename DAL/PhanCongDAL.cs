@@ -20,18 +20,27 @@ namespace DAL
             }
             set { }
         }
-        public int Insert(int congVanId, string maNguoiDung, string maPhongBan, string yKien)
+        public int Insert(int congVanId, string maNguoiDung, string maPhongBan, string yKien, string nguoiGiao, string capPhanCong)
         {
+            // 🚫 Validate tầng DAL (phòng lỗi từ BLL)
+            if (!string.IsNullOrEmpty(maNguoiDung) && !string.IsNullOrEmpty(maPhongBan))
+                throw new Exception("Không được insert cả user và phòng ban");
+
+            if (string.IsNullOrEmpty(maNguoiDung) && string.IsNullOrEmpty(maPhongBan))
+                throw new Exception("Phải có user hoặc phòng ban");
+
             string sql = @"INSERT INTO PhanCongCongVan
-    (CongVanId, MaNguoiDung, MaPhongBan, YKienChiDao, TrangThai)
-    VALUES (@cvId, @user, @pb, @ykien, @tt)";
+    (CongVanId, MaNguoiDung, MaPhongBan, YKienChiDao, TrangThai, NguoiGiao, CapPhanCong)
+    VALUES (@cvId, @user, @pb, @ykien, @tt, @nguoiGiao, @cap)";
 
             return DBHelper.Instance.ExecuteNonQuery(sql,
                 new SqlParameter("@cvId", congVanId),
                 new SqlParameter("@user", (object)maNguoiDung ?? DBNull.Value),
                 new SqlParameter("@pb", (object)maPhongBan ?? DBNull.Value),
-                new SqlParameter("@ykien", yKien),
-                new SqlParameter("@tt", TrangThaiCongVanDen.DANG_XU_LY)
+                new SqlParameter("@ykien", yKien ?? ""),
+                new SqlParameter("@tt", TrangThaiCongVanDen.DANG_XU_LY),
+                new SqlParameter("@nguoiGiao", nguoiGiao),
+                new SqlParameter("@cap", capPhanCong)
             );
         }
     }

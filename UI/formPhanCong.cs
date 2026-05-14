@@ -25,22 +25,103 @@ namespace UI
 
         private void formPhanCong_Load(object sender, EventArgs e)
         {
-            cbUser.DataSource = BLL.UserService.Instance.GetAllUsers();
-            cbUser.DisplayMember = "TenNguoiDung";
-            cbUser.ValueMember = "MaNguoiDung";
-
-            cbPhongBan.DataSource = BLL.PhongBanBLL.Instance.GetAll();
+            cbPhongBan.DataSource = PhongBanBLL.Instance.GetAll();
             cbPhongBan.DisplayMember = "TenPhongBan";
             cbPhongBan.ValueMember = "MaPhongBan";
+
+            cbPhongBan.SelectedIndexChanged += CbPhongBan_SelectedIndexChanged;
+
+            // 🎯 PHÂN QUYỀN
+            if (Session.IsTruongPhong)
+            {
+                // Trưởng phòng
+                rdPhongBan.Visible = false;
+                rdCaNhan.Visible = false;
+
+                cbPhongBan.SelectedValue = Session.PhongBan;
+                cbPhongBan.Enabled = false;
+
+                LoadUsersByPhongBan(Session.PhongBan);
+            }
+            else if (Session.IsLanhDao)
+            {
+                // Lãnh đạo
+                rdPhongBan.Checked = true;
+                cbUser.Enabled = false; // mặc định giao phòng
+            }
+
+            // load user lần đầu
+            if (cbPhongBan.SelectedValue != null)
+            {
+                LoadUsersByPhongBan(cbPhongBan.SelectedValue.ToString());
+            }
+        }
+
+        private void CbPhongBan_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbPhongBan.SelectedValue == null) return;
+
+            LoadUsersByPhongBan(cbPhongBan.SelectedValue.ToString());
+        }
+
+        private void LoadUsersByPhongBan(string maPhongBan)
+        {
+            if (string.IsNullOrEmpty(maPhongBan))
+            {
+                cbUser.DataSource = null;
+                return;
+            }
+
+            var dt = UserService.Instance.GetByPhongBan(maPhongBan);
+
+            cbUser.DataSource = dt;
+            cbUser.DisplayMember = "TenNguoiDung";
+            cbUser.ValueMember = "MaNguoiDung";
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            string user = cbUser.SelectedValue?.ToString();
-            string pb = cbPhongBan.SelectedValue?.ToString();
+            string user = null;
+            string pb = null;
             string yKien = txtYKien.Text;
 
-            var result = BLL.CongVanDenBLL.Instance.PhanCong(_congVanId, user, pb, yKien);
+            if (Session.IsTruongPhong)
+            {
+                // chỉ giao user trong phòng mình
+                user = cbUser.SelectedValue?.ToString();
+
+                if (string.IsNullOrEmpty(user))
+                {
+                    MessageBox.Show("Vui lòng chọn nhân viên");
+                    return;
+                }
+            }
+            else if (Session.IsLanhDao)
+            {
+                if (rdPhongBan.Checked)
+                {
+                    pb = cbPhongBan.SelectedValue?.ToString();
+
+                    if (string.IsNullOrEmpty(pb))
+                    {
+                        MessageBox.Show("Vui lòng chọn phòng ban");
+                        return;
+                    }
+                }
+                else if (rdCaNhan.Checked)
+                {
+                    pb = cbPhongBan.SelectedValue?.ToString();
+                    user = cbUser.SelectedValue?.ToString();
+
+                    if (string.IsNullOrEmpty(user))
+                    {
+                        MessageBox.Show("Vui lòng chọn nhân viên");
+                        return;
+                    }
+                }
+            }
+
+            var result = CongVanDenBLL.Instance.PhanCong(_congVanId, user, pb, yKien);
 
             if (result)
             {
@@ -51,6 +132,37 @@ namespace UI
             else
             {
                 MessageBox.Show("Thất bại!");
+            }
+        }
+
+        private void rdPhongBan_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rdPhongBan.Checked)
+            {
+                cbUser.Enabled = false;
+            }
+        }
+
+        private void rdCaNhan_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rdCaNhan.Checked)
+            {
+                cbUser.Enabled = true;
+
+                if (cbPhongBan.SelectedValue != null)
+                {
+                    LoadUsersByPhongBan(cbPhongBan.SelectedValue.ToString());
+                }
+            }
+        }
+
+        private void cbPhongBan_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            if (cbPhongBan.SelectedValue == null) return;
+
+            if (Session.IsLanhDao && rdCaNhan.Checked)
+            {
+                LoadUsersByPhongBan(cbPhongBan.SelectedValue.ToString());
             }
         }
     }

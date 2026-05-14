@@ -77,7 +77,8 @@ namespace UI
                 TrichYeu = txtTrichYeu.Text.Trim(),
                 DoKhan = cbDoKhan.Text,
                 DoMat = cbDoMat.Text,
-                FileDinhKem = txtFile.Text
+                FileDinhKem = txtFile.Text,
+                TrangThai = "Mới nhập"
             };
 
             // 3. Gọi BLL
@@ -177,6 +178,11 @@ namespace UI
         private void btnCancel_Click(object sender, EventArgs e)
         {
             ClearForm();
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

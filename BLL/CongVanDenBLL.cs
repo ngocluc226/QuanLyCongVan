@@ -43,11 +43,50 @@ namespace BLL
         }
         public bool PhanCong(int congVanId, string maNguoiDung, string maPhongBan, string yKien)
         {
-            var result = PhanCongDAL.Instance.Insert(congVanId, maNguoiDung, maPhongBan, yKien);
+            if (!string.IsNullOrEmpty(maNguoiDung) && !string.IsNullOrEmpty(maPhongBan))
+                throw new Exception("Chỉ được chọn 1 trong 2: User hoặc Phòng");
+
+            if (string.IsNullOrEmpty(maNguoiDung) && string.IsNullOrEmpty(maPhongBan))
+                throw new Exception("Phải chọn nơi phân công");
+
+            string cap = "";
+            string nguoiGiao = Session.UserName;
+
+            if (Session.Role == "LanhDao")
+            {
+                if (string.IsNullOrEmpty(maPhongBan))
+                    throw new Exception("Lãnh đạo chỉ được giao phòng ban");
+
+                maNguoiDung = null;
+                cap = "LANH_DAO";
+            }
+            else if (Session.Role == "TruongPhong")
+            {
+                if (string.IsNullOrEmpty(maNguoiDung))
+                    throw new Exception("Trưởng phòng phải giao cho nhân viên");
+
+                maPhongBan = null;
+                cap = "TRUONG_PHONG";
+            }
+
+            var result = PhanCongDAL.Instance.Insert(
+                congVanId,
+                maNguoiDung,
+                maPhongBan,
+                yKien,
+                nguoiGiao,
+                cap
+            );
 
             if (result > 0)
             {
                 DAL.CongVanDenDAL.Instance.UpdateTrangThai(congVanId, TrangThaiCongVanDen.DA_PHAN_CONG);
+
+                LogBLL.Instance.WriteLog(
+                    $"Phân công CV {congVanId} - {cap}",
+                    Session.UserName
+                );
+
                 return true;
             }
 
@@ -79,6 +118,10 @@ namespace BLL
         public DataTable GetByTrangThai(string trangThai)
         {
             return DAL.CongVanDenDAL.Instance.GetByTrangThai(trangThai);
+        }
+        public DataTable GetCongVanChoTruongPhong()
+        {
+            return CongVanDenDAL.Instance.GetCongVanTheoPhong(Session.PhongBan);
         }
     }
 }

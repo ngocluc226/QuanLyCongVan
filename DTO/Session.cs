@@ -17,6 +17,11 @@ namespace DTO
         public static string UserId => CurrentUser?.MaNguoiDung;
         public static string PhongBan => CurrentUser?.MaPhongBan;
 
+        // 🎯 THÊM CÁI NÀY
+        public static bool IsLanhDao => Role == "LanhDao";
+        public static bool IsTruongPhong => Role == "TruongPhong";
+        public static bool IsNhanVien => Role == "NhanVien";
+
         public static void SetUser(User user)
         {
             CurrentUser = user;

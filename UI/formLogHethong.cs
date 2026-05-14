@@ -15,6 +15,7 @@ namespace UI
         public formLogHethong()
         {
             InitializeComponent();
+            LoadData();
         }
         private void LoadData()
         {

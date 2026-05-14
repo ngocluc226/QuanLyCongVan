@@ -20,7 +20,8 @@ namespace UI
             dgvTaiKhoan.AutoGenerateColumns = false;
             LoadSearchCombo();
             LoadPhongBan();
-            dgvTaiKhoan.DataSource = null;
+            // Load users into the grid when the form loads
+            LoadUsers();
             ResetState();
         }
 
@@ -133,6 +134,8 @@ namespace UI
             ClearInputs();
             txtManguoidung.Enabled = true;
             txtManguoidung.Focus();
+            LoadUsers();
+            ResetState();
         }
 
         private void BtnCapNhat_Click(object sender, EventArgs e)
@@ -148,6 +151,8 @@ namespace UI
 
             // Ensure we're in update mode
             _isAdding = false;
+            LoadUsers();
+            ResetState();
         }
 
         private void BtnXoa_Click(object sender, EventArgs e)
@@ -187,6 +192,7 @@ namespace UI
                 }
 
                 ClearInputs();
+                LoadUsers();
                 ResetState();
             }
         }
@@ -222,6 +228,7 @@ namespace UI
 
             LoadUsers();
             ClearInputs();
+            LoadUsers();
             ResetState();
         }
 
@@ -229,6 +236,7 @@ namespace UI
         {
             ResetState();
             ClearInputs();
+            LoadUsers();
         }
 
 
@@ -256,6 +264,12 @@ namespace UI
         private void btnReturn_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            ClearInputs();
+            LoadUsers();
         }
     }
 }

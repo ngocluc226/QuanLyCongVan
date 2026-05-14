@@ -64,6 +64,12 @@ namespace UI
                 case "LanhDao":
                     f = new formLanhDao();
                     break;
+                case "NhanVien":
+                     f = new formNhanVien();
+                    break;
+                case "TruongPhong":
+                     f = new formTruongPhongCVDen();
+                    break;
                 default:
                     f = new formNhanVien();
                     break;

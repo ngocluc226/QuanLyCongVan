@@ -130,5 +130,28 @@ namespace DAL
                 Email = r["Email"]?.ToString()
             };
         }
+        public DataTable GetByRole(string role)
+        {
+            string query = "SELECT MaNguoiDung, TenNguoiDung FROM NguoiDung WHERE Quyen = @Role";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+        new SqlParameter("@Role", role)
+            };
+
+            return DBHelper.Instance.ExecuteQuery(query, parameters);
+        }
+        public DataTable GetByPhongBan(string maPhongBan)
+        {
+            string query = @"
+        SELECT MaNguoiDung, TenNguoiDung
+        FROM NguoiDung
+        WHERE MaPhongBan = @MaPhongBan";
+
+            return DBHelper.Instance.ExecuteQuery(
+                query,
+                new SqlParameter("@MaPhongBan", maPhongBan)
+            );
+        }
     }
 }

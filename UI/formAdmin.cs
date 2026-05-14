@@ -33,10 +33,6 @@ namespace UI
             Utils.LoadForm(new formCongVanDenList(), pnlContent);
         }
 
-        private void btnThongKe_Click(object sender, EventArgs e)
-        {
-            //LoadForm(new formThongKe());
-        }
 
         private void btnLog_Click(object sender, EventArgs e)
         {
@@ -51,6 +47,11 @@ namespace UI
         private void formAdmin_Load(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Maximized;
+        }
+
+        private void btnCongVanDi_Click(object sender, EventArgs e)
+        {
+            Utils.LoadForm(new formCongVanDiList(), pnlContent);
         }
     }
 }

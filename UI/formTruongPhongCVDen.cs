@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BLL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,48 +12,24 @@ using System.Windows.Forms;
 
 namespace UI
 {
-    public partial class formNhanVienCVDen : Form
+    public partial class formTruongPhongCVDen : Form
     {
-        public formNhanVienCVDen()
+        public formTruongPhongCVDen()
         {
             InitializeComponent();
+        }
+
+        private void formTruongPhongCVDen_Load(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Maximized;
             LoadData();
         }
         private void LoadData()
         {
-            dgvCongVan.DataSource =
-                BLL.CongVanDenBLL.Instance.GetByTrangThai(DTO.TrangThaiCongVanDen.DA_PHAN_CONG);
+            var dt = CongVanDenBLL.Instance.GetCongVanChoTruongPhong();
+
+            dgvCongVan.DataSource = dt;
         }
-        private int GetSelectedId()
-        {
-            if (dgvCongVan.SelectedRows.Count == 0)
-            {
-                MessageBox.Show("Chọn công văn!");
-                return -1;
-            }
-
-            return Convert.ToInt32(dgvCongVan.SelectedRows[0].Cells["Id"].Value);
-        }
-        private void btnXuLy_Click(object sender, EventArgs e)
-        {
-            int id = GetSelectedId();
-            if (id == -1) return;
-
-            BLL.CongVanDenBLL.Instance.CapNhatXuLy(id, DTO.TrangThaiCongVanDen.DANG_XU_LY);
-
-            LoadData();
-        }
-
-        private void btnHoanThanh_Click(object sender, EventArgs e)
-        {
-            int id = GetSelectedId();
-            if (id == -1) return;
-
-            BLL.CongVanDenBLL.Instance.HoanThanh(id);
-
-            LoadData();
-        }
-
         private void btnOpen_Click(object sender, EventArgs e)
         {
             if (dgvCongVan.SelectedRows.Count == 0)
@@ -74,6 +51,25 @@ namespace UI
 
             formFileViewer f = new formFileViewer(fullPath);
             f.ShowDialog();
+        }
+
+        private void btnPhanCong_Click(object sender, EventArgs e)
+        {
+            if (dgvCongVan.CurrentRow == null)
+            {
+                MessageBox.Show("Vui lòng chọn công văn!");
+                return;
+            }
+
+            // 👉 Lấy Id công văn (đảm bảo tên cột đúng với DataTable)
+            int congVanId = Convert.ToInt32(dgvCongVan.CurrentRow.Cells["Id"].Value);
+
+            // 👉 Mở form phân công
+            formPhanCong f = new formPhanCong(congVanId);
+            f.ShowDialog();
+
+            // 👉 Sau khi đóng form → reload lại danh sách
+            LoadData();
         }
     }
 }

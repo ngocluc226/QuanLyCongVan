@@ -120,12 +120,6 @@
     <Compile Include="formLogin.Designer.cs">
       <DependentUpon>formLogin.cs</DependentUpon>
     </Compile>
-    <Compile Include="formMenu.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="formMenu.Designer.cs">
-      <DependentUpon>formMenu.cs</DependentUpon>
-    </Compile>
     <Compile Include="formNhanVien.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -167,6 +161,12 @@
     </Compile>
     <Compile Include="formSendMail.Designer.cs">
       <DependentUpon>formSendMail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="formTruongPhongCVDen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formTruongPhongCVDen.Designer.cs">
+      <DependentUpon>formTruongPhongCVDen.cs</DependentUpon>
     </Compile>
     <Compile Include="formVanThu.cs">
       <SubType>Form</SubType>
@@ -222,9 +222,6 @@
     <EmbeddedResource Include="formLogin.resx">
       <DependentUpon>formLogin.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="formMenu.resx">
-      <DependentUpon>formMenu.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="formNhanVien.resx">
       <DependentUpon>formNhanVien.cs</DependentUpon>
     </EmbeddedResource>
@@ -245,6 +242,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="formSendMail.resx">
       <DependentUpon>formSendMail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formTruongPhongCVDen.resx">
+      <DependentUpon>formTruongPhongCVDen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="formVanThu.resx">
       <DependentUpon>formVanThu.cs</DependentUpon>

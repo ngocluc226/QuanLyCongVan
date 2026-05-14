@@ -55,5 +55,13 @@ namespace BLL
 
             return UserDAL.Instance.Login(username, password);
         }
+        public DataTable GetByRole(string role)
+        {
+            return UserDAL.Instance.GetByRole(role);
+        }
+        public DataTable GetByPhongBan(string maPhongBan)
+        {
+            return UserDAL.Instance.GetByPhongBan(maPhongBan);
+        }
     }
 }

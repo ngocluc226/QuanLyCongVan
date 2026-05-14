@@ -135,10 +135,11 @@
             // 
             // dgvVanBan
             // 
+            this.dgvVanBan.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvVanBan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvVanBan.Location = new System.Drawing.Point(69, 147);
+            this.dgvVanBan.Location = new System.Drawing.Point(31, 147);
             this.dgvVanBan.Name = "dgvVanBan";
-            this.dgvVanBan.Size = new System.Drawing.Size(1265, 424);
+            this.dgvVanBan.Size = new System.Drawing.Size(1331, 424);
             this.dgvVanBan.TabIndex = 49;
             // 
             // btnDelete
@@ -177,6 +178,7 @@
             this.Controls.Add(this.dtpTo);
             this.Controls.Add(this.dtpFrom);
             this.Controls.Add(this.label1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "formCongVanDenList";
             this.Text = "Công văn đến";
             this.Load += new System.EventHandler(this.formCongVanDenList_Load);
