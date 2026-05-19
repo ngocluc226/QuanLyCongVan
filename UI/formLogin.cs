@@ -1,4 +1,4 @@
-﻿using DTO;
+using DTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -68,7 +68,7 @@ namespace UI
                      f = new formNhanVien();
                     break;
                 case "TruongPhong":
-                     f = new formTruongPhongCVDen();
+                     f = new formTruongPhong();
                     break;
                 default:
                     f = new formNhanVien();

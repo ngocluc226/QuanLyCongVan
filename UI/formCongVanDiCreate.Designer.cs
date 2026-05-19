@@ -73,6 +73,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.txtSoDi = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.dgvChoBanHanh = new System.Windows.Forms.DataGridView();
             this.dtgvvbdi.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.SuspendLayout();
@@ -647,11 +648,24 @@
             this.label7.TabIndex = 0;
             this.label7.Text = "Số đi";
             // 
+            // dgvChoBanHanh
+            // 
+            this.dgvChoBanHanh.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvChoBanHanh.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.dgvChoBanHanh.Location = new System.Drawing.Point(0, 312);
+            this.dgvChoBanHanh.MultiSelect = false;
+            this.dgvChoBanHanh.Name = "dgvChoBanHanh";
+            this.dgvChoBanHanh.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvChoBanHanh.Size = new System.Drawing.Size(1553, 200);
+            this.dgvChoBanHanh.TabIndex = 6;
+            this.dgvChoBanHanh.Visible = false;
+            // 
             // formCongVanDiCreate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1596, 551);
+            this.Controls.Add(this.dgvChoBanHanh);
             this.Controls.Add(this.dtgvvbdi);
             this.Name = "formCongVanDiCreate";
             this.Text = "formCongVanDiCreate";
@@ -709,5 +723,6 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox txtSoDi;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.DataGridView dgvChoBanHanh;
     }
 }

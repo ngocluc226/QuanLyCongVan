@@ -41,7 +41,7 @@
             this.btnPhanCong.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnPhanCong.ForeColor = System.Drawing.Color.White;
             this.btnPhanCong.Location = new System.Drawing.Point(53, 117);
-            this.btnPhanCong.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnPhanCong.Margin = new System.Windows.Forms.Padding(4);
             this.btnPhanCong.Name = "btnPhanCong";
             this.btnPhanCong.Size = new System.Drawing.Size(163, 58);
             this.btnPhanCong.TabIndex = 0;
@@ -54,7 +54,7 @@
             this.dgvCongVan.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvCongVan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvCongVan.Location = new System.Drawing.Point(53, 183);
-            this.dgvCongVan.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dgvCongVan.Margin = new System.Windows.Forms.Padding(4);
             this.dgvCongVan.Name = "dgvCongVan";
             this.dgvCongVan.RowHeadersWidth = 51;
             this.dgvCongVan.Size = new System.Drawing.Size(1551, 542);
@@ -77,7 +77,7 @@
             this.btnOpen.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnOpen.ForeColor = System.Drawing.Color.White;
             this.btnOpen.Location = new System.Drawing.Point(881, 117);
-            this.btnOpen.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnOpen.Margin = new System.Windows.Forms.Padding(4);
             this.btnOpen.Name = "btnOpen";
             this.btnOpen.Size = new System.Drawing.Size(178, 58);
             this.btnOpen.TabIndex = 63;
@@ -95,7 +95,7 @@
             this.Controls.Add(this.dgvCongVan);
             this.Controls.Add(this.btnPhanCong);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "formLanhDaoCVDen";
             this.Text = "formLanhDao";
             ((System.ComponentModel.ISupportInitialize)(this.dgvCongVan)).EndInit();

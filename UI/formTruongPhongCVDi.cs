@@ -1,18 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
+using BLL;
+using DTO;
 
 namespace UI
 {
-    public partial class formLanhDaoCVDi : Form
+    public partial class formTruongPhongCVDi : Form
     {
-        public formLanhDaoCVDi()
+        public formTruongPhongCVDi()
         {
             InitializeComponent();
             InitEvents();
@@ -23,11 +19,12 @@ namespace UI
             this.Load += (s, e) => LoadData();
             this.btnDuyet.Click += (s, e) => DuyetCV();
             this.btnTuChoi.Click += (s, e) => TuChoiCV();
+            this.btnXem.Click += (s, e) => XemFile();
         }
 
         private void LoadData()
         {
-            dgvCongVan.DataSource = BLL.CongVanDiBLL.Instance.GetByTrangThai(DTO.TrangThaiCongVanDi.CHO_KY_LANH_DAO);
+            dgvCongVan.DataSource = CongVanDiBLL.Instance.GetByTrangThai(TrangThaiCongVanDi.CHO_DUYET_TRUONG_PHONG);
         }
 
         private void DuyetCV()
@@ -35,11 +32,15 @@ namespace UI
             if (dgvCongVan.SelectedRows.Count > 0)
             {
                 int id = Convert.ToInt32(dgvCongVan.SelectedRows[0].Cells["Id"].Value);
-                if (BLL.CongVanDiBLL.Instance.ChuyenTrangThai(id, DTO.TrangThaiCongVanDi.CHO_BAN_HANH, "Lãnh đạo đã duyệt"))
+                if (CongVanDiBLL.Instance.ChuyenTrangThai(id, TrangThaiCongVanDi.CHO_KY_LANH_DAO, "Trưởng phòng đã duyệt"))
                 {
-                    MessageBox.Show("Đã duyệt thành công!");
+                    MessageBox.Show("Đã duyệt và chuyển Lãnh đạo ký thành công!");
                     LoadData();
                 }
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn công văn cần duyệt!");
             }
         }
 
@@ -58,9 +59,9 @@ namespace UI
                         return;
                     }
 
-                    if (BLL.CongVanDiBLL.Instance.ChuyenTrangThai(id, DTO.TrangThaiCongVanDi.TU_CHOI, "Lãnh đạo từ chối: " + lyDo))
+                    if (CongVanDiBLL.Instance.ChuyenTrangThai(id, TrangThaiCongVanDi.TU_CHOI, "Trưởng phòng từ chối: " + lyDo))
                     {
-                        MessageBox.Show("Đã từ chối!");
+                        MessageBox.Show("Đã từ chối thành công!");
                         LoadData();
                     }
                 }
@@ -69,6 +70,27 @@ namespace UI
             {
                 MessageBox.Show("Vui lòng chọn công văn cần từ chối!");
             }
+        }
+
+        private void XemFile()
+        {
+            if (dgvCongVan.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Vui lòng chọn công văn!");
+                return;
+            }
+
+            string path = dgvCongVan.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
+
+            if (string.IsNullOrEmpty(path))
+            {
+                MessageBox.Show("Không có file đính kèm!");
+                return;
+            }
+
+            string fullPath = Path.Combine(Application.StartupPath, path);
+            formFileViewer f = new formFileViewer(fullPath);
+            f.ShowDialog();
         }
 
         private string ShowPromptDialog(string text, string caption)
