@@ -93,6 +93,12 @@
     <Compile Include="formLanhDao.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="formUyQuyen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formUyQuyen.Designer.cs">
+      <DependentUpon>formUyQuyen.cs</DependentUpon>
+    </Compile>
     <Compile Include="formLanhDao.Designer.cs">
       <DependentUpon>formLanhDao.cs</DependentUpon>
     </Compile>
@@ -221,6 +227,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="formLanhDao.resx">
       <DependentUpon>formLanhDao.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formUyQuyen.resx">
+      <DependentUpon>formUyQuyen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="formLanhDaoCVDen.resx">
       <DependentUpon>formLanhDaoCVDen.cs</DependentUpon>

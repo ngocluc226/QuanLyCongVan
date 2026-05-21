@@ -32,6 +32,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnLogout = new System.Windows.Forms.Button();
             this.btnCVDi = new System.Windows.Forms.Button();
+            this.btnUyQuyen = new System.Windows.Forms.Button();
             this.btnCVDen = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -49,6 +50,7 @@
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.btnLogout);
+            this.panel1.Controls.Add(this.btnUyQuyen);
             this.panel1.Controls.Add(this.btnCVDi);
             this.panel1.Controls.Add(this.btnCVDen);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
@@ -72,6 +74,22 @@
             this.btnLogout.Text = "Đăng xuất";
             this.btnLogout.UseVisualStyleBackColor = false;
             this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
+            // 
+                        // 
+            // btnUyQuyen
+            // 
+            this.btnUyQuyen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(106)))), ((int)(((byte)(177)))));
+            this.btnUyQuyen.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnUyQuyen.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.btnUyQuyen.ForeColor = System.Drawing.Color.White;
+            this.btnUyQuyen.Location = new System.Drawing.Point(0, 92);
+            this.btnUyQuyen.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnUyQuyen.Name = "btnUyQuyen";
+            this.btnUyQuyen.Size = new System.Drawing.Size(264, 46);
+            this.btnUyQuyen.TabIndex = 2;
+            this.btnUyQuyen.Text = "Ủy quyền xử lý";
+            this.btnUyQuyen.UseVisualStyleBackColor = false;
+            this.btnUyQuyen.Click += new System.EventHandler(this.btnUyQuyen_Click);
             // 
             // btnCVDi
             // 
@@ -125,6 +143,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnLogout;
         private System.Windows.Forms.Button btnCVDi;
+        private System.Windows.Forms.Button btnUyQuyen;
         private System.Windows.Forms.Button btnCVDen;
     }
 }

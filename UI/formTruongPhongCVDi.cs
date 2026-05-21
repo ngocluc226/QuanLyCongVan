@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Windows.Forms;
 using System.IO;
 using BLL;
@@ -24,7 +24,16 @@ namespace UI
 
         private void LoadData()
         {
-            dgvCongVan.DataSource = CongVanDiBLL.Instance.GetByTrangThai(TrangThaiCongVanDi.CHO_DUYET_TRUONG_PHONG);
+            if (Session.CurrentUser != null && UyQuyenBLL.Instance.CheckHasActiveUyQuyenLanhDao(Session.CurrentUser.MaNguoiDung))
+            {
+                dgvCongVan.DataSource = CongVanDiBLL.Instance.GetByTrangThais(
+                    TrangThaiCongVanDi.CHO_DUYET_TRUONG_PHONG, 
+                    TrangThaiCongVanDi.CHO_KY_LANH_DAO);
+            }
+            else
+            {
+                dgvCongVan.DataSource = CongVanDiBLL.Instance.GetByTrangThai(TrangThaiCongVanDi.CHO_DUYET_TRUONG_PHONG);
+            }
         }
 
         private void DuyetCV()
@@ -32,10 +41,23 @@ namespace UI
             if (dgvCongVan.SelectedRows.Count > 0)
             {
                 int id = Convert.ToInt32(dgvCongVan.SelectedRows[0].Cells["Id"].Value);
-                if (CongVanDiBLL.Instance.ChuyenTrangThai(id, TrangThaiCongVanDi.CHO_KY_LANH_DAO, "Trưởng phòng đã duyệt"))
+                string trangThai = dgvCongVan.SelectedRows[0].Cells["TrangThai"].Value.ToString();
+                
+                if (trangThai == TrangThaiCongVanDi.CHO_DUYET_TRUONG_PHONG)
                 {
-                    MessageBox.Show("Đã duyệt và chuyển Lãnh đạo ký thành công!");
-                    LoadData();
+                    if (CongVanDiBLL.Instance.ChuyenTrangThai(id, TrangThaiCongVanDi.CHO_KY_LANH_DAO, "Trưởng phòng đã duyệt"))
+                    {
+                        MessageBox.Show("Duyệt và chuyển Lãnh đạo ký thành công!");
+                        LoadData();
+                    }
+                }
+                else if (trangThai == TrangThaiCongVanDi.CHO_KY_LANH_DAO)
+                {
+                    if (CongVanDiBLL.Instance.ChuyenTrangThai(id, TrangThaiCongVanDi.CHO_BAN_HANH, "Ký thay Lãnh đạo bởi " + Session.CurrentUser.TenNguoiDung))
+                    {
+                        MessageBox.Show("Duyệt (Ký thay) thành công!");
+                        LoadData();
+                    }
                 }
             }
             else
@@ -49,19 +71,21 @@ namespace UI
             if (dgvCongVan.SelectedRows.Count > 0)
             {
                 int id = Convert.ToInt32(dgvCongVan.SelectedRows[0].Cells["Id"].Value);
-                var result = MessageBox.Show("Bạn có chắc chắn muốn TỪ CHỐI công văn này không?", "Xác nhận từ chối", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                string trangThai = dgvCongVan.SelectedRows[0].Cells["TrangThai"].Value.ToString();
+                
+                var result = MessageBox.Show("Bạn có chắc chắn muốn TỪ CHỐI công văn này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (result == DialogResult.Yes)
                 {
-                    string lyDo = ShowPromptDialog("Nhập lý do từ chối (bắt buộc):", "Từ chối văn bản");
-                    if (string.IsNullOrWhiteSpace(lyDo))
-                    {
-                        MessageBox.Show("Vui lòng nhập lý do từ chối để nhân viên khắc phục!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
+                    string lyDo = ShowPromptDialog("Nhập lý do từ chối:", "Lý do");
+                    if (string.IsNullOrEmpty(lyDo)) lyDo = "Không đạt yêu cầu";
+                    
+                    string trangThaiMoi = (trangThai == TrangThaiCongVanDi.CHO_KY_LANH_DAO) 
+                                        ? TrangThaiCongVanDi.CHO_DUYET_TRUONG_PHONG 
+                                        : TrangThaiCongVanDi.TU_CHOI;
 
-                    if (CongVanDiBLL.Instance.ChuyenTrangThai(id, TrangThaiCongVanDi.TU_CHOI, "Trưởng phòng từ chối: " + lyDo))
+                    if (CongVanDiBLL.Instance.ChuyenTrangThai(id, trangThaiMoi, "Từ chối: " + lyDo))
                     {
-                        MessageBox.Show("Đã từ chối thành công!");
+                        MessageBox.Show("Từ chối thành công!");
                         LoadData();
                     }
                 }
