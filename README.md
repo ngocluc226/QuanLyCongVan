@@ -323,3 +323,6 @@ INSERT INTO NguoiDung (MaNguoiDung, TenNguoiDung, TenDangNhap, MatKhau, Quyen, M
 ('U004', N'Lê Trưởng Phòng IT', 'truongphong', '123', 'TruongPhong', 'IT'),
 ('U005', N'Phạm Chuyên Viên IT', 'nhanvien', '123', 'NhanVien', 'IT');
 GO
+
+
+//////
