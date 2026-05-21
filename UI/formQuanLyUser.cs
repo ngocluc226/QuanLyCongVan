@@ -17,14 +17,56 @@ namespace UI
 
         private void formQuanLyUser_Load(object sender, EventArgs e)
         {
-            dgvTaiKhoan.AutoGenerateColumns = false;
+            InitDataGridView();
+            Utils.FormatDataGridView(dgvTaiKhoan);
+            Utils.SyncAllButtons(this);
             LoadSearchCombo();
             LoadPhongBan();
-            // Load users into the grid when the form loads
             LoadUsers();
             ResetState();
         }
+        private void InitDataGridView()
+        {
+            dgvTaiKhoan.AutoGenerateColumns = false;
+            dgvTaiKhoan.Columns.Clear();
+            dgvTaiKhoan.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvTaiKhoan.AllowUserToAddRows = false;
 
+            // 1. Mã người dùng
+            dgvTaiKhoan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "colMaNguoiDung", HeaderText = "Mã số", DataPropertyName = "MaNguoiDung", Width = 90 });
+
+            // 2. Tên người dùng
+            dgvTaiKhoan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "colTenNguoiDung", HeaderText = "Họ và tên", DataPropertyName = "TenNguoiDung", Width = 150 });
+
+            // 3. Tên đăng nhập
+            dgvTaiKhoan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "colTenDangNhap", HeaderText = "Tài khoản", DataPropertyName = "TenDangNhap", Width = 110 });
+
+            // 4. Quyền
+            dgvTaiKhoan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "colQuyen", HeaderText = "Quyền hạn", DataPropertyName = "Quyen", Width = 110 });
+
+            // 5. Số điện thoại
+            dgvTaiKhoan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "colSDT", HeaderText = "Số ĐT", DataPropertyName = "SDT", Width = 100 });
+
+            // 6. Email
+            dgvTaiKhoan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "colEmail", HeaderText = "Email", DataPropertyName = "Email", Width = 160 });
+
+            // 7. Tên phòng ban trực thuộc (Kéo giãn phủ lưới)
+            dgvTaiKhoan.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                Name = "colTenPhongBan",
+                HeaderText = "Phòng ban trực thuộc",
+                DataPropertyName = "TenPhongBan",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+            });
+
+            // 8. CỘT THÊM MỚI (ẨN): Mã phòng ban phục vụ logic đổ ngược dữ liệu khi click Sửa
+            dgvTaiKhoan.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                Name = "colMaPhongBan",
+                DataPropertyName = "MaPhongBan",
+                Visible = false
+            });
+        }
         private void ResetState()
         {
             _isAdding = false;
@@ -81,24 +123,27 @@ namespace UI
 
         private User GetUserFromForm()
         {
+            string rawPassword = txtPassword.Text.Trim();
+            string hashedPassword = "";
+
+            // Nếu đang thêm mới, hoặc người dùng có nhập mật khẩu mới vào ô TextBox thì tiến hành băm
+            if (!string.IsNullOrEmpty(rawPassword))
+            {
+                hashedPassword = Utils.HashSHA256(rawPassword);
+            }
             return new User
             {
                 MaNguoiDung = txtManguoidung.Text.Trim(),
                 TenNguoiDung = txtfullname.Text.Trim(),
                 TenDangNhap = txtUsername.Text.Trim(),
-                MatKhau = txtPassword.Text.Trim(),
+                MatKhau = hashedPassword,
 
-                // 👉 lấy trực tiếp từ combobox
                 Quyen = cbQuyen.SelectedItem?.ToString(),
-
                 MaPhongBan = cbPhongBan.SelectedValue?.ToString(),
-
                 SDT = txtSdt.Text.Trim(),
                 Email = txtEmail.Text.Trim()
             };
         }
-
-        // ================= EVENT =================
 
         private void dgvTaiKhoan_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -114,16 +159,22 @@ namespace UI
             txtManguoidung.Text = r.Cells["colMaNguoiDung"].Value?.ToString();
             txtfullname.Text = r.Cells["colTenNguoiDung"].Value?.ToString();
             txtUsername.Text = r.Cells["colTenDangNhap"].Value?.ToString();
-            //txtPassword.Text = r.Cells["colMatKhau"].Value?.ToString();
 
-            cbQuyen.SelectedItem = r.Cells["colQuyen"].Value?.ToString();
+            if (r.Cells["colMaPhongBan"] != null && r.Cells["colMaPhongBan"].Value != DBNull.Value)
+            {
+                cbPhongBan.SelectedValue = r.Cells["colMaPhongBan"].Value?.ToString();
+            }
+            else
+            {
+               cbPhongBan.SelectedIndex = cbPhongBan.FindStringExact(r.Cells["colTenPhongBan"].Value?.ToString());
+            }
 
-            cbPhongBan.SelectedItem = r.Cells["colTenPhongBan"].Value?.ToString();
+            string quyenText = r.Cells["colQuyen"].Value?.ToString();
+            cbQuyen.SelectedIndex = cbQuyen.FindStringExact(quyenText);
 
             txtSdt.Text = r.Cells["colSDT"].Value?.ToString();
             txtEmail.Text = r.Cells["colEmail"].Value?.ToString();
 
-            // When editing, lock the id field and mark as editing mode
             txtManguoidung.Enabled = false;
             _isAdding = false;
         }
@@ -140,7 +191,6 @@ namespace UI
 
         private void BtnCapNhat_Click(object sender, EventArgs e)
         {
-            // Populate the form from the currently selected row so user can edit
             if (dgvTaiKhoan.CurrentRow == null)
             {
                 MessageBox.Show("Chọn người dùng cần sửa");
@@ -149,7 +199,6 @@ namespace UI
 
             PopulateFormFromRow(dgvTaiKhoan.CurrentRow);
 
-            // Ensure we're in update mode
             _isAdding = false;
             LoadUsers();
             ResetState();
@@ -261,10 +310,6 @@ namespace UI
                 UserService.Instance.SearchUsers(col, text);
         }
 
-        private void btnReturn_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {

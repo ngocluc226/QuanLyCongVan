@@ -25,6 +25,7 @@ namespace UI
 
         private void formPhanCong_Load(object sender, EventArgs e)
         {
+            Utils.SyncAllButtons(this);
             cbPhongBan.DataSource = PhongBanBLL.Instance.GetAll();
             cbPhongBan.DisplayMember = "TenPhongBan";
             cbPhongBan.ValueMember = "MaPhongBan";
@@ -33,11 +34,9 @@ namespace UI
 
             // 🎯 PHÂN QUYỀN
             if (Session.IsTruongPhong)
-            {
-                // Trưởng phòng
-                rdPhongBan.Visible = false;
-                rdCaNhan.Visible = false;
-
+            { 
+                rdCaNhan.Checked = true;        // Mặc định là giao cá nhân
+                cbUser.Enabled = true;
                 cbPhongBan.SelectedValue = Session.PhongBan;
                 cbPhongBan.Enabled = false;
 

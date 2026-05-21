@@ -36,6 +36,7 @@ namespace UI
         private void formVanThu_Load(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Maximized;
+            Utils.SyncAllButtons(this);
         }
     }
 }

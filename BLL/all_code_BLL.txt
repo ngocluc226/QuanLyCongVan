@@ -1,0 +1,514 @@
+===== D:\CODE\QuanLyCongVan\BLL\CongVanDenBLL.cs =====
+using DAL;
+using DTO;
+using System;
+using System.Data;
+using System.Data.SqlClient;
+
+namespace BLL
+{
+    public class CongVanDenBLL
+    {
+        private static CongVanDenBLL _Instance;
+        public static CongVanDenBLL Instance
+        {
+            get
+            {
+                if (_Instance == null)
+                    _Instance = new CongVanDenBLL();
+                return _Instance;
+            }
+        }
+
+        public bool Insert(DTO.CongVanDen cv)
+        {
+            if (string.IsNullOrEmpty(cv.SoDen))
+                return false;
+
+            // Set tr?ng thái chu?n
+            cv.TrangThai = TrangThaiCongVanDen.DA_NHAP;
+
+            LogBLL.Instance.WriteLog("Thêm công van: " + cv.SoDen, Session.UserName);
+
+            return DAL.CongVanDenDAL.Instance.Insert(cv) > 0;
+        }
+
+        public bool TrinhLanhDao(int id)
+        {
+            LogBLL.Instance.WriteLog("Trình lãnh d?o", Session.UserName);
+            return DAL.CongVanDenDAL.Instance.UpdateTrangThai(id, TrangThaiCongVanDen.DA_TRINH) > 0;
+        }
+
+        public bool PhanCong(int congVanId, string maNguoiDung, string maPhongBan, string yKien)
+        {
+            if (!string.IsNullOrEmpty(maNguoiDung) && !string.IsNullOrEmpty(maPhongBan))
+                throw new Exception("Ch? du?c ch?n 1 trong 2: User ho?c Phòng");
+
+            if (string.IsNullOrEmpty(maNguoiDung) && string.IsNullOrEmpty(maPhongBan))
+                throw new Exception("Ph?i ch?n noi phân công");
+
+            string cap = "";
+            string nguoiGiao = Session.UserName;
+
+            if (Session.Role == "LanhDao")
+            {
+                if (string.IsNullOrEmpty(maPhongBan))
+                    throw new Exception("Lãnh d?o ch? du?c giao phòng ban");
+
+                maNguoiDung = null;
+                cap = "LANH_DAO";
+            }
+            else if (Session.Role == "TruongPhong")
+            {
+                if (string.IsNullOrEmpty(maNguoiDung))
+                    throw new Exception("Tru?ng phòng ph?i giao cho nhân viên");
+
+                maPhongBan = null;
+                cap = "TRUONG_PHONG";
+            }
+
+            var result = PhanCongDAL.Instance.Insert(
+                congVanId,
+                maNguoiDung,
+                maPhongBan,
+                yKien,
+                nguoiGiao,
+                cap
+            );
+
+            if (result > 0)
+            {
+                DAL.CongVanDenDAL.Instance.UpdateTrangThai(congVanId, TrangThaiCongVanDen.DA_PHAN_CONG);
+
+                LogBLL.Instance.WriteLog(
+                    $"Phân công CV {congVanId} - {cap}",
+                    Session.UserName
+                );
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool CapNhatXuLy(int congVanId, string trangThai)
+        {
+            return DAL.CongVanDenDAL.Instance.UpdateTrangThai(congVanId, trangThai) > 0;
+        }
+
+        public bool HoanThanh(int congVanId)
+        {
+            return DAL.CongVanDenDAL.Instance.UpdateTrangThai(congVanId, TrangThaiCongVanDen.HOAN_THANH) > 0;
+        }
+
+        public bool Delete(int id)
+        {
+            LogBLL.Instance.WriteLog("Xóa công van ID: " + id, Session.UserName);
+            return DAL.CongVanDenDAL.Instance.Delete(id) > 0;
+        }
+
+        public string GenerateSoDen()
+        {
+            int count = DAL.CongVanDenDAL.Instance.GetMaxId() + 1;
+            return count.ToString();
+        }
+
+        public DataTable GetByDateRange(DateTime fromDate, DateTime toDate)
+        {
+            return DAL.CongVanDenDAL.Instance.GetByDateRange(fromDate, toDate);
+        }
+
+        public DataTable GetCongVanChoNhanVien()
+        {
+            return CongVanDenDAL.Instance.GetCongVanTheoNhanVien(Session.UserId);
+        }
+
+        public int GetThongBaoNhanVien()
+        {
+            // Truy?n dúng UserId c?a ngu?i dang dang nh?p vào b? l?c
+            return DAL.CongVanDenDAL.Instance.GetCountChoXuLyByNhanVien(Session.UserId);
+        }
+
+        public int GetThongBaoTruongPhong()
+        {
+            // Truy?n dúng Mã phòng ban c?a Tru?ng phòng dang dang nh?p d? d?m vi?c t?n d?ng
+            return DAL.CongVanDenDAL.Instance.GetCountChoGiaoViecByPhongBan(Session.PhongBan);
+        }
+
+        public DataTable GetPaged(int pageNumber, int pageSize)
+        {
+            return DAL.CongVanDenDAL.Instance.GetPaged(pageNumber, pageSize);
+        }
+
+        public int GetTotalCount()
+        {
+            return DAL.CongVanDenDAL.Instance.GetTotalCount();
+        }
+
+        public DataTable GetCongVanDaHoanThanhChoNhanVien()
+        {
+            return CongVanDenDAL.Instance.GetCongVanDaHoanThanhTheoNhanVien(Session.UserId);
+        }
+
+        public DataTable GetCongVanDaXuLyVanThu()
+        {
+            return DAL.CongVanDenDAL.Instance.GetCongVanDaXuLyVanThu();
+        }
+
+        public DataTable GetCongVanDaXuLyLanhDao()
+        {
+            return DAL.CongVanDenDAL.Instance.GetCongVanDaXuLyLanhDao();
+        }
+
+        public DataTable GetCongVanDaXuLyTruongPhong()
+        {
+            return DAL.CongVanDenDAL.Instance.GetCongVanDaXuLyTruongPhong(Session.UserId);
+        }
+
+        
+        public DataTable GetCongVanMoiNhap()
+        {
+            return DAL.CongVanDenDAL.Instance.GetByTrangThai(TrangThaiCongVanDen.DA_NHAP);
+        }
+
+        public DataTable GetCongVanChoLanhDao()
+        {
+            return DAL.CongVanDenDAL.Instance.GetByTrangThai(TrangThaiCongVanDen.DA_TRINH);
+        }
+
+        public DataTable GetCongVanChoPhongBan()
+        {
+            return DAL.CongVanDenDAL.Instance.GetCongVanTheoPhong(Session.PhongBan);
+        }
+    }
+}
+
+===== D:\CODE\QuanLyCongVan\BLL\CongVanDiBLL.cs =====
+using System;
+using System.Data;
+
+namespace BLL
+{
+    public class CongVanDiBLL
+    {
+        private static CongVanDiBLL _Instance;
+        public static CongVanDiBLL Instance
+        {
+            get
+            {
+                if (_Instance == null)
+                    _Instance = new CongVanDiBLL();
+                return _Instance;
+            }
+        }
+
+        public DataTable GetAll()
+        {
+            return DAL.CongVanDiDAL.Instance.GetAll();
+        }
+
+        public bool Insert(DTO.CongVanDi cv)
+        {
+            if (string.IsNullOrEmpty(cv.SoDi))
+                return false;
+
+            return DAL.CongVanDiDAL.Instance.Insert(cv) > 0;
+        }
+
+        public bool Delete(int id)
+        {
+            return DAL.CongVanDiDAL.Instance.Delete(id) > 0;
+        }
+        
+        public string GenerateSoDi()
+        {
+            int count = DAL.CongVanDiDAL.Instance.GetMaxId() + 1;
+            return count.ToString();
+        }
+        
+        public DataTable GetByDateRange(DateTime fromDate, DateTime toDate)
+        {
+            return DAL.CongVanDiDAL.Instance.GetByDateRange(fromDate, toDate);
+        }
+    }
+}
+
+===== D:\CODE\QuanLyCongVan\BLL\LogBLL.cs =====
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BLL
+{
+    public class LogBLL
+    {
+        private static LogBLL _Instance;
+        public static LogBLL Instance
+        {
+            get
+            {
+                if (_Instance == null)
+                    _Instance = new LogBLL();
+                return _Instance;
+            }
+            private set { }
+        }
+
+        public DataTable GetAll()
+        {
+            return DAL.LogDAL.Instance.GetAll();
+        }
+
+        public void WriteLog(string action, string user)
+        {
+            DAL.LogDAL.Instance.Insert(action, user);
+        }
+    }
+}
+
+===== D:\CODE\QuanLyCongVan\BLL\PhongBanBLL.cs =====
+using DAL;
+using System.Data;
+
+namespace BLL
+{
+    public class PhongBanBLL
+    {
+        private static PhongBanBLL _Instance;
+        public static PhongBanBLL Instance
+        {
+            get
+            {
+                if (_Instance == null)
+                    _Instance = new PhongBanBLL();
+                return _Instance;
+            }
+        }
+
+        private PhongBanBLL() { }
+
+        public DataTable GetAll()
+        {
+            return PhongBanDAL.Instance.GetAll();
+        }
+        public bool Insert(string ma, string ten)
+        {
+            return PhongBanDAL.Instance.Insert(ma, ten) > 0;
+        }
+
+        public bool Update(string ma, string ten)
+        {
+            return PhongBanDAL.Instance.Update(ma, ten) > 0;
+        }
+
+        public bool Delete(string ma)
+        {
+            return PhongBanDAL.Instance.Delete(ma) > 0;
+        }
+    }
+}
+
+===== D:\CODE\QuanLyCongVan\BLL\TrinhLanhDaoBLL.cs =====
+using DAL;
+using DTO;
+using System;
+using System.Data;
+
+namespace BLL
+{
+    public class TrinhLanhDaoBLL
+    {
+        private static TrinhLanhDaoBLL _Instance;
+        public static TrinhLanhDaoBLL Instance
+        {
+            get
+            {
+                if (_Instance == null)
+                    _Instance = new TrinhLanhDaoBLL();
+                return _Instance;
+            }
+        }
+
+        public bool Trinh(int congVanId, string nguoiTrinhId, string lanhDaoId)
+        {
+            var obj = new TrinhLanhDao
+            {
+                CongVanId = congVanId,
+                NguoiTrinhId = nguoiTrinhId,
+                LanhDaoId = lanhDaoId,
+                NgayTrinh = DateTime.Now,
+                TrangThai = "ChoDuyet"
+            };
+
+            int result = TrinhLanhDaoDAL.Instance.Insert(obj);
+
+            if (result > 0)
+            {
+                CongVanDenDAL.Instance.UpdateTrangThai(congVanId, TrangThaiCongVanDen.DA_TRINH);
+                LogBLL.Instance.WriteLog("Trình lãnh d?o", Session.UserName);
+                return true;
+            }
+
+            return false;
+        }
+        public int GetThongBaoLanhDao()
+        {
+            // Session.UserId s? tr? v? dúng mã c?a Lãnh d?o dang gõ m?t kh?u vào form Login
+            return TrinhLanhDaoDAL.Instance.GetCountChoDuyetByLanhDao(Session.UserId);
+        }
+    }
+}
+
+===== D:\CODE\QuanLyCongVan\BLL\UserService.cs =====
+using DAL;
+using DTO;
+using System.Data;
+
+namespace BLL
+{
+    public class UserService
+    {
+        private static UserService _instance;
+        public static UserService Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new UserService();
+                return _instance;
+            }
+        }
+
+        private UserService() { }
+
+        public DataTable GetAllUsers()
+        {
+            return UserDAL.Instance.GetAll();
+        }
+
+        public DataTable GetAllPhongBan()
+        {
+            return PhongBanBLL.Instance.GetAll();
+        }
+
+        public void AddUser(User u)
+        {
+            UserDAL.Instance.Insert(u);
+        }
+
+        public void UpdateUser(User u)
+        {
+            UserDAL.Instance.Update(u);
+        }
+
+        public void DeleteUser(string id)
+        {
+            UserDAL.Instance.Delete(id);
+        }
+
+        public DataTable SearchUsers(string column, string text)
+        {
+            return UserDAL.Instance.Search(column, text);
+        }
+        public User Login(string username, string password)
+        {
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+                return null;
+
+            return UserDAL.Instance.Login(username, password);
+        }
+        public DataTable GetByRole(string role)
+        {
+            return UserDAL.Instance.GetByRole(role);
+        }
+        public DataTable GetByPhongBan(string maPhongBan)
+        {
+            return UserDAL.Instance.GetByPhongBan(maPhongBan);
+        }
+    }
+}
+
+===== D:\CODE\QuanLyCongVan\BLL\obj\Debug\net10.0\.NETCoreApp,Version=v10.0.AssemblyAttributes.cs =====
+// <autogenerated />
+using System;
+using System.Reflection;
+[assembly: global::System.Runtime.Versioning.TargetFrameworkAttribute(".NETCoreApp,Version=v10.0", FrameworkDisplayName = ".NET 10.0")]
+
+===== D:\CODE\QuanLyCongVan\BLL\obj\Debug\net10.0\BLL.AssemblyInfo.cs =====
+//------------------------------------------------------------------------------
+// <auto-generated>
+//     This code was generated by a tool.
+//     Runtime Version:4.0.30319.42000
+//
+//     Changes to this file may cause incorrect behavior and will be lost if
+//     the code is regenerated.
+// </auto-generated>
+//------------------------------------------------------------------------------
+
+using System;
+using System.Reflection;
+
+[assembly: System.Reflection.AssemblyCompanyAttribute("BLL")]
+[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8f1dac1628eef45d8f3d7260fbd142d267958220")]
+[assembly: System.Reflection.AssemblyProductAttribute("BLL")]
+[assembly: System.Reflection.AssemblyTitleAttribute("BLL")]
+[assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
+
+// Generated by the MSBuild WriteCodeFragment class.
+
+
+===== D:\CODE\QuanLyCongVan\BLL\obj\Debug\net10.0\BLL.GlobalUsings.g.cs =====
+// <auto-generated/>
+global using System;
+global using System.Collections.Generic;
+global using System.IO;
+global using System.Linq;
+global using System.Net.Http;
+global using System.Threading;
+global using System.Threading.Tasks;
+
+===== D:\CODE\QuanLyCongVan\BLL\obj\Debug\net472\.NETFramework,Version=v4.7.2.AssemblyAttributes.cs =====
+// <autogenerated />
+using System;
+using System.Reflection;
+[assembly: global::System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.7.2", FrameworkDisplayName = ".NET Framework 4.7.2")]
+
+===== D:\CODE\QuanLyCongVan\BLL\obj\Debug\net472\BLL.AssemblyInfo.cs =====
+//------------------------------------------------------------------------------
+// <auto-generated>
+//     This code was generated by a tool.
+//     Runtime Version:4.0.30319.42000
+//
+//     Changes to this file may cause incorrect behavior and will be lost if
+//     the code is regenerated.
+// </auto-generated>
+//------------------------------------------------------------------------------
+
+using System;
+using System.Reflection;
+
+[assembly: System.Reflection.AssemblyCompanyAttribute("BLL")]
+[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+64347ddc5972d430a00abb41ffed3b334e9261b4")]
+[assembly: System.Reflection.AssemblyProductAttribute("BLL")]
+[assembly: System.Reflection.AssemblyTitleAttribute("BLL")]
+[assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
+
+// Generated by the MSBuild WriteCodeFragment class.
+
+
+===== D:\CODE\QuanLyCongVan\BLL\obj\Debug\net472\BLL.GlobalUsings.g.cs =====
+// <auto-generated/>
+global using System;
+global using System.Collections.Generic;
+global using System.IO;
+global using System.Linq;
+global using System.Threading;
+global using System.Threading.Tasks;
+

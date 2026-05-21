@@ -39,6 +39,9 @@
             this.dgvVanBan = new System.Windows.Forms.DataGridView();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnOpen = new System.Windows.Forms.Button();
+            this.btnPrev = new System.Windows.Forms.Button();
+            this.btnNext = new System.Windows.Forms.Button();
+            this.lblPageInfo = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvVanBan)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,10 +62,10 @@
             this.btnShow.BackColor = System.Drawing.Color.Blue;
             this.btnShow.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnShow.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnShow.Location = new System.Drawing.Point(893, 60);
+            this.btnShow.Location = new System.Drawing.Point(775, 52);
             this.btnShow.Margin = new System.Windows.Forms.Padding(2);
             this.btnShow.Name = "btnShow";
-            this.btnShow.Size = new System.Drawing.Size(116, 28);
+            this.btnShow.Size = new System.Drawing.Size(129, 43);
             this.btnShow.TabIndex = 42;
             this.btnShow.Text = "Thống kê";
             this.btnShow.UseVisualStyleBackColor = false;
@@ -114,7 +117,7 @@
             this.lblTong.AutoSize = true;
             this.lblTong.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTong.ForeColor = System.Drawing.Color.Black;
-            this.lblTong.Location = new System.Drawing.Point(66, 117);
+            this.lblTong.Location = new System.Drawing.Point(28, 101);
             this.lblTong.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblTong.Name = "lblTong";
             this.lblTong.Size = new System.Drawing.Size(41, 17);
@@ -126,7 +129,7 @@
             this.lbTitle.AutoSize = true;
             this.lbTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.lbTitle.Location = new System.Drawing.Point(557, 105);
+            this.lbTitle.Location = new System.Drawing.Point(552, 147);
             this.lbTitle.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbTitle.Name = "lbTitle";
             this.lbTitle.Size = new System.Drawing.Size(274, 29);
@@ -137,16 +140,16 @@
             // 
             this.dgvVanBan.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvVanBan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvVanBan.Location = new System.Drawing.Point(31, 147);
+            this.dgvVanBan.Location = new System.Drawing.Point(31, 202);
             this.dgvVanBan.Name = "dgvVanBan";
-            this.dgvVanBan.Size = new System.Drawing.Size(1331, 424);
+            this.dgvVanBan.Size = new System.Drawing.Size(1331, 507);
             this.dgvVanBan.TabIndex = 49;
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(1119, 104);
+            this.btnDelete.Location = new System.Drawing.Point(1276, 147);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(75, 23);
+            this.btnDelete.Size = new System.Drawing.Size(86, 37);
             this.btnDelete.TabIndex = 50;
             this.btnDelete.Text = "Xóa";
             this.btnDelete.UseVisualStyleBackColor = true;
@@ -154,19 +157,51 @@
             // 
             // btnOpen
             // 
-            this.btnOpen.Location = new System.Drawing.Point(974, 104);
+            this.btnOpen.Location = new System.Drawing.Point(31, 147);
             this.btnOpen.Name = "btnOpen";
-            this.btnOpen.Size = new System.Drawing.Size(105, 23);
+            this.btnOpen.Size = new System.Drawing.Size(123, 37);
             this.btnOpen.TabIndex = 51;
             this.btnOpen.Text = "Xem văn bản";
             this.btnOpen.UseVisualStyleBackColor = true;
             this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
             // 
+            // btnPrev
+            // 
+            this.btnPrev.Location = new System.Drawing.Point(1040, 724);
+            this.btnPrev.Name = "btnPrev";
+            this.btnPrev.Size = new System.Drawing.Size(95, 41);
+            this.btnPrev.TabIndex = 52;
+            this.btnPrev.Text = "Trang trước";
+            this.btnPrev.UseVisualStyleBackColor = true;
+            this.btnPrev.Click += new System.EventHandler(this.btnPrev_Click);
+            // 
+            // btnNext
+            // 
+            this.btnNext.Location = new System.Drawing.Point(1205, 724);
+            this.btnNext.Name = "btnNext";
+            this.btnNext.Size = new System.Drawing.Size(85, 41);
+            this.btnNext.TabIndex = 53;
+            this.btnNext.Text = "Trang sau";
+            this.btnNext.UseVisualStyleBackColor = true;
+            this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
+            // 
+            // lblPageInfo
+            // 
+            this.lblPageInfo.AutoSize = true;
+            this.lblPageInfo.Location = new System.Drawing.Point(1158, 747);
+            this.lblPageInfo.Name = "lblPageInfo";
+            this.lblPageInfo.Size = new System.Drawing.Size(24, 13);
+            this.lblPageInfo.TabIndex = 54;
+            this.lblPageInfo.Text = "1/1";
+            // 
             // formCongVanDenList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1374, 617);
+            this.ClientSize = new System.Drawing.Size(1374, 777);
+            this.Controls.Add(this.lblPageInfo);
+            this.Controls.Add(this.btnNext);
+            this.Controls.Add(this.btnPrev);
             this.Controls.Add(this.btnOpen);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.dgvVanBan);
@@ -201,5 +236,8 @@
         private System.Windows.Forms.DataGridView dgvVanBan;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnOpen;
+        private System.Windows.Forms.Button btnPrev;
+        private System.Windows.Forms.Button btnNext;
+        private System.Windows.Forms.Label lblPageInfo;
     }
 }

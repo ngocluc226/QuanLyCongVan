@@ -17,6 +17,7 @@ namespace UI
         public formCongVanDiList()
         {
             InitializeComponent();
+            Utils.FormatDataGridView(dgvVanBan);
 
             // Gán sự kiện
             this.Load += new System.EventHandler(this.formCongVanDiList_Load);

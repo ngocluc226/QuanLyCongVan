@@ -18,6 +18,8 @@ namespace UI
         public formPhongBan()
         {
             InitializeComponent();
+            Utils.FormatDataGridView(dgvPhongBan);
+            Utils.SyncAllButtons(this);
             LoadData();
         }
         private void LoadData()

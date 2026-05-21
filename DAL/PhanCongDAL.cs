@@ -38,7 +38,7 @@ namespace DAL
                 new SqlParameter("@user", (object)maNguoiDung ?? DBNull.Value),
                 new SqlParameter("@pb", (object)maPhongBan ?? DBNull.Value),
                 new SqlParameter("@ykien", yKien ?? ""),
-                new SqlParameter("@tt", TrangThaiCongVanDen.DANG_XU_LY),
+                new SqlParameter("@tt", TrangThaiCongVanDen.DA_PHAN_CONG),
                 new SqlParameter("@nguoiGiao", nguoiGiao),
                 new SqlParameter("@cap", capPhanCong)
             );

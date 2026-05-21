@@ -34,6 +34,19 @@ namespace UI
         private void formLanhDao_Load(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Maximized;
+            Utils.SyncAllButtons(this);
+
+            int soLuongChoDuyet = BLL.TrinhLanhDaoBLL.Instance.GetThongBaoLanhDao();
+
+            if (soLuongChoDuyet > 0)
+            {
+                MessageBox.Show(
+                    $"Xin chào !\nBạn đang có {soLuongChoDuyet} công văn mới cần duyệt và phân công xử lý.",
+                    "Thông báo hệ thống",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+            }
         }
     }
 }

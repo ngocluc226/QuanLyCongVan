@@ -35,6 +35,19 @@ namespace UI
         private void formNhanVien_Load(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Maximized;
+            Utils.SyncAllButtons(this);
+
+            int soLuongCanXuLy = BLL.CongVanDenBLL.Instance.GetThongBaoNhanVien();
+
+            if (soLuongCanXuLy > 0)
+            {
+                MessageBox.Show(
+                    $"Bạn có {soLuongCanXuLy} công văn đã được phân công đang chờ bạn xử lý và hoàn thành!",
+                    "Nhắc nhở công việc",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+            }
         }
     }
 }

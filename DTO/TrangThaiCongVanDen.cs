@@ -16,5 +16,6 @@ namespace DTO
         public const string CHO_PHOI_HOP = "Chờ phối hợp";
         public const string DA_XU_LY = "Đã xử lý";
         public const string HOAN_THANH = "Hoàn thành";
+        public const string DA_XOA = "Đã xóa";
     }
 }

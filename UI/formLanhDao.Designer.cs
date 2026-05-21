@@ -39,10 +39,9 @@
             // pnlContent
             // 
             this.pnlContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlContent.Location = new System.Drawing.Point(266, 0);
-            this.pnlContent.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pnlContent.Location = new System.Drawing.Point(200, 0);
             this.pnlContent.Name = "pnlContent";
-            this.pnlContent.Size = new System.Drawing.Size(801, 554);
+            this.pnlContent.Size = new System.Drawing.Size(600, 450);
             this.pnlContent.TabIndex = 3;
             // 
             // panel1
@@ -53,9 +52,8 @@
             this.panel1.Controls.Add(this.btnCVDen);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(266, 554);
+            this.panel1.Size = new System.Drawing.Size(200, 450);
             this.panel1.TabIndex = 2;
             // 
             // btnLogout
@@ -64,10 +62,9 @@
             this.btnLogout.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.btnLogout.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnLogout.ForeColor = System.Drawing.Color.White;
-            this.btnLogout.Location = new System.Drawing.Point(0, 506);
-            this.btnLogout.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnLogout.Location = new System.Drawing.Point(0, 411);
             this.btnLogout.Name = "btnLogout";
-            this.btnLogout.Size = new System.Drawing.Size(264, 46);
+            this.btnLogout.Size = new System.Drawing.Size(198, 37);
             this.btnLogout.TabIndex = 2;
             this.btnLogout.Text = "Đăng xuất";
             this.btnLogout.UseVisualStyleBackColor = false;
@@ -79,10 +76,9 @@
             this.btnCVDi.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnCVDi.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnCVDi.ForeColor = System.Drawing.Color.White;
-            this.btnCVDi.Location = new System.Drawing.Point(0, 46);
-            this.btnCVDi.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCVDi.Location = new System.Drawing.Point(0, 37);
             this.btnCVDi.Name = "btnCVDi";
-            this.btnCVDi.Size = new System.Drawing.Size(264, 46);
+            this.btnCVDi.Size = new System.Drawing.Size(198, 37);
             this.btnCVDi.TabIndex = 1;
             this.btnCVDi.Text = "Công văn đi";
             this.btnCVDi.UseVisualStyleBackColor = false;
@@ -95,9 +91,8 @@
             this.btnCVDen.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnCVDen.ForeColor = System.Drawing.Color.White;
             this.btnCVDen.Location = new System.Drawing.Point(0, 0);
-            this.btnCVDen.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnCVDen.Name = "btnCVDen";
-            this.btnCVDen.Size = new System.Drawing.Size(264, 46);
+            this.btnCVDen.Size = new System.Drawing.Size(198, 37);
             this.btnCVDen.TabIndex = 0;
             this.btnCVDen.Text = "Công văn đến";
             this.btnCVDen.UseVisualStyleBackColor = false;
@@ -105,12 +100,11 @@
             // 
             // formLanhDao
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.pnlContent);
             this.Controls.Add(this.panel1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "formLanhDao";
             this.Text = "formLanhDao";
             this.Load += new System.EventHandler(this.formLanhDao_Load);

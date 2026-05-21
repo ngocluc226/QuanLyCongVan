@@ -47,6 +47,7 @@ namespace UI
         private void formAdmin_Load(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Maximized;
+            Utils.SyncAllButtons(this);
         }
 
         private void btnCongVanDi_Click(object sender, EventArgs e)

@@ -1,6 +1,7 @@
 ﻿using DAL;
 using DTO;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -19,11 +20,6 @@ namespace BLL
             }
         }
 
-        public DataTable GetAll()
-        {
-            return DAL.CongVanDenDAL.Instance.GetAll();
-        }
-
         public bool Insert(DTO.CongVanDen cv)
         {
             if (string.IsNullOrEmpty(cv.SoDen))
@@ -36,11 +32,49 @@ namespace BLL
 
             return DAL.CongVanDenDAL.Instance.Insert(cv) > 0;
         }
+        public DataTable SearchInTab(string role, bool isTabChuaXuLy, string column, string value)
+        {
+            string sqlBase = "";
+            List<SqlParameter> p = new List<SqlParameter>();
+
+            // Xác định nguồn dữ liệu dựa vào Role và Tab
+            switch (role)
+            {
+                case "VanThu":
+                    sqlBase = isTabChuaXuLy ?
+                        "SELECT * FROM CongVanDen WHERE TrangThai = N'Đã nhập' AND TrangThai <> N'Đã xóa'" :
+                        "SELECT * FROM CongVanDen WHERE TrangThai <> N'Đã nhập' AND TrangThai <> N'Đã xóa'";
+                    break;
+                case "LanhDao":
+                    sqlBase = isTabChuaXuLy ?
+                        "SELECT cv.* FROM CongVanDen cv JOIN TrinhLanhDao t ON cv.Id = t.CongVanId WHERE t.LanhDaoId = @id AND t.TrangThai = N'ChoDuyet'" :
+                        "SELECT DISTINCT cv.* FROM CongVanDen cv JOIN TrinhLanhDao t ON cv.Id = t.CongVanId WHERE t.LanhDaoId = @id AND t.TrangThai <> N'ChoDuyet'";
+                    p.Add(new SqlParameter("@id", Session.UserId));
+                    break;
+                case "TruongPhong":
+                    sqlBase = isTabChuaXuLy ?
+                        "SELECT cv.* FROM CongVanDen cv JOIN PhanCongCongVan pc ON cv.Id = pc.CongVanId WHERE pc.MaPhongBan = @pb AND pc.CapPhanCong = 'LANH_DAO' AND cv.Id NOT IN (SELECT CongVanId FROM PhanCongCongVan WHERE CapPhanCong = 'TRUONG_PHONG')" :
+                        "SELECT DISTINCT cv.* FROM CongVanDen cv JOIN PhanCongCongVan pc ON cv.Id = pc.CongVanId WHERE pc.NguoiGiao = (SELECT TenDangNhap FROM NguoiDung WHERE MaNguoiDung = @id) AND pc.CapPhanCong = 'TRUONG_PHONG'";
+                    p.Add(new SqlParameter("@pb", Session.PhongBan));
+                    p.Add(new SqlParameter("@id", Session.UserId));
+                    break;
+                case "NhanVien":
+                    sqlBase = isTabChuaXuLy ?
+                        "SELECT cv.* FROM CongVanDen cv JOIN PhanCongCongVan pc ON cv.Id = pc.CongVanId WHERE pc.MaNguoiDung = @id AND cv.TrangThai IN (N'Đã phân công', N'Đang xử lý')" :
+                        "SELECT cv.* FROM CongVanDen cv JOIN PhanCongCongVan pc ON cv.Id = pc.CongVanId WHERE pc.MaNguoiDung = @id AND cv.TrangThai = N'Hoàn thành'";
+                    p.Add(new SqlParameter("@id", Session.UserId));
+                    break;
+            }
+
+            return DAL.CongVanDenDAL.Instance.SearchData(sqlBase, column, value, p.ToArray());
+        }
+
         public bool TrinhLanhDao(int id)
         {
             LogBLL.Instance.WriteLog("Trình lãnh đạo", Session.UserName);
             return DAL.CongVanDenDAL.Instance.UpdateTrangThai(id, TrangThaiCongVanDen.DA_TRINH) > 0;
         }
+
         public bool PhanCong(int congVanId, string maNguoiDung, string maPhongBan, string yKien)
         {
             if (!string.IsNullOrEmpty(maNguoiDung) && !string.IsNullOrEmpty(maPhongBan))
@@ -92,10 +126,12 @@ namespace BLL
 
             return false;
         }
+
         public bool CapNhatXuLy(int congVanId, string trangThai)
         {
             return DAL.CongVanDenDAL.Instance.UpdateTrangThai(congVanId, trangThai) > 0;
         }
+
         public bool HoanThanh(int congVanId)
         {
             return DAL.CongVanDenDAL.Instance.UpdateTrangThai(congVanId, TrangThaiCongVanDen.HOAN_THANH) > 0;
@@ -106,22 +142,79 @@ namespace BLL
             LogBLL.Instance.WriteLog("Xóa công văn ID: " + id, Session.UserName);
             return DAL.CongVanDenDAL.Instance.Delete(id) > 0;
         }
+
         public string GenerateSoDen()
         {
             int count = DAL.CongVanDenDAL.Instance.GetMaxId() + 1;
             return count.ToString();
         }
+
         public DataTable GetByDateRange(DateTime fromDate, DateTime toDate)
         {
             return DAL.CongVanDenDAL.Instance.GetByDateRange(fromDate, toDate);
         }
-        public DataTable GetByTrangThai(string trangThai)
+        public DataTable GetCongVanMoiNhap()
         {
-            return DAL.CongVanDenDAL.Instance.GetByTrangThai(trangThai);
+            return DAL.CongVanDenDAL.Instance.GetCongVanMoiNhapVanThu();
         }
-        public DataTable GetCongVanChoTruongPhong()
+
+        public DataTable GetCongVanDaXuLyVanThu()
         {
-            return CongVanDenDAL.Instance.GetCongVanTheoPhong(Session.PhongBan);
+            return DAL.CongVanDenDAL.Instance.GetCongVanDaXuLyVanThu();
         }
+
+        public DataTable GetCongVanChoLanhDao()
+        {
+            return DAL.CongVanDenDAL.Instance.GetCongVanChoLanhDao(Session.UserId);
+        }
+
+        public DataTable GetCongVanDaXuLyLanhDao()
+        {
+            return DAL.CongVanDenDAL.Instance.GetCongVanDaXuLyLanhDao(Session.UserId);
+        }
+
+        public DataTable GetCongVanChoPhongBan()
+        {
+            return DAL.CongVanDenDAL.Instance.GetCongVanChoPhongBan(Session.PhongBan);
+        }
+
+        public DataTable GetCongVanDaXuLyTruongPhong()
+        {
+            return DAL.CongVanDenDAL.Instance.GetCongVanDaXuLyTruongPhong(Session.UserId);
+        }
+
+        public DataTable GetCongVanChoNhanVien()
+        {
+            return DAL.CongVanDenDAL.Instance.GetCongVanTheoNhanVien(Session.UserId);
+        }
+
+        public DataTable GetCongVanDaHoanThanhChoNhanVien()
+        {
+            return DAL.CongVanDenDAL.Instance.GetCongVanDaHoanThanhNhanVien(Session.UserId);
+        }
+        
+
+        public int GetThongBaoNhanVien()
+        {
+            // Truyền đúng UserId của người đang đăng nhập vào bộ lọc
+            return DAL.CongVanDenDAL.Instance.GetCountChoXuLyByNhanVien(Session.UserId);
+        }
+
+        public int GetThongBaoTruongPhong()
+        {
+            // Truyền đúng Mã phòng ban của Trưởng phòng đang đăng nhập để đếm việc tồn đọng
+            return DAL.CongVanDenDAL.Instance.GetCountChoGiaoViecByPhongBan(Session.PhongBan);
+        }
+
+        public DataTable GetPaged(int pageNumber, int pageSize)
+        {
+            return DAL.CongVanDenDAL.Instance.GetPaged(pageNumber, pageSize);
+        }
+
+        public int GetTotalCount()
+        {
+            return DAL.CongVanDenDAL.Instance.GetTotalCount();
+        }
+
     }
 }

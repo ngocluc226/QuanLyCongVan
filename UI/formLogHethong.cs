@@ -15,6 +15,7 @@ namespace UI
         public formLogHethong()
         {
             InitializeComponent();
+            Utils.FormatDataGridView(dgvLog);
             LoadData();
         }
         private void LoadData()

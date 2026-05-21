@@ -166,6 +166,8 @@ namespace UI
 
         private void formCongVanDenCreate_Load(object sender, EventArgs e)
         {
+            Utils.SyncAllButtons(this);
+
             txtSoDen.Text = BLL.CongVanDenBLL.Instance.GenerateSoDen();
             txtSoDen.Enabled = false;
         }
@@ -180,9 +182,7 @@ namespace UI
             ClearForm();
         }
 
-        private void btnEdit_Click(object sender, EventArgs e)
-        {
 
-        }
+        
     }
 }

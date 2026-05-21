@@ -23,15 +23,17 @@ namespace UI
             string username = txtUser.Text.Trim();
             string password = txtPass.Text.Trim();
 
-            // 1. Validate
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("Nhập tài khoản và mật khẩu!");
                 return;
             }
 
-            // 2. Gọi BLL
-            var user = BLL.UserService.Instance.Login(username, password);
+            // Băm mật khẩu người dùng gõ vào trước khi gọi Login
+            string hashedPassword = Utils.HashSHA256(password);
+
+            // Gọi BLL bằng mật khẩu đã mã hóa
+            var user = BLL.UserService.Instance.Login(username, hashedPassword);
 
             if (user == null)
             {
@@ -39,13 +41,9 @@ namespace UI
                 return;
             }
 
-            // 3. Lưu session
             Session.SetUser(user);
-
-            // 4. Ghi log
             BLL.LogBLL.Instance.WriteLog("Đăng nhập", Session.UserName);
 
-            // 5. Mở form theo quyền
             this.Hide();
             OpenFormByRole();
         }

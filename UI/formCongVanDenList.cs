@@ -13,28 +13,43 @@ namespace UI
 {
     public partial class formCongVanDenList : Form
     {
+        private int currentPage = 1;
+        private int pageSize = 20;
+        private int totalPages = 1;
         public formCongVanDenList()
         {
             InitializeComponent();
         }
         private void LoadData()
         {
-            DataTable dt = BLL.CongVanDenBLL.Instance.GetAll();
-
+            // 1. Lấy dữ liệu trang hiện tại
+            DataTable dt = BLL.CongVanDenBLL.Instance.GetPaged(currentPage, pageSize);
             dgvVanBan.DataSource = dt;
 
-            lblTong.Text = "Tổng: " + dt.Rows.Count.ToString();
+            // 2. Tính toán tổng số trang
+            int totalRows = BLL.CongVanDenBLL.Instance.GetTotalCount();
+            totalPages = (int)Math.Ceiling((double)totalRows / pageSize);
+            if (totalPages == 0) totalPages = 1;
+
+            // 3. Hiển thị thông tin lên giao diện
+            lblPageInfo.Text = $"{currentPage}/{totalPages}";
+            lblTong.Text = "Tổng số dòng: " + totalRows.ToString();
+
+            // 4. Trạng thái ẩn/hiện nút điều hướng
+            btnPrev.Enabled = (currentPage > 1);
+            btnNext.Enabled = (currentPage < totalPages);
         }
         private void InitDataGridView()
         {
             dgvVanBan.AutoGenerateColumns = false;
             dgvVanBan.Columns.Clear();
 
-            // Cho phép chọn nhiều dòng
+            // Cấu hình hành vi chọn dòng
             dgvVanBan.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvVanBan.MultiSelect = true;
+            dgvVanBan.AllowUserToAddRows = false;
 
-            // Id (ẩn)
+            // 1. Cột Id (Ẩn danh sách nhưng giữ lại để lấy dữ liệu khi Xóa/Mở file)
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "Id",
@@ -42,98 +57,112 @@ namespace UI
                 Visible = false
             });
 
+            // 2. Cột Số đến
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "SoDen",
                 HeaderText = "Số đến",
-                DataPropertyName = "SoDen"
+                DataPropertyName = "SoDen",
+                Width = 80
             });
 
+            // 3. Cột Số văn bản
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "SoVanBan",
                 HeaderText = "Số văn bản",
-                DataPropertyName = "SoVanBan"
+                DataPropertyName = "SoVanBan",
+                Width = 110
             });
 
+            // 4. Cột Ngày đến (Định dạng ngày/tháng/năm)
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "NgayDen",
                 HeaderText = "Ngày đến",
                 DataPropertyName = "NgayDen",
-                DefaultCellStyle = { Format = "dd/MM/yyyy" }
+                DefaultCellStyle = { Format = "dd/MM/yyyy" },
+                Width = 100
             });
 
+            // 5. Cột Ngày ban hành
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "NgayBanHanh",
                 HeaderText = "Ngày ban hành",
                 DataPropertyName = "NgayBanHanh",
-                DefaultCellStyle = { Format = "dd/MM/yyyy" }
+                DefaultCellStyle = { Format = "dd/MM/yyyy" },
+                Width = 110
             });
 
+            // 6. Cột Nơi gửi
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "NoiGui",
                 HeaderText = "Nơi gửi",
-                DataPropertyName = "NoiGui"
+                DataPropertyName = "NoiGui",
+                Width = 130
             });
 
+            // 7. Cột Người ký
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "NguoiKy",
                 HeaderText = "Người ký",
-                DataPropertyName = "NguoiKy"
+                DataPropertyName = "NguoiKy",
+                Width = 120
             });
 
+            // 8. Cột Trích yếu (Tự động kéo giãn chiếm hết khoảng trống)
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "TrichYeu",
-                HeaderText = "Trích yếu",
+                HeaderText = "Trích yếu nội dung",
                 DataPropertyName = "TrichYeu",
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
             });
 
+            // 9. Cột Độ khẩn
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "DoKhan",
                 HeaderText = "Độ khẩn",
-                DataPropertyName = "DoKhan"
+                DataPropertyName = "DoKhan",
+                Width = 90
             });
 
+            // 10. Cột Độ mật
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "DoMat",
                 HeaderText = "Độ mật",
-                DataPropertyName = "DoMat"
+                DataPropertyName = "DoMat",
+                Width = 90
             });
 
+            // 11. Cột Trạng thái
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "TrangThai",
                 HeaderText = "Trạng thái",
-                DataPropertyName = "TrangThai"
+                DataPropertyName = "TrangThai",
+                Width = 120
             });
 
+            // 12. Cột Tên File đính kèm (Ẩn đường dẫn thô, chỉ giữ để gọi hàm xem file)
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "FileDinhKem",
-                HeaderText = "File",
-                DataPropertyName = "FileDinhKem"
-            });
-
-            dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
-            {
-                Name = "NgayTao",
-                HeaderText = "Ngày tạo",
-                DataPropertyName = "NgayTao",
-                DefaultCellStyle = { Format = "dd/MM/yyyy HH:mm" }
+                DataPropertyName = "FileDinhKem",
+                Visible = false
             });
         }
 
         private void formCongVanDenList_Load(object sender, EventArgs e)
         {
             InitDataGridView();
+            Utils.FormatDataGridView(dgvVanBan);
+            Utils.SyncAllButtons(this);
             LoadData();
         }
 
@@ -213,6 +242,24 @@ namespace UI
 
             formFileViewer f = new formFileViewer(fullPath);
             f.ShowDialog();
+        }
+
+        private void btnPrev_Click(object sender, EventArgs e)
+        {
+            if (currentPage > 1)
+            {
+                currentPage--;
+                LoadData();
+            }
+        }
+
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+            if (currentPage < totalPages)
+            {
+                currentPage++;
+                LoadData();
+            }
         }
     }
 }

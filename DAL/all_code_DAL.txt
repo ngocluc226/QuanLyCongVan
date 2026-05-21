@@ -1,0 +1,894 @@
+===== D:\CODE\QuanLyCongVan\DAL\CongVanDenDAL.cs =====
+using DTO;
+using System;
+using System.Data;
+using System.Data.SqlClient;
+
+namespace DAL
+{
+    public class CongVanDenDAL
+    {
+        private static CongVanDenDAL _Instance;
+        public static CongVanDenDAL Instance
+        {
+            get
+            {
+                if (_Instance == null)
+                    _Instance = new CongVanDenDAL();
+                return _Instance;
+            }
+        }
+
+        public DataTable GetAll()
+        {
+            string query = "SELECT * FROM CongVanDen WHERE TrangThai <> N'Ðã xóa' ORDER BY NgayDen DESC";
+            return DBHelper.Instance.ExecuteQuery(query);
+        }
+        public int UpdateTrangThai(int id, string trangThai)
+        {
+            string query = "UPDATE CongVanDen SET TrangThai = @TrangThai WHERE Id = @Id";
+
+            return DBHelper.Instance.ExecuteNonQuery(
+                query,
+                new SqlParameter("@TrangThai", trangThai),
+                new SqlParameter("@Id", id)
+            );
+        }
+        // ?? Thêm công van
+        public int Insert(CongVanDen cv)
+        {
+            string query = @"INSERT INTO CongVanDen 
+            (SoDen, SoVanBan, NgayDen, NgayBanHanh, NoiGui, NguoiKy, TrichYeu, DoKhan, DoMat, FileDinhKem, TrangThai)
+            VALUES 
+            (@SoDen, @SoVanBan, @NgayDen, @NgayBanHanh, @NoiGui, @NguoiKy, @TrichYeu, @DoKhan, @DoMat, @FileDinhKem, @TrangThai)";
+
+            return DBHelper.Instance.ExecuteNonQuery(
+                query,
+                new SqlParameter("@SoDen", cv.SoDen),
+                new SqlParameter("@SoVanBan", (object)cv.SoVanBan ?? DBNull.Value),
+                new SqlParameter("@NgayDen", cv.NgayDen),
+                new SqlParameter("@NgayBanHanh", (object)cv.NgayBanHanh ?? DBNull.Value),
+                new SqlParameter("@NoiGui", (object)cv.NoiGui ?? DBNull.Value),
+                new SqlParameter("@NguoiKy", (object)cv.NguoiKy ?? DBNull.Value),
+                new SqlParameter("@TrichYeu", cv.TrichYeu),
+                new SqlParameter("@DoKhan", (object)cv.DoKhan ?? DBNull.Value),
+                new SqlParameter("@DoMat", (object)cv.DoMat ?? DBNull.Value),
+                new SqlParameter("@FileDinhKem", (object)cv.FileDinhKem ?? DBNull.Value),
+                new SqlParameter("@TrangThai", (object)cv.TrangThai ?? "Chua x? lý")
+            );
+        }
+
+        // ?? Xóa công van
+        public int Delete(int id)
+        {
+            string query = "UPDATE CongVanDen SET TrangThai = @TrangThai WHERE Id = @Id";
+
+            return DBHelper.Instance.ExecuteNonQuery(
+                query,
+                new SqlParameter("@TrangThai", DTO.TrangThaiCongVanDen.DA_XOA),
+                new SqlParameter("@Id", id)
+            );
+        }
+
+        // ?? Ki?m tra trùng S? d?n
+        public int CountBySoDen(string soDen)
+        {
+            string query = "SELECT COUNT(*) FROM CongVanDen WHERE SoDen = @SoDen";
+
+            object result = DBHelper.Instance.ExecuteScalar(
+                query,
+                new SqlParameter("@SoDen", soDen)
+            );
+
+            return (result != null) ? Convert.ToInt32(result) : 0;
+        }
+
+        public int GetMaxId()
+        {
+                       string query = "SELECT ISNULL(MAX(Id), 0) FROM CongVanDen";
+            object result = DBHelper.Instance.ExecuteScalar(query);
+            return (result != null) ? Convert.ToInt32(result) : 0;
+        }
+        public DataTable GetByDateRange(DateTime fromDate, DateTime toDate)
+        {
+            string query = @"SELECT * FROM CongVanDen
+                     WHERE NgayDen BETWEEN @FromDate AND @ToDate
+                     ORDER BY NgayDen DESC";
+
+            return DBHelper.Instance.ExecuteQuery(
+                query,
+                new SqlParameter("@FromDate", fromDate),
+                new SqlParameter("@ToDate", toDate)
+            );
+        }
+        public DataTable GetByTrangThai(string trangThai)
+        {
+            string query = "SELECT * FROM CongVanDen WHERE TrangThai = @tt";
+
+            return DBHelper.Instance.ExecuteQuery(query,
+                new SqlParameter("@tt", trangThai));
+        }
+        public DataTable GetCongVanTheoPhong(string maPhongBan)
+        {
+            string sql = @"
+        SELECT cv.*
+        FROM CongVanDen cv
+        JOIN PhanCongCongVan pc ON cv.Id = pc.CongVanId
+        WHERE pc.MaPhongBan = @pb
+          AND pc.MaNguoiDung IS NULL
+        ORDER BY pc.NgayPhanCong DESC";
+
+            return DBHelper.Instance.ExecuteQuery(sql,
+                new SqlParameter("@pb", maPhongBan)
+            );
+        }
+        public DataTable GetCongVanTheoNhanVien(string maNguoiDung)
+        {
+            string sql = @"
+        SELECT cv.*
+        FROM CongVanDen cv
+        JOIN PhanCongCongVan pc ON cv.Id = pc.CongVanId
+        WHERE pc.MaNguoiDung = @maNguoiDung
+          AND (cv.TrangThai = @tt1 OR cv.TrangThai = @tt2)
+        ORDER BY pc.NgayPhanCong DESC";
+
+            return DBHelper.Instance.ExecuteQuery(sql,
+                new SqlParameter("@maNguoiDung", maNguoiDung),
+                new SqlParameter("@tt1", TrangThaiCongVanDen.DA_PHAN_CONG),
+                new SqlParameter("@tt2", TrangThaiCongVanDen.DANG_XU_LY)
+            );
+        }
+        /// <summary>
+        /// Ð?m s? lu?ng công van m?i giao cho phòng ban mà Tru?ng phòng CHUA phân công cho nhân viên
+        /// </summary>
+        public int GetCountChoGiaoViecByPhongBan(string maPhongBan)
+        {
+            string query = @"
+        SELECT COUNT(DISTINCT cv.Id) 
+        FROM CongVanDen cv
+        JOIN PhanCongCongVan pc ON cv.Id = pc.CongVanId
+        WHERE pc.MaPhongBan = @maPhongBan 
+          AND cv.TrangThai = N'Ðã phân công'
+          AND cv.Id NOT IN (
+              SELECT CongVanId 
+              FROM PhanCongCongVan 
+              WHERE CapPhanCong = 'TRUONG_PHONG'
+          )";
+
+            // G?i tr?c ti?p thông qua ExecuteScalar c?a DBHelper c?c k? an toàn và g?n gàng
+            object result = DBHelper.Instance.ExecuteScalar(query,
+                new SqlParameter("@maPhongBan", maPhongBan)
+            );
+
+            return (result != null) ? Convert.ToInt32(result) : 0;
+        }
+
+        /// <summary>
+        /// Ð?m s? lu?ng công van giao dích danh cho Nhân viên mà nhân viên CHUA b?m Hoàn thành
+        /// </summary>
+        public int GetCountChoXuLyByNhanVien(string maNguoiDung)
+        {
+            string query = @"
+        SELECT COUNT(DISTINCT cv.Id) 
+        FROM CongVanDen cv
+        JOIN PhanCongCongVan pc ON cv.Id = pc.CongVanId
+        WHERE pc.MaNguoiDung = @maNguoiDung 
+          AND cv.TrangThai IN (N'Ðã phân công', N'Ðang x? lý')";
+
+            // S? d?ng ExecuteScalar c?a DBHelper
+            object result = DBHelper.Instance.ExecuteScalar(query,
+                new SqlParameter("@maNguoiDung", maNguoiDung)
+            );
+
+            return (result != null) ? Convert.ToInt32(result) : 0;
+        }
+        // Hàm l?y d? li?u theo s? trang (M?i trang 20 dòng)
+        public DataTable GetPaged(int pageNumber, int pageSize)
+        {
+            // S?A T?I ÐÂY: Thêm di?u ki?n l?c b? các van b?n dã xóa m?m khi phân trang
+            string query = @"
+        SELECT * FROM CongVanDen 
+        WHERE TrangThai <> N'Ðã xóa'
+        ORDER BY NgayDen DESC
+        OFFSET @Offset ROWS
+        FETCH NEXT @PageSize ROWS ONLY;";
+
+            int offset = (pageNumber - 1) * pageSize;
+
+            return DBHelper.Instance.ExecuteQuery(query,
+                new SqlParameter("@Offset", offset),
+                new SqlParameter("@PageSize", pageSize)
+            );
+        }
+
+        // Hàm d?m t?ng s? dòng d? tính t?ng s? trang
+        public int GetTotalCount()
+        {
+            string query = "SELECT COUNT(*) FROM CongVanDen";
+            object result = DBHelper.Instance.ExecuteScalar(query);
+            return (result != null) ? Convert.ToInt32(result) : 0;
+        }
+        public DataTable GetCongVanDaHoanThanhTheoNhanVien(string maNguoiDung)
+        {
+            string sql = @"
+        SELECT cv.*
+        FROM CongVanDen cv
+        JOIN PhanCongCongVan pc ON cv.Id = pc.CongVanId
+        WHERE pc.MaNguoiDung = @maNguoiDung
+          AND cv.TrangThai = @trangThai
+        ORDER BY cv.NgayDen DESC";
+
+            return DBHelper.Instance.ExecuteQuery(sql,
+                new SqlParameter("@maNguoiDung", maNguoiDung),
+                new SqlParameter("@trangThai", DTO.TrangThaiCongVanDen.HOAN_THANH)
+            );
+        }
+        public DataTable GetCongVanDaXuLyVanThu()
+        {
+            // L?y các công van có tr?ng thái KHÁC 'Ðã nh?p' (t?c là dã du?c trình di, dang x? lý ho?c dã xong)
+            string query = "SELECT * FROM CongVanDen WHERE TrangThai <> N'Ðã nh?p' AND TrangThai <> N'Ðã xóa' ORDER BY NgayDen DESC";
+            return DBHelper.Instance.ExecuteQuery(query);
+        }
+        public DataTable GetCongVanDaXuLyLanhDao()
+        {
+            // L?y các công van dã du?c Lãnh d?o phê duy?t/phân công di (Tr?ng thái khác Ðã nh?p và khác Ðã trình)
+            string query = @"SELECT * FROM CongVanDen 
+                     WHERE TrangThai NOT IN (N'Ðã nh?p', N'Ðã trình', N'Ðã xóa') 
+                     ORDER BY NgayDen DESC";
+            return DBHelper.Instance.ExecuteQuery(query);
+        }
+        public DataTable GetCongVanDaXuLyTruongPhong(string maTruongPhong)
+        {
+            // Tìm các công van mà ngu?i giao chính là Tru?ng phòng dang dang nh?p này
+            string query = @"
+        SELECT DISTINCT cv.*
+        FROM CongVanDen cv
+        JOIN PhanCongCongVan pc ON cv.Id = pc.CongVanId
+        WHERE pc.NguoiGiao = (SELECT TenDangNhap FROM NguoiDung WHERE MaNguoiDung = @maTruongPhong)
+          AND cv.TrangThai <> N'Ðã xóa'
+        ORDER BY cv.NgayDen DESC";
+
+            return DBHelper.Instance.ExecuteQuery(query, new SqlParameter("@maTruongPhong", maTruongPhong));
+        }
+
+    }
+}
+
+===== D:\CODE\QuanLyCongVan\DAL\CongVanDiDAL.cs =====
+using DTO;
+using System;
+using System.Data;
+using System.Data.SqlClient;
+
+namespace DAL
+{
+    public class CongVanDiDAL
+    {
+        private static CongVanDiDAL _Instance;
+        public static CongVanDiDAL Instance
+        {
+            get
+            {
+                if (_Instance == null)
+                    _Instance = new CongVanDiDAL();
+                return _Instance;
+            }
+        }
+
+        // ðŸ”¹ Láº¥y toÃ n bá»™ danh sÃ¡ch
+        public DataTable GetAll()
+        {
+            string query = "SELECT * FROM CongVanDi ORDER BY NgayDi DESC";
+            return DBHelper.Instance.ExecuteQuery(query);
+        }
+
+        // ðŸ”¹ ThÃªm cÃ´ng vÄƒn
+        public int Insert(CongVanDi cv)
+        {
+            string query = @"INSERT INTO CongVanDi 
+            (SoDi, SoVanBan, NgayDi, NgayBanHanh, NoiNhan, NguoiKy, TrichYeu, DoKhan, DoMat, FileDinhKem, TrangThai)
+            VALUES 
+            (@SoDi, @SoVanBan, @NgayDi, @NgayBanHanh, @NoiNhan, @NguoiKy, @TrichYeu, @DoKhan, @DoMat, @FileDinhKem, @TrangThai)";
+
+            return DBHelper.Instance.ExecuteNonQuery(
+                query,
+                new SqlParameter("@SoDi", cv.SoDi),
+                new SqlParameter("@SoVanBan", (object)cv.SoVanBan ?? DBNull.Value),
+                new SqlParameter("@NgayDi", cv.NgayDi),
+                new SqlParameter("@NgayBanHanh", (object)cv.NgayBanHanh ?? DBNull.Value),
+                new SqlParameter("@NoiNhan", (object)cv.NoiNhan ?? DBNull.Value),
+                new SqlParameter("@NguoiKy", (object)cv.NguoiKy ?? DBNull.Value),
+                new SqlParameter("@TrichYeu", cv.TrichYeu),
+                new SqlParameter("@DoKhan", (object)cv.DoKhan ?? DBNull.Value),
+                new SqlParameter("@DoMat", (object)cv.DoMat ?? DBNull.Value),
+                new SqlParameter("@FileDinhKem", (object)cv.FileDinhKem ?? DBNull.Value),
+                new SqlParameter("@TrangThai", (object)cv.TrangThai ?? "ChÆ°a xá»­ lÃ½")
+            );
+        }
+
+        // ðŸ”¹ XÃ³a cÃ´ng vÄƒn
+        public int Delete(int id)
+        {
+            string query = "DELETE FROM CongVanDi WHERE Id = @Id";
+
+            return DBHelper.Instance.ExecuteNonQuery(
+                query,
+                new SqlParameter("@Id", id)
+            );
+        }
+
+        // ðŸ”¹ Kiá»ƒm tra trÃ¹ng Sá»‘ Ä‘i
+        public int CountBySoDi(string soDi)
+        {
+            string query = "SELECT COUNT(*) FROM CongVanDi WHERE SoDi = @SoDi";
+
+            object result = DBHelper.Instance.ExecuteScalar(
+                query,
+                new SqlParameter("@SoDi", soDi)
+            );
+
+            return (result != null) ? Convert.ToInt32(result) : 0;
+        }
+
+        public int GetMaxId()
+        {
+            string query = "SELECT ISNULL(MAX(Id), 0) FROM CongVanDi";
+            object result = DBHelper.Instance.ExecuteScalar(query);
+            return (result != null) ? Convert.ToInt32(result) : 0;
+        }
+
+        public DataTable GetByDateRange(DateTime fromDate, DateTime toDate)
+        {
+            string query = @"SELECT * FROM CongVanDi
+                             WHERE NgayDi BETWEEN @FromDate AND @ToDate
+                             ORDER BY NgayDi DESC";
+
+            return DBHelper.Instance.ExecuteQuery(
+                query,
+                new SqlParameter("@FromDate", fromDate),
+                new SqlParameter("@ToDate", toDate)
+            );
+        }
+    }
+}
+
+===== D:\CODE\QuanLyCongVan\DAL\DBHelper.cs =====
+using System;
+using System.Data;
+using System.Data.SqlClient;
+
+namespace DAL
+{
+    public class DBHelper
+    {
+        private readonly string _connectionString;
+
+        private static DBHelper _Instance;
+        public static DBHelper Instance
+        {
+            get
+            {
+                if (_Instance == null)
+                    _Instance = new DBHelper();
+                return _Instance;
+            }
+        }
+
+        private DBHelper()
+        {
+            _connectionString = @"Server=NGOCLUC-DESKTOP\SQLEXPRESS;Database=QUANLYCONGVAN;Trusted_Connection=True;";
+        }
+
+        private SqlConnection GetConnection()
+        {
+            return new SqlConnection(_connectionString);
+        }
+
+        public DataTable ExecuteQuery(string sql, params SqlParameter[] parameters)
+        {
+            using (SqlConnection conn = GetConnection())
+            using (SqlCommand cmd = new SqlCommand(sql, conn))
+            {
+                if (parameters != null && parameters.Length > 0)
+                    cmd.Parameters.AddRange(parameters);
+
+                DataTable dt = new DataTable();
+                conn.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    dt.Load(reader);
+                }
+                return dt;
+            }
+        }
+
+        public int ExecuteNonQuery(string sql, params SqlParameter[] parameters)
+        {
+            using (SqlConnection conn = GetConnection())
+            using (SqlCommand cmd = new SqlCommand(sql, conn))
+            {
+                if (parameters != null && parameters.Length > 0)
+                    cmd.Parameters.AddRange(parameters);
+
+                conn.Open();
+                return cmd.ExecuteNonQuery();
+            }
+        }
+
+        public object ExecuteScalar(string sql, params SqlParameter[] parameters)
+        {
+            using (SqlConnection conn = GetConnection())
+            using (SqlCommand cmd = new SqlCommand(sql, conn))
+            {
+                if (parameters != null && parameters.Length > 0)
+                    cmd.Parameters.AddRange(parameters);
+
+                conn.Open();
+                return cmd.ExecuteScalar();
+            }
+        }
+    }
+}
+
+===== D:\CODE\QuanLyCongVan\DAL\LogDAL.cs =====
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DAL
+{
+    public class LogDAL
+    {
+        private static LogDAL _Instance;
+        public static LogDAL Instance
+        {
+            get
+            {
+                if (_Instance == null)
+                    _Instance = new LogDAL();
+                return _Instance;
+            }
+            private set { }
+        }
+
+        public DataTable GetAll()
+        {
+            return DBHelper.Instance.ExecuteQuery(
+                "SELECT * FROM LogHeThong ORDER BY ThoiGian DESC"
+            );
+        }
+
+        public int Insert(string hanhDong, string user)
+        {
+            string sql = @"INSERT INTO LogHeThong (HanhDong, NguoiThucHien)
+                       VALUES (@hd, @user)";
+
+            return DBHelper.Instance.ExecuteNonQuery(sql,
+                new SqlParameter("@hd", hanhDong),
+                new SqlParameter("@user", user));
+        }
+    }
+}
+
+===== D:\CODE\QuanLyCongVan\DAL\PhanCongDAL.cs =====
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DTO;
+namespace DAL
+{
+    public class PhanCongDAL
+    {
+        private static PhanCongDAL _Instance;
+        public static PhanCongDAL Instance
+        {
+            get
+            {
+                if (_Instance == null)
+                    _Instance = new PhanCongDAL();
+                return _Instance;
+            }
+            set { }
+        }
+        public int Insert(int congVanId, string maNguoiDung, string maPhongBan, string yKien, string nguoiGiao, string capPhanCong)
+        {
+            // ?? Validate t?ng DAL (phòng l?i t? BLL)
+            if (!string.IsNullOrEmpty(maNguoiDung) && !string.IsNullOrEmpty(maPhongBan))
+                throw new Exception("Không du?c insert c? user và phòng ban");
+
+            if (string.IsNullOrEmpty(maNguoiDung) && string.IsNullOrEmpty(maPhongBan))
+                throw new Exception("Ph?i có user ho?c phòng ban");
+
+            string sql = @"INSERT INTO PhanCongCongVan
+    (CongVanId, MaNguoiDung, MaPhongBan, YKienChiDao, TrangThai, NguoiGiao, CapPhanCong)
+    VALUES (@cvId, @user, @pb, @ykien, @tt, @nguoiGiao, @cap)";
+
+            return DBHelper.Instance.ExecuteNonQuery(sql,
+                new SqlParameter("@cvId", congVanId),
+                new SqlParameter("@user", (object)maNguoiDung ?? DBNull.Value),
+                new SqlParameter("@pb", (object)maPhongBan ?? DBNull.Value),
+                new SqlParameter("@ykien", yKien ?? ""),
+                new SqlParameter("@tt", TrangThaiCongVanDen.DA_PHAN_CONG),
+                new SqlParameter("@nguoiGiao", nguoiGiao),
+                new SqlParameter("@cap", capPhanCong)
+            );
+        }
+    }
+}
+
+===== D:\CODE\QuanLyCongVan\DAL\PhongBanDAL.cs =====
+using System.Data;
+using System.Data.SqlClient;
+
+namespace DAL
+{
+    public class PhongBanDAL
+    {
+        private static PhongBanDAL _Instance;
+        public static PhongBanDAL Instance
+        {
+            get
+            {
+                if (_Instance == null)
+                    _Instance = new PhongBanDAL();
+                return _Instance;
+            }
+        }
+
+        private PhongBanDAL() { }
+
+        public DataTable GetAll()
+        {
+            return DBHelper.Instance.ExecuteQuery(
+                "SELECT MaPhongBan, TenPhongBan FROM PhongBan"
+            );
+        }
+        public int Insert(string ma, string ten)
+        {
+            string sql = "INSERT INTO PhongBan (MaPhongBan, TenPhongBan) VALUES (@ma, @ten)";
+            return DBHelper.Instance.ExecuteNonQuery(sql,
+                new SqlParameter("@ma", ma),
+                new SqlParameter("@ten", ten));
+        }
+
+        public int Update(string ma, string ten)
+        {
+            string sql = "UPDATE PhongBan SET TenPhongBan = @ten WHERE MaPhongBan = @ma";
+            return DBHelper.Instance.ExecuteNonQuery(sql,
+                new SqlParameter("@ma", ma),
+                new SqlParameter("@ten", ten));
+        }
+
+        public int Delete(string ma)
+        {
+            string sql = "DELETE FROM PhongBan WHERE MaPhongBan = @ma";
+            return DBHelper.Instance.ExecuteNonQuery(sql,
+                new SqlParameter("@ma", ma));
+        }
+    }
+}
+
+===== D:\CODE\QuanLyCongVan\DAL\TrinhLanhDaoDAL.cs =====
+using DTO;
+using System;
+using System.Data;
+using System.Data.SqlClient;
+
+namespace DAL
+{
+    public class TrinhLanhDaoDAL
+    {
+        private static TrinhLanhDaoDAL _Instance;
+        public static TrinhLanhDaoDAL Instance
+        {
+            get
+            {
+                if (_Instance == null)
+                    _Instance = new TrinhLanhDaoDAL();
+                return _Instance;
+            }
+        }
+
+        // ?? Thêm m?i trình lãnh d?o
+        public int Insert(TrinhLanhDao t)
+        {
+            string query = @"INSERT INTO TrinhLanhDao
+    (CongVanId, NguoiTrinhId, LanhDaoId, NgayTrinh, TrangThai)
+    VALUES (@CongVanId, @NguoiTrinhId, @LanhDaoId, @NgayTrinh, @TrangThai)";
+
+            return DBHelper.Instance.ExecuteNonQuery(
+                query,
+                new SqlParameter("@CongVanId", t.CongVanId),
+                new SqlParameter("@NguoiTrinhId", t.NguoiTrinhId),
+                new SqlParameter("@LanhDaoId", t.LanhDaoId),
+                new SqlParameter("@NgayTrinh", t.NgayTrinh),
+                new SqlParameter("@TrangThai", t.TrangThai)
+            );
+        }
+
+        // ?? L?y công van theo lãnh d?o
+        public DataTable GetByLanhDao(string lanhDaoId)
+        {
+            string query = @"
+        SELECT cv.*, nd.TenNguoiDung
+        FROM CongVanDen cv
+        JOIN TrinhLanhDao t ON cv.Id = t.CongVanId
+        JOIN NguoiDung nd ON t.NguoiTrinhId = nd.MaNguoiDung
+        WHERE t.LanhDaoId = @LanhDaoId
+        AND t.TrangThai = N'ChoDuyet'
+        ORDER BY t.NgayTrinh DESC";
+
+            return DBHelper.Instance.ExecuteQuery(
+                query,
+                new SqlParameter("@LanhDaoId", lanhDaoId)
+            );
+        }
+        /// <summary>
+        /// Ð?m s? lu?ng công van dang trong tr?ng thái ch? duy?t c?a RIÊNG v? Lãnh d?o này
+        /// </summary>
+        public int GetCountChoDuyetByLanhDao(string lanhDaoId)
+        {
+            // Ð?m chính xác s? dòng trong b?ng TrinhLanhDao kh?p v?i mã Lãnh d?o dang dang nh?p
+            string query = @"
+        SELECT COUNT(*) 
+        FROM TrinhLanhDao 
+        WHERE LanhDaoId = @LanhDaoId 
+          AND TrangThai = N'ChoDuyet'";
+
+            // G?i thông qua l?p ti?n ích DBHelper an toàn c?a b?n
+            object result = DBHelper.Instance.ExecuteScalar(query,
+                new SqlParameter("@LanhDaoId", lanhDaoId)
+            );
+
+            return (result != null) ? Convert.ToInt32(result) : 0;
+        }
+    }
+}
+
+===== D:\CODE\QuanLyCongVan\DAL\UserDAL.cs =====
+using System.Data;
+using System.Data.SqlClient;
+using DTO;
+
+namespace DAL
+{
+    public class UserDAL
+    {
+        private static UserDAL _instance;
+        public static UserDAL Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new UserDAL();
+                return _instance;
+            }
+        }
+
+        private UserDAL() { }
+
+        public DataTable GetAll()
+        {
+            string sql = @"
+                SELECT nd.*, pb.TenPhongBan
+                FROM NguoiDung nd
+                LEFT JOIN PhongBan pb ON nd.MaPhongBan = pb.MaPhongBan";
+
+            return DBHelper.Instance.ExecuteQuery(sql);
+        }
+
+        public int Insert(User u)
+        {
+            string sql = @"INSERT INTO NguoiDung 
+            (MaNguoiDung, TenNguoiDung, TenDangNhap, MatKhau, Quyen, MaPhongBan, SDT, Email)
+            VALUES (@Ma, @Ten, @User, @Pass, @Quyen, @PhongBan, @SDT, @Email)";
+
+            return DBHelper.Instance.ExecuteNonQuery(sql,
+                new SqlParameter("@Ma", u.MaNguoiDung),
+                new SqlParameter("@Ten", u.TenNguoiDung),
+                new SqlParameter("@User", u.TenDangNhap),
+                new SqlParameter("@Pass", u.MatKhau),
+                new SqlParameter("@Quyen", u.Quyen),
+                new SqlParameter("@PhongBan", u.MaPhongBan),
+                new SqlParameter("@SDT", u.SDT),
+                new SqlParameter("@Email", u.Email)
+            );
+        }
+
+        public int Update(User u)
+        {
+            string sql = @"UPDATE NguoiDung SET 
+                TenNguoiDung = @Ten,
+                TenDangNhap = @User,
+                MatKhau = @Pass,
+                Quyen = @Quyen,
+                MaPhongBan = @PhongBan,
+                SDT = @SDT,
+                Email = @Email
+                WHERE MaNguoiDung = @Ma";
+
+            return DBHelper.Instance.ExecuteNonQuery(sql,
+                new SqlParameter("@Ma", u.MaNguoiDung),
+                new SqlParameter("@Ten", u.TenNguoiDung),
+                new SqlParameter("@User", u.TenDangNhap),
+                new SqlParameter("@Pass", u.MatKhau),
+                new SqlParameter("@Quyen", u.Quyen),
+                new SqlParameter("@PhongBan", u.MaPhongBan),
+                new SqlParameter("@SDT", u.SDT),
+                new SqlParameter("@Email", u.Email)
+            );
+        }
+
+        public int Delete(string ma)
+        {
+            string sql = "DELETE FROM NguoiDung WHERE MaNguoiDung = @Ma";
+
+            return DBHelper.Instance.ExecuteNonQuery(sql,
+                new SqlParameter("@Ma", ma));
+        }
+
+        public DataTable Search(string column, string value)
+        {
+            string[] allowedColumns =
+            {
+                "nd.MaNguoiDung",
+                "nd.TenNguoiDung",
+                "nd.TenDangNhap",
+                "nd.Email",
+                "nd.Quyen",
+                "nd.SDT",
+                "pb.TenPhongBan"
+    };
+
+            if (!System.Array.Exists(allowedColumns, c => c == column))
+                throw new System.Exception("C?t tìm ki?m không h?p l?");
+
+            string sql = $@"
+        SELECT nd.*, pb.TenPhongBan
+        FROM NguoiDung nd
+        LEFT JOIN PhongBan pb ON nd.MaPhongBan = pb.MaPhongBan
+        WHERE {column} LIKE @value";
+
+            return DBHelper.Instance.ExecuteQuery(sql,
+                new SqlParameter("@value", "%" + value + "%"));
+        }
+        public User Login(string username, string password)
+        {
+            string sql = @"SELECT * FROM NguoiDung 
+                   WHERE TenDangNhap = @user AND MatKhau = @pass";
+
+            DataTable dt = DBHelper.Instance.ExecuteQuery(sql,
+                new SqlParameter("@user", username),
+                new SqlParameter("@pass", password));
+
+            if (dt.Rows.Count == 0)
+                return null;
+
+            DataRow r = dt.Rows[0];
+
+            return new DTO.User()
+            {
+                MaNguoiDung = r["MaNguoiDung"].ToString(),
+                TenNguoiDung = r["TenNguoiDung"].ToString(),
+                TenDangNhap = r["TenDangNhap"].ToString(),
+                MatKhau = r["MatKhau"].ToString(),
+                Quyen = r["Quyen"].ToString(),
+                MaPhongBan = r["MaPhongBan"]?.ToString(),
+                SDT = r["SDT"]?.ToString(),
+                Email = r["Email"]?.ToString()
+            };
+        }
+        public DataTable GetByRole(string role)
+        {
+            string query = "SELECT MaNguoiDung, TenNguoiDung FROM NguoiDung WHERE Quyen = @Role";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+        new SqlParameter("@Role", role)
+            };
+
+            return DBHelper.Instance.ExecuteQuery(query, parameters);
+        }
+        public DataTable GetByPhongBan(string maPhongBan)
+        {
+            string query = @"
+        SELECT MaNguoiDung, TenNguoiDung
+        FROM NguoiDung
+        WHERE MaPhongBan = @MaPhongBan";
+
+            return DBHelper.Instance.ExecuteQuery(
+                query,
+                new SqlParameter("@MaPhongBan", maPhongBan)
+            );
+        }
+    }
+}
+
+===== D:\CODE\QuanLyCongVan\DAL\obj\Debug\net10.0\.NETCoreApp,Version=v10.0.AssemblyAttributes.cs =====
+// <autogenerated />
+using System;
+using System.Reflection;
+[assembly: global::System.Runtime.Versioning.TargetFrameworkAttribute(".NETCoreApp,Version=v10.0", FrameworkDisplayName = ".NET 10.0")]
+
+===== D:\CODE\QuanLyCongVan\DAL\obj\Debug\net10.0\DAL.AssemblyInfo.cs =====
+//------------------------------------------------------------------------------
+// <auto-generated>
+//     This code was generated by a tool.
+//     Runtime Version:4.0.30319.42000
+//
+//     Changes to this file may cause incorrect behavior and will be lost if
+//     the code is regenerated.
+// </auto-generated>
+//------------------------------------------------------------------------------
+
+using System;
+using System.Reflection;
+
+[assembly: System.Reflection.AssemblyCompanyAttribute("DAL")]
+[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8f1dac1628eef45d8f3d7260fbd142d267958220")]
+[assembly: System.Reflection.AssemblyProductAttribute("DAL")]
+[assembly: System.Reflection.AssemblyTitleAttribute("DAL")]
+[assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
+
+// Generated by the MSBuild WriteCodeFragment class.
+
+
+===== D:\CODE\QuanLyCongVan\DAL\obj\Debug\net10.0\DAL.GlobalUsings.g.cs =====
+// <auto-generated/>
+global using System;
+global using System.Collections.Generic;
+global using System.IO;
+global using System.Linq;
+global using System.Net.Http;
+global using System.Threading;
+global using System.Threading.Tasks;
+
+===== D:\CODE\QuanLyCongVan\DAL\obj\Debug\net472\.NETFramework,Version=v4.7.2.AssemblyAttributes.cs =====
+// <autogenerated />
+using System;
+using System.Reflection;
+[assembly: global::System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.7.2", FrameworkDisplayName = ".NET Framework 4.7.2")]
+
+===== D:\CODE\QuanLyCongVan\DAL\obj\Debug\net472\DAL.AssemblyInfo.cs =====
+//------------------------------------------------------------------------------
+// <auto-generated>
+//     This code was generated by a tool.
+//     Runtime Version:4.0.30319.42000
+//
+//     Changes to this file may cause incorrect behavior and will be lost if
+//     the code is regenerated.
+// </auto-generated>
+//------------------------------------------------------------------------------
+
+using System;
+using System.Reflection;
+
+[assembly: System.Reflection.AssemblyCompanyAttribute("DAL")]
+[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+64347ddc5972d430a00abb41ffed3b334e9261b4")]
+[assembly: System.Reflection.AssemblyProductAttribute("DAL")]
+[assembly: System.Reflection.AssemblyTitleAttribute("DAL")]
+[assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
+
+// Generated by the MSBuild WriteCodeFragment class.
+
+
+===== D:\CODE\QuanLyCongVan\DAL\obj\Debug\net472\DAL.GlobalUsings.g.cs =====
+// <auto-generated/>
+global using System;
+global using System.Collections.Generic;
+global using System.IO;
+global using System.Linq;
+global using System.Threading;
+global using System.Threading.Tasks;
+
