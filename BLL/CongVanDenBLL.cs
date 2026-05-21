@@ -19,7 +19,10 @@ namespace BLL
                 return _Instance;
             }
         }
-
+        public DataTable GetAll()
+        {
+            return DAL.CongVanDenDAL.Instance.GetAll();
+        }
         public bool Insert(DTO.CongVanDen cv)
         {
             if (string.IsNullOrEmpty(cv.SoDen))
