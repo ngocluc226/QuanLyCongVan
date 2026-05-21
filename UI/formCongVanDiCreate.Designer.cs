@@ -50,6 +50,8 @@
             this.btnEdit = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.cboCongVanDen = new System.Windows.Forms.ComboBox();
+            this.labelCongVanDen = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.cbDoMat = new System.Windows.Forms.ComboBox();
             this.cbDoKhan = new System.Windows.Forms.ComboBox();
@@ -101,11 +103,11 @@
             this.dtgvvbdi.Controls.Add(this.btnEdit);
             this.dtgvvbdi.Controls.Add(this.btnAdd);
             this.dtgvvbdi.Controls.Add(this.groupBox7);
-            this.dtgvvbdi.Location = new System.Drawing.Point(-53, 39);
+            this.dtgvvbdi.Location = new System.Drawing.Point(-10, 39);
             this.dtgvvbdi.Margin = new System.Windows.Forms.Padding(4);
             this.dtgvvbdi.Name = "dtgvvbdi";
             this.dtgvvbdi.Padding = new System.Windows.Forms.Padding(4);
-            this.dtgvvbdi.Size = new System.Drawing.Size(1587, 473);
+            this.dtgvvbdi.Size = new System.Drawing.Size(1550, 473);
             this.dtgvvbdi.TabIndex = 5;
             this.dtgvvbdi.TabStop = false;
             this.dtgvvbdi.Text = "Công cụ";
@@ -362,6 +364,8 @@
             // groupBox7
             // 
             this.groupBox7.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.groupBox7.Controls.Add(this.cboCongVanDen);
+            this.groupBox7.Controls.Add(this.labelCongVanDen);
             this.groupBox7.Controls.Add(this.label5);
             this.groupBox7.Controls.Add(this.cbDoMat);
             this.groupBox7.Controls.Add(this.cbDoKhan);
@@ -393,6 +397,23 @@
             this.groupBox7.TabIndex = 0;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Thông tin chung";
+            // 
+            // cboCongVanDen
+            // 
+            this.cboCongVanDen.FormattingEnabled = true;
+            this.cboCongVanDen.Location = new System.Drawing.Point(1200, 230);
+            this.cboCongVanDen.Name = "cboCongVanDen";
+            this.cboCongVanDen.Size = new System.Drawing.Size(200, 24);
+            this.cboCongVanDen.TabIndex = 80;
+            // 
+            // labelCongVanDen
+            // 
+            this.labelCongVanDen.AutoSize = true;
+            this.labelCongVanDen.Location = new System.Drawing.Point(1050, 233);
+            this.labelCongVanDen.Name = "labelCongVanDen";
+            this.labelCongVanDen.Size = new System.Drawing.Size(126, 17);
+            this.labelCongVanDen.TabIndex = 81;
+            this.labelCongVanDen.Text = "Trả lời cho CV đến:";
             // 
             // label5
             // 
@@ -700,6 +721,9 @@
         private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.GroupBox groupBox7;
+        // Fields for CongVanDen linkage
+        private System.Windows.Forms.ComboBox cboCongVanDen;
+        private System.Windows.Forms.Label labelCongVanDen;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox cbDoMat;
         private System.Windows.Forms.ComboBox cbDoKhan;

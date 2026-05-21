@@ -29,9 +29,9 @@ namespace DAL
         public int Insert(CongVanDi cv)
         {
             string query = @"INSERT INTO CongVanDi 
-            (SoDi, SoVanBan, NgayDi, NgayBanHanh, NoiNhan, NguoiKy, TrichYeu, DoKhan, DoMat, FileDinhKem, TrangThai)
+            (SoDi, SoVanBan, NgayDi, NgayBanHanh, NoiNhan, NguoiKy, TrichYeu, DoKhan, DoMat, FileDinhKem, TrangThai, LienKetCongVanDenId)
             VALUES 
-            (@SoDi, @SoVanBan, @NgayDi, @NgayBanHanh, @NoiNhan, @NguoiKy, @TrichYeu, @DoKhan, @DoMat, @FileDinhKem, @TrangThai)";
+            (@SoDi, @SoVanBan, @NgayDi, @NgayBanHanh, @NoiNhan, @NguoiKy, @TrichYeu, @DoKhan, @DoMat, @FileDinhKem, @TrangThai, @LienKetCongVanDenId)";
 
             return DBHelper.Instance.ExecuteNonQuery(
                 query,
@@ -45,7 +45,8 @@ namespace DAL
                 new SqlParameter("@DoKhan", (object)cv.DoKhan ?? DBNull.Value),
                 new SqlParameter("@DoMat", (object)cv.DoMat ?? DBNull.Value),
                 new SqlParameter("@FileDinhKem", (object)cv.FileDinhKem ?? DBNull.Value),
-                new SqlParameter("@TrangThai", (object)cv.TrangThai ?? "Chưa xử lý")
+                new SqlParameter("@TrangThai", (object)cv.TrangThai ?? "Chưa xử lý"),
+                new SqlParameter("@LienKetCongVanDenId", (object)cv.LienKetCongVanDenId ?? DBNull.Value)
             );
         }
 
@@ -66,7 +67,7 @@ namespace DAL
             string query = @"UPDATE CongVanDi 
             SET SoDi = @SoDi, SoVanBan = @SoVanBan, NgayDi = @NgayDi, NgayBanHanh = @NgayBanHanh, 
                 NoiNhan = @NoiNhan, NguoiKy = @NguoiKy, TrichYeu = @TrichYeu, DoKhan = @DoKhan, 
-                DoMat = @DoMat, FileDinhKem = @FileDinhKem, TrangThai = @TrangThai
+                DoMat = @DoMat, FileDinhKem = @FileDinhKem, TrangThai = @TrangThai, LienKetCongVanDenId = @LienKetCongVanDenId
             WHERE Id = @Id";
 
             return DBHelper.Instance.ExecuteNonQuery(
@@ -82,7 +83,8 @@ namespace DAL
                 new SqlParameter("@DoKhan", (object)cv.DoKhan ?? DBNull.Value),
                 new SqlParameter("@DoMat", (object)cv.DoMat ?? DBNull.Value),
                 new SqlParameter("@FileDinhKem", (object)cv.FileDinhKem ?? DBNull.Value),
-                new SqlParameter("@TrangThai", (object)cv.TrangThai ?? DBNull.Value)
+                new SqlParameter("@TrangThai", (object)cv.TrangThai ?? DBNull.Value),
+                new SqlParameter("@LienKetCongVanDenId", (object)cv.LienKetCongVanDenId ?? DBNull.Value)
             );
         }
 

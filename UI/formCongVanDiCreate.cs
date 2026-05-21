@@ -39,6 +39,24 @@ namespace UI
 
         private void formCongVanDiCreate_Load(object sender, EventArgs e)
         {
+            // Tải dữ liệu cboCongVanDen
+            DataTable dtCVDen = CongVanDenBLL.Instance.GetAll();
+            DataTable dtCVDenClone = dtCVDen.Clone();
+            
+            // Bỏ ràng buộc NotNull cho DataTable clone dùng để binding lên giao diện
+            foreach (DataColumn col in dtCVDenClone.Columns)
+            {
+                col.AllowDBNull = true;
+            }
+            
+            dtCVDenClone.Rows.Add(dtCVDenClone.NewRow()); // Dòng trống đầu tiên
+            foreach (DataRow r in dtCVDen.Rows) dtCVDenClone.ImportRow(r);
+            
+            cboCongVanDen.DataSource = dtCVDenClone;
+            cboCongVanDen.ValueMember = "Id";
+            cboCongVanDen.DisplayMember = "TrichYeu";
+            cboCongVanDen.SelectedIndex = 0; // Trống thay vì chọn dòng đầu tiên
+
             // Kiểm tra Role để tối ưu hóa UI
             bool isNhanVien = (Session.CurrentUser != null && Session.CurrentUser.Quyen == "NhanVien");
 
@@ -70,6 +88,9 @@ namespace UI
                     cbDoKhan.Text = _cvEdit.DoKhan;
                     cbDoMat.Text = _cvEdit.DoMat;
                     txtFile.Text = _cvEdit.FileDinhKem;
+                    
+                    if (_cvEdit.LienKetCongVanDenId.HasValue)
+                        cboCongVanDen.SelectedValue = _cvEdit.LienKetCongVanDenId.Value;
                 }
             }
             else
@@ -88,6 +109,7 @@ namespace UI
                     {
                         var row = dgvChoBanHanh.SelectedRows[0];
                         txtSoDi.Text = row.Cells["SoDi"].Value?.ToString();
+                        txtSoVanBan.Text = row.Cells["SoVanBan"].Value?.ToString();
                         txtTrichYeu.Text = row.Cells["TrichYeu"].Value?.ToString();
                         txtNguoiKy.Text = row.Cells["NguoiKy"].Value?.ToString();
                         cbNoiNhan.Text = row.Cells["NoiNhan"].Value?.ToString();
@@ -95,6 +117,16 @@ namespace UI
                         cbDoMat.Text = row.Cells["DoMat"].Value?.ToString();
                         txtFile.Text = row.Cells["FileDinhKem"].Value?.ToString();
                         dtpNgayDi.Value = Convert.ToDateTime(row.Cells["NgayDi"].Value);
+
+                        // Load liên kết công văn đến nếu có
+                        if (row.Cells["LienKetCongVanDenId"] != null && row.Cells["LienKetCongVanDenId"].Value != DBNull.Value)
+                        {
+                            cboCongVanDen.SelectedValue = Convert.ToInt32(row.Cells["LienKetCongVanDenId"].Value);
+                        }
+                        else
+                        {
+                            cboCongVanDen.SelectedIndex = 0;
+                        }
 
                         // Lưu Id vào tag
                         this.Tag = row.Cells["Id"].Value;
@@ -157,6 +189,16 @@ namespace UI
 
             // Định vị trạng thái và dữ liệu theo quyền
             string targetTrangThai = isNhanVien ? DTO.TrangThaiCongVanDi.DU_THAO : DTO.TrangThaiCongVanDi.DA_BAN_HANH;
+            
+            int? lienKetId = null;
+            // Bỏ qua dòng trắng mặc định (SelectedIndex == 0)
+            if (cboCongVanDen.SelectedIndex > 0 && cboCongVanDen.SelectedValue != null && cboCongVanDen.SelectedValue != DBNull.Value)
+            {
+                if (int.TryParse(cboCongVanDen.SelectedValue.ToString(), out int parsedId) && parsedId > 0)
+                {
+                    lienKetId = parsedId;
+                }
+            }
 
             // 2. Cập nhật hoặc Thêm
             if (this.Tag != null) // Sửa dự thảo hoặc Cập nhật ban hành
@@ -175,7 +217,8 @@ namespace UI
                     DoKhan = cbDoKhan.Text,
                     DoMat = cbDoMat.Text,
                     FileDinhKem = txtFile.Text,
-                    TrangThai = targetTrangThai
+                    TrangThai = targetTrangThai,
+                    LienKetCongVanDenId = lienKetId
                 };
 
                 bool result = CongVanDiBLL.Instance.Update(cv);
@@ -214,7 +257,8 @@ namespace UI
                     DoKhan = cbDoKhan.Text,
                     DoMat = cbDoMat.Text,
                     FileDinhKem = txtFile.Text,
-                    TrangThai = targetTrangThai
+                    TrangThai = targetTrangThai,
+                    LienKetCongVanDenId = lienKetId
                 };
 
                 bool result = CongVanDiBLL.Instance.Insert(cv);

@@ -68,7 +68,8 @@ namespace UI
                     DoKhan = row.Cells["DoKhan"].Value?.ToString(),
                     DoMat = row.Cells["DoMat"].Value?.ToString(),
                     FileDinhKem = row.Cells["FileDinhKem"].Value?.ToString(),
-                    TrangThai = row.Cells["TrangThai"].Value?.ToString()
+                    TrangThai = row.Cells["TrangThai"].Value?.ToString(),
+                    LienKetCongVanDenId = row.Cells["LienKetCongVanDenId"]?.Value != DBNull.Value ? (int?)Convert.ToInt32(row.Cells["LienKetCongVanDenId"].Value) : null
                 };
 
                 using (var f = new formCongVanDiCreate(cv))
