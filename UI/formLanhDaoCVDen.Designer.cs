@@ -54,7 +54,8 @@
             this.btnPhanCong.BackColor = System.Drawing.Color.Blue;
             this.btnPhanCong.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnPhanCong.ForeColor = System.Drawing.Color.White;
-            this.btnPhanCong.Location = new System.Drawing.Point(40, 95);
+            this.btnPhanCong.Location = new System.Drawing.Point(53, 117);
+            this.btnPhanCong.Margin = new System.Windows.Forms.Padding(4);
             this.btnPhanCong.Name = "btnPhanCong";
             this.btnPhanCong.Size = new System.Drawing.Size(122, 47);
             this.btnPhanCong.TabIndex = 0;
@@ -66,7 +67,8 @@
             // 
             this.dgvCongVan.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvCongVan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvCongVan.Location = new System.Drawing.Point(6, 23);
+            this.dgvCongVan.Location = new System.Drawing.Point(53, 183);
+            this.dgvCongVan.Margin = new System.Windows.Forms.Padding(4);
             this.dgvCongVan.Name = "dgvCongVan";
             this.dgvCongVan.RowHeadersWidth = 51;
             this.dgvCongVan.Size = new System.Drawing.Size(1163, 580);
@@ -89,7 +91,8 @@
             this.btnOpen.BackColor = System.Drawing.Color.Blue;
             this.btnOpen.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnOpen.ForeColor = System.Drawing.Color.White;
-            this.btnOpen.Location = new System.Drawing.Point(202, 95);
+            this.btnOpen.Location = new System.Drawing.Point(881, 117);
+            this.btnOpen.Margin = new System.Windows.Forms.Padding(4);
             this.btnOpen.Name = "btnOpen";
             this.btnOpen.Size = new System.Drawing.Size(134, 47);
             this.btnOpen.TabIndex = 63;
@@ -214,6 +217,7 @@
             this.Controls.Add(this.label4);
             this.Controls.Add(this.btnPhanCong);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "formLanhDaoCVDen";
             this.Text = "formLanhDao";
             this.Load += new System.EventHandler(this.formLanhDaoCVDen_Load);

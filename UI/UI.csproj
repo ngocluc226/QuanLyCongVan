@@ -93,6 +93,12 @@
     <Compile Include="formLanhDao.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="formUyQuyen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formUyQuyen.Designer.cs">
+      <DependentUpon>formUyQuyen.cs</DependentUpon>
+    </Compile>
     <Compile Include="formLanhDao.Designer.cs">
       <DependentUpon>formLanhDao.cs</DependentUpon>
     </Compile>
@@ -162,6 +168,18 @@
     <Compile Include="formSendMail.Designer.cs">
       <DependentUpon>formSendMail.cs</DependentUpon>
     </Compile>
+    <Compile Include="formTruongPhong.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formTruongPhong.Designer.cs">
+      <DependentUpon>formTruongPhong.cs</DependentUpon>
+    </Compile>
+    <Compile Include="formTruongPhongCVDi.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formTruongPhongCVDi.Designer.cs">
+      <DependentUpon>formTruongPhongCVDi.cs</DependentUpon>
+    </Compile>
     <Compile Include="formTruongPhongCVDen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -209,6 +227,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="formLanhDao.resx">
       <DependentUpon>formLanhDao.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formUyQuyen.resx">
+      <DependentUpon>formUyQuyen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="formLanhDaoCVDen.resx">
       <DependentUpon>formLanhDaoCVDen.cs</DependentUpon>

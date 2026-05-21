@@ -31,6 +31,11 @@ namespace UI
             Utils.LoadForm(new formLanhDaoCVDi(), pnlContent);
         }
 
+        private void btnUyQuyen_Click(object sender, EventArgs e)
+        {
+            Utils.LoadForm(new formUyQuyen(), pnlContent);
+        }
+
         private void formLanhDao_Load(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Maximized;
