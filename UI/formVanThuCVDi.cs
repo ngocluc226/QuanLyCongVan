@@ -117,5 +117,10 @@ namespace UI
             formFileViewer f = new formFileViewer(fullPath);
             f.ShowDialog();
         }
+
+        private void formVanThuCVDi_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

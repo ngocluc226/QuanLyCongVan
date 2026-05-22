@@ -33,6 +33,7 @@
             this.btnSuaDraft = new System.Windows.Forms.Button();
             this.btnNopDuyet = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
+            this.btnKiemTraAI = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCongVan)).BeginInit();
             this.SuspendLayout();
             // 
@@ -83,15 +84,26 @@
             this.label4.Location = new System.Drawing.Point(215, 39);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(422, 32);
+            this.label4.Size = new System.Drawing.Size(559, 32);
             this.label4.TabIndex = 44;
             this.label4.Text = "DANH SÁCH CÔNG VĂN ĐI DO TÔI SOẠN THẢO";
+            // 
+            // btnKiemTraAI
+            // 
+            this.btnKiemTraAI.Location = new System.Drawing.Point(476, 106);
+            this.btnKiemTraAI.Name = "btnKiemTraAI";
+            this.btnKiemTraAI.Size = new System.Drawing.Size(189, 32);
+            this.btnKiemTraAI.TabIndex = 63;
+            this.btnKiemTraAI.Text = "Kiểm tra thể thức bằng AI";
+            this.btnKiemTraAI.UseVisualStyleBackColor = true;
+            this.btnKiemTraAI.Click += new System.EventHandler(this.btnKiemTraAI_Click);
             // 
             // formNhanVienCVDi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1227, 533);
+            this.Controls.Add(this.btnKiemTraAI);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.btnNopDuyet);
             this.Controls.Add(this.btnSuaDraft);
@@ -113,5 +125,6 @@
         private System.Windows.Forms.Button btnSuaDraft;
         private System.Windows.Forms.Button btnNopDuyet;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button btnKiemTraAI;
     }
 }
