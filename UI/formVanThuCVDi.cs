@@ -19,6 +19,8 @@ namespace UI
         {
             InitializeComponent();
             InitEvents();
+            Utils.FormatDataGridView(dgvCongVan);
+            Utils.SyncAllButtons(this);
         }
 
         private void InitEvents()
