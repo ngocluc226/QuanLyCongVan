@@ -34,6 +34,7 @@
             this.btnNopDuyet = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.btnKiemTraAI = new System.Windows.Forms.Button();
+            this.btnOpen = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCongVan)).BeginInit();
             this.SuspendLayout();
             // 
@@ -90,7 +91,7 @@
             // 
             // btnKiemTraAI
             // 
-            this.btnKiemTraAI.Location = new System.Drawing.Point(476, 106);
+            this.btnKiemTraAI.Location = new System.Drawing.Point(637, 106);
             this.btnKiemTraAI.Name = "btnKiemTraAI";
             this.btnKiemTraAI.Size = new System.Drawing.Size(189, 32);
             this.btnKiemTraAI.TabIndex = 63;
@@ -98,11 +99,22 @@
             this.btnKiemTraAI.UseVisualStyleBackColor = true;
             this.btnKiemTraAI.Click += new System.EventHandler(this.btnKiemTraAI_Click);
             // 
+            // btnOpen
+            // 
+            this.btnOpen.Location = new System.Drawing.Point(492, 106);
+            this.btnOpen.Name = "btnOpen";
+            this.btnOpen.Size = new System.Drawing.Size(95, 32);
+            this.btnOpen.TabIndex = 64;
+            this.btnOpen.Text = "Xem văn bản";
+            this.btnOpen.UseVisualStyleBackColor = true;
+            this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
+            // 
             // formNhanVienCVDi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1227, 533);
+            this.Controls.Add(this.btnOpen);
             this.Controls.Add(this.btnKiemTraAI);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.btnNopDuyet);
@@ -126,5 +138,6 @@
         private System.Windows.Forms.Button btnNopDuyet;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnKiemTraAI;
+        private System.Windows.Forms.Button btnOpen;
     }
 }

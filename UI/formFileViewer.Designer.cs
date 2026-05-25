@@ -49,7 +49,7 @@
             this.webViewer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.webViewer.MinimumSize = new System.Drawing.Size(27, 25);
             this.webViewer.Name = "webViewer";
-            this.webViewer.Size = new System.Drawing.Size(760, 740);
+            this.webViewer.Size = new System.Drawing.Size(607, 700);
             this.webViewer.TabIndex = 1;
             this.webViewer.Visible = false;
             // 
@@ -57,12 +57,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(824, 748);
+            this.ClientSize = new System.Drawing.Size(652, 695);
             this.Controls.Add(this.webViewer);
             this.Controls.Add(this.picViewer);
             this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "formFileViewer";
-            this.Text = "Xem file";
+            this.Text = "Quản lý công văn";
             this.Load += new System.EventHandler(this.formFileViewer_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picViewer)).EndInit();
             this.ResumeLayout(false);

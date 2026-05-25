@@ -18,6 +18,7 @@ namespace UI
         {
             InitializeComponent();
             Utils.FormatDataGridView(dgvVanBan);
+            Utils.SyncAllButtons(this);
 
             // Gán sự kiện
             this.Load += new System.EventHandler(this.formCongVanDiList_Load);

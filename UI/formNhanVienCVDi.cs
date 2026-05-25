@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -131,6 +132,16 @@ namespace UI
 
             // 3. Cập nhật lại giao diện sau khi tắt hộp thoại kiểm tra
             LoadData(); 
+        }
+
+        private void btnOpen_Click(object sender, EventArgs e)
+        {
+            string path = dgvCongVan.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
+
+            if (string.IsNullOrEmpty(path)) return;
+            string fullPath = Path.Combine(Application.StartupPath, path);
+            formFileViewer f = new formFileViewer(fullPath);
+            f.ShowDialog();
         }
     }
 }

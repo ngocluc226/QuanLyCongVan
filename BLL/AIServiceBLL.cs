@@ -6,6 +6,9 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
+using System.Drawing;
+using System.Drawing.Imaging;
+using PdfiumViewer;
 
 namespace BLL
 {
@@ -21,56 +24,150 @@ namespace BLL
                 return _Instance;
             }
         }
-        // ĐỒNG BỘ MỚI: Đọc trực tiếp từ file App.config thay vì gán cứng trong code
-        private readonly string _aiEndpoint = ConfigurationManager.AppSettings["AI_Endpoint"];
-        private readonly string _apiKey = ConfigurationManager.AppSettings["AI_ApiKey"];
-        private readonly string _aiModel = ConfigurationManager.AppSettings["AI_Model"];
+
+        private readonly string _aiEndpoint;
+        private readonly string _aiModel;
+
+        private readonly string[] _apiKeys;
+        private int _currentKeyIndex = 0;
+        private readonly object _keyLock = new object();
+
+        private AIServiceBLL()
+        {
+            _aiEndpoint = ConfigurationManager.AppSettings["AI_Endpoint"];
+            _aiModel = ConfigurationManager.AppSettings["AI_Model"];
+
+            string rawKeys = ConfigurationManager.AppSettings["AI_ApiKeys"];
+            if (!string.IsNullOrEmpty(rawKeys))
+            {
+                _apiKeys = rawKeys.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            }
+        }
+
+        private string GetNextApiKey()
+        {
+            if (_apiKeys == null || _apiKeys.Length == 0) return null;
+
+            lock (_keyLock)
+            {
+                string selectedKey = _apiKeys[_currentKeyIndex].Trim();
+                _currentKeyIndex = (_currentKeyIndex + 1) % _apiKeys.Length;
+                return selectedKey;
+            }
+        }
+
         public async Task<KetQuaKiemTraAI> KiemTraTheThucVanBanAsync(string filePath)
         {
-            // Kiểm tra an toàn xem file cấu hình có bị thiếu tham số không
-            if (string.IsNullOrEmpty(_aiEndpoint) || string.IsNullOrEmpty(_apiKey))
+            string activeApiKey = GetNextApiKey();
+
+            if (string.IsNullOrEmpty(_aiEndpoint) || string.IsNullOrEmpty(activeApiKey) || string.IsNullOrEmpty(_aiModel))
             {
-                throw new Exception("Lỗi hệ thống: Chưa cấu hình thông số AI_Endpoint hoặc AI_ApiKey trong tệp App.config!");
-            }
-            if (string.IsNullOrEmpty(_aiEndpoint) || string.IsNullOrEmpty(_apiKey) || string.IsNullOrEmpty(_aiModel))
-            {
-                throw new Exception("Lỗi hệ thống: Chưa cấu hình đầy đủ Endpoint, ApiKey hoặc Model trong tệp App.config!");
+                throw new Exception("Lỗi hệ thống: Chưa cấu hình đầy đủ Endpoint, danh sách ApiKey hoặc Model trong App.config!");
             }
             if (!File.Exists(filePath))
-                throw new FileNotFoundException("Không tìm thấy tệp tin dự thảo cần kiểm tra!");
+                throw new FileNotFoundException("Không tìm thấy tệp tin tài liệu cần kiểm tra!");
 
-            string extension = Path.GetExtension(filePath).ToLower();
-            string mimeType = "image/jpeg";
-            if (extension == ".png") mimeType = "image/png";
+            string extension = Path.GetExtension(filePath).ToLower().Trim();
+            string mimeType = "image/png"; // Ép sang PNG để đảm bảo chất lượng ảnh ghép không bị vỡ chữ
+            string base64Image = "";
 
-            string jsonPayload = "";
-
-            // --- GIAI ĐOẠN 1: ĐỌC FILE VÀ ĐÓNG GÓI PAYLOAD ---
+            // --- GIAI ĐOẠN 1: XỬ LÝ ĐA TRANG VÀ GHÉP ẢNH TỰ ĐỘNG ---
             try
             {
-                byte[] fileBytes = File.ReadAllBytes(filePath);
-                string base64Image = Convert.ToBase64String(fileBytes);
+                if (extension == ".pdf")
+                {
+                    using (var pdfDocument = PdfiumViewer.PdfDocument.Load(filePath))
+                    {
+                        int pageCount = pdfDocument.PageCount;
+                        if (pageCount == 0)
+                            throw new Exception("File PDF không có nội dung hoặc bị lỗi cấu trúc!");
 
-                string systemPrompt = @"Bạn là Chuyên gia Kiểm tra Văn bản Hành chính Việt Nam. 
-                Nhiệm vụ của bạn là kiểm tra HÌNH ẢNH văn bản được cung cấp và đối chiếu nghiêm ngặt với Nghị định 30/2020/NĐ-CP theo các quy chuẩn kỹ thuật sau:
-                1. CĂN LỀ:Lề trên: 20-25mm, Lề dưới: 20-25mm, Lề trái: 30-35mm (để đóng gáy), Lề phải: 15-20mm.
-                2. PHÔNG CHỮ: Phải dùng duy nhất phông chữ Times New Roman cho toàn bộ văn bản.
-                3. QUỐC HIỆU & TIÊU NGỮ: 
-                   - Dòng 1 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM': Chữ in hoa, cỡ chữ 12-13, đứng, đậm.
-                   - Dòng 2 'Độc lập - Tự do - Hạnh phúc': Chữ in thường, cỡ chữ 13-14, đứng, đậm, chữ cái đầu các từ phải viết hoa. 
-                    Có đường kẻ ngang màu đen bên dưới, nét liền, độ dài bằng độ dài dòng chữ.
-                4. TÊN CƠ QUAN & SỐ HIỆU: Đặt góc trái, cỡ 12-13. Số và ký hiệu văn bản phải đúng dạng.
-                5. ĐỊA DANH & NGÀY THÁNG: Đặt góc phải, ngang hàng với Số hiệu, chữ in thường, cỡ 13-14, nghiêng.
-                6. TRÍCH YẾU NỘI DUNG: Chữ in thường, cỡ 13-14, đứng, đậm, đặt ngay dưới tên loại văn bản.
-                7. THẨM QUYỀN & CON DẤU: Chức vụ người ký viết hoa, in bài (cỡ 13-14, đứng, đậm). Con dấu đóng phải rõ ràng, đóng trùm lên khoảng 1/3 chữ ký về phía bên trái.
+                        if (pageCount == 1)
+                        {
+                            // Nếu chỉ có 1 trang, render bình thường
+                            using (var img = pdfDocument.Render(0, 300, 300, true))
+                            {
+                                using (var ms = new MemoryStream())
+                                {
+                                    img.Save(ms, ImageFormat.Png);
+                                    base64Image = Convert.ToBase64String(ms.ToArray());
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // NẾU CÓ NHIỀU TRANG: Tiến hành lấy trang đầu (0) và trang cuối (pageCount - 1)
+                            using (var firstPage = pdfDocument.Render(0, 300, 300, true))
+                            using (var lastPage = pdfDocument.Render(pageCount - 1, 300, 300, true))
+                            {
+                                // Tính toán kích thước tổng để tạo một bức ảnh dọc ghép 2 trang lại
+                                int combinedWidth = Math.Max(firstPage.Width, lastPage.Width);
+                                int combinedHeight = firstPage.Height + lastPage.Height + 20; // Cộng thêm 20px khoảng cách phân đoạn
 
-                YÊU CẦU ĐẦU RA: Bạn BẮT BUỘC phải trả về dữ liệu dưới cấu trúc một đối tượng JSON thuần túy, bao gồm các trường:
-                - DiemSo (int): Thang điểm từ 0 đến 100 dựa trên mức độ vi phạm.
+                                using (var combinedImage = new Bitmap(combinedWidth, combinedHeight))
+                                using (var g = Graphics.FromImage(combinedImage))
+                                {
+                                    g.Clear(Color.White); // Đổ nền trắng cho ảnh ghép
+
+                                    // Vẽ trang đầu tiên lên nửa trên
+                                    g.DrawImage(firstPage, 0, 0);
+
+                                    // Vẽ một đường chỉ phân tách nhỏ giữa 2 trang để AI phân biệt vùng dữ liệu
+                                    using (Pen p = new Pen(Color.LightGray, 2))
+                                    {
+                                        g.DrawLine(p, 0, firstPage.Height + 10, combinedWidth, firstPage.Height + 10);
+                                    }
+
+                                    // Vẽ trang cuối cùng lên nửa dưới
+                                    g.DrawImage(lastPage, 0, firstPage.Height + 20);
+
+                                    using (var ms = new MemoryStream())
+                                    {
+                                        combinedImage.Save(ms, ImageFormat.Png);
+                                        base64Image = Convert.ToBase64String(ms.ToArray());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (extension == ".png" || extension == ".jpg" || extension == ".jpeg" || extension == ".webp")
+                {
+                    mimeType = extension == ".png" ? "image/png" : (extension == ".webp" ? "image/webp" : "image/jpeg");
+                    byte[] fileBytes = File.ReadAllBytes(filePath);
+                    base64Image = Convert.ToBase64String(fileBytes);
+                }
+                else
+                {
+                    throw new Exception($"Định dạng tệp {extension} không hỗ trợ! Hệ thống chỉ nhận tệp tài liệu PDF hoặc file ảnh dạng PNG, JPG, JPEG, WEBP.");
+                }
+
+                // Loại bỏ ký tự ngắt dòng thừa trong chuỗi Base64
+                base64Image = base64Image.Replace("\r", "").Replace("\n", "");
+
+                // --- GIAI ĐOẠN 2: CẬP NHẬT PROMPT ĐỌC ẢNH GHÉP HAI TRANG ---
+                string systemPrompt = @"Bạn là hệ thống Vision AI kiểm soát thể thức văn bản hành chính Việt Nam theo Nghị định 30/2020/NĐ-CP.
+                Hình ảnh gửi lên có thể là một bức ảnh được ghép dọc từ TRANG ĐẦU TIÊN và TRANG CUỐI CÙNG của một văn bản nhiều trang (ngăn cách bởi một đường kẻ xám).
+                Hãy rà soát kỹ lưỡng các vùng thông tin theo quy trình sau:
+
+                1. KIỂM TRA PHẦN ĐẦU VĂN BẢN (Nằm ở nửa trên của bức ảnh ghép):
+                   - QUỐC HIỆU: Góc trên bên phải phải có 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM' (in hoa, đậm).
+                   - TIÊU NGỮ: Ngay dưới Quốc hiệu phải có 'Độc lập - Tự do - Hạnh phúc' (đậm, đứng, có nét gạch chân liền phía dưới).
+                   - CƠ QUAN BAN HÀNH: Góc trên bên trái phải có tên tổ chức hoặc cơ quan ban hành văn bản.
+                   Nếu thiếu một trong các thành phần đầu này -> BÁO LỖI NGHIÊM TRỌNG.
+
+                2. KIỂM TRA PHẦN CUỐI VĂN BẢN (Nằm ở nửa dưới của bức ảnh ghép):
+                   - HỌ TÊN NGƯỜI KÝ: Phải xuất hiện rõ ràng họ tên đầy đủ bằng chữ in thường/in hoa của người có thẩm quyền ký ở dưới cùng bên phải. Nếu chỉ có chức vụ hoặc chữ ký mà không ghi rõ họ tên chữ bên dưới -> BÁO LỖI NGHIÊM TRỌNG.
+                   - CHỮ KÝ VÀ CON DẤU: Phải có hình ảnh con dấu pháp lý màu đỏ (hoặc dấu số). Con dấu bắt buộc phải đóng trùm lên khoảng 1/3 chữ ký về phía bên trái. Nếu đóng lệch hẳn ra ngoài hoặc đè kín hoàn toàn chữ ký là SAI.
+
+                YÊU CẦU ĐẦU RA (JSON THUẦN):
+                Bạn bắt buộc phải kiểm tra và trả về cấu trúc đối tượng JSON chính xác sau:
+                - DiemSo (int): Thang điểm từ 0 đến 100. Trừ thẳng tay 25 điểm cho mỗi thành phần bị thiếu ở trên. Thiếu 1 thành phần cốt lõi thì điểm tối đa chỉ là 75 (Không hợp lệ).
                 - HopLe (bool): true nếu DiemSo >= 80, ngược lại là false.
-                - DanhSachLoi (array string): Liệt kê chi tiết, cụ thể từng lỗi thể thức, font, lề phát hiện được từ ảnh.
-                - DeXuatChinhSua (string): Lời khuyên ngắn gọn để nhân viên sửa lại cho đúng quy chuẩn.";
+                - DanhSachLoi (array string): Nếu thiếu thành phần nào, bắt buộc phải ghi rõ câu cảnh báo vào đây (Ví dụ: 'Văn bản thiếu cụm Quốc hiệu ở góc trên bên phải', 'Thiếu họ tên người ký ở phần cuối văn bản'). Nếu đầy đủ hoàn toàn, để mảng rỗng [].
+                - DeXuatChinhSua (string): Hướng dẫn bổ sung thành phần cụ thể.";
 
-                string userPrompt = "Hãy phân tích hình ảnh đính kèm và kiểm tra thể thức văn bản hành chính này.";
+                string userPrompt = "Thực hiện phân tích hình ảnh văn bản. Lưu ý đây là ảnh ghép giữa trang đầu và trang cuối của tài liệu, hãy quét kỹ cả hai vùng trên và dưới.";
 
                 var requestPayload = new
                 {
@@ -91,20 +188,13 @@ namespace BLL
                     response_format = new { type = "json_object" }
                 };
 
-                jsonPayload = JsonConvert.SerializeObject(requestPayload);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Lỗi khởi tạo dữ liệu tệp tin: " + ex.Message);
-            }
+                string jsonPayload = JsonConvert.SerializeObject(requestPayload);
 
-            // --- GIAI ĐOẠN 2: KẾT NỐI MẠNG VÀ GỌI API ---
-            string responseString = "";
-            try
-            {
+                // --- GIAI ĐOẠN 3: KẾT NỐI MẠNG VÀ GỌI API ---
+                string responseString = "";
                 using (HttpClient client = new HttpClient())
                 {
-                    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_apiKey}");
+                    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {activeApiKey}");
                     client.Timeout = TimeSpan.FromSeconds(35);
 
                     var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
@@ -117,21 +207,11 @@ namespace BLL
                     else
                     {
                         string errDetail = await response.Content.ReadAsStringAsync();
-                        // Ném lỗi này ra và KHÔNG cho khối catch bên dưới nuốt mất
                         throw new InvalidOperationException($"Máy chủ AI từ chối kết nối (Mã lỗi: {response.StatusCode}). Chi tiết: {errDetail}");
                     }
                 }
-            }
-            catch (Exception ex) when (!(ex is InvalidOperationException))
-            {
-                // KỸ THUẬT MỚI: Chỉ bắt lỗi mạng thật (WebException, TaskCanceledException do Timeout,...)
-                // Nếu là InvalidOperationException do sai Key/hết tiền phía trên ném ra, catch này sẽ BỎ QUA để đẩy thẳng lên UI.
-                throw new Exception("Cần kiểm tra và kết nối lại mạng để thực hiện chức năng này!");
-            }
 
-            // --- GIAI ĐOẠN 3: GIẢI MÃ JSON KẾT QUẢ ĐẦU RA ---
-            try
-            {
+                // --- GIAI ĐOẠN 4: TRẢ KẾT QUẢ DTO ---
                 var openRouterResponse = JsonConvert.DeserializeAnonymousType(responseString, new
                 {
                     choices = new[] { new { message = new { content = "" } } }
@@ -139,7 +219,6 @@ namespace BLL
 
                 string aiJsonContent = openRouterResponse.choices[0].message.content.Trim();
 
-                // BẢO VỆ CHỐNG LỖI FORMAT: Loại bỏ ký tự bọc khối ```json của Markdown nếu AI lỡ tay sinh ra
                 if (aiJsonContent.StartsWith("```"))
                 {
                     int firstLineBreak = aiJsonContent.IndexOf('\n');
@@ -152,10 +231,13 @@ namespace BLL
 
                 return JsonConvert.DeserializeObject<KetQuaKiemTraAI>(aiJsonContent);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!(ex is InvalidOperationException) && !(ex is FileNotFoundException))
             {
-                // Giúp bạn debug xem cấu trúc JSON trả về bị sai lệch ở trường nào
-                throw new Exception("AI phản hồi cấu trúc không tương thích DTO: " + ex.Message);
+                if (ex.Message.Contains("DTO") || ex.Message.Contains("JSON"))
+                {
+                    throw new Exception("AI phản hồi cấu trúc không tương thích hệ thống: " + ex.Message);
+                }
+                throw new Exception("Hệ thống mất kết nối mạng hoặc lỗi xử lý tệp: " + ex.Message);
             }
         }
     }
