@@ -47,7 +47,7 @@
             this.webViewer.Location = new System.Drawing.Point(12, -5);
             this.webViewer.MinimumSize = new System.Drawing.Size(20, 20);
             this.webViewer.Name = "webViewer";
-            this.webViewer.Size = new System.Drawing.Size(570, 601);
+            this.webViewer.Size = new System.Drawing.Size(607, 700);
             this.webViewer.TabIndex = 1;
             this.webViewer.Visible = false;
             // 
@@ -55,11 +55,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(618, 608);
+            this.ClientSize = new System.Drawing.Size(652, 695);
             this.Controls.Add(this.webViewer);
             this.Controls.Add(this.picViewer);
             this.Name = "formFileViewer";
-            this.Text = "formFileViewer";
+            this.Text = "Quản lý công văn";
             this.Load += new System.EventHandler(this.formFileViewer_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picViewer)).EndInit();
             this.ResumeLayout(false);

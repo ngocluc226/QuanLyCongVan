@@ -117,18 +117,28 @@ namespace DAL
                 new SqlParameter("@ToDate", toDate)
             );
         }
-        // --- VĂN THƯ: Xem toàn bộ công văn trong cơ quan ---
+        // --- VĂN THƯ - Tab 1 (tabChoXuLy): Công văn mới nhập hệ thống ---
         public DataTable GetCongVanMoiNhapVanThu()
         {
-            string query = "SELECT * FROM CongVanDen WHERE TrangThai = N'Đã nhập' AND TrangThai <> N'Đã xóa' ORDER BY NgayDen DESC";
-            return DBHelper.Instance.ExecuteQuery(query);
+            // Sử dụng SqlParameter và truyền trực tiếp hằng số DTO.TrangThaiCongVanDen.DA_NHAP ("Đã nhập hệ thống")
+            string query = "SELECT * FROM CongVanDen WHERE TrangThai = @tt AND TrangThai <> @daXoa ORDER BY NgayDen DESC";
+
+            return DBHelper.Instance.ExecuteQuery(query,
+                new SqlParameter("@tt", DTO.TrangThaiCongVanDen.DA_NHAP),
+                new SqlParameter("@daXoa", DTO.TrangThaiCongVanDen.DA_XOA)
+            );
         }
 
+        // --- VĂN THƯ - Tab 2 (tabDaXuLy): Lịch sử công văn đã trình đi ---
         public DataTable GetCongVanDaXuLyVanThu()
         {
-            // Văn thư xem được tất cả các trạng thái còn lại để theo dõi luồng
-            string query = "SELECT * FROM CongVanDen WHERE TrangThai <> N'Đã nhập' AND TrangThai <> N'Đã xóa' ORDER BY NgayDen DESC";
-            return DBHelper.Instance.ExecuteQuery(query);
+            // Lấy tất cả công văn có trạng thái KHÁC "Đã nhập hệ thống" và chưa bị xóa
+            string query = "SELECT * FROM CongVanDen WHERE TrangThai <> @tt AND TrangThai <> @daXoa ORDER BY NgayDen DESC";
+
+            return DBHelper.Instance.ExecuteQuery(query,
+                new SqlParameter("@tt", DTO.TrangThaiCongVanDen.DA_NHAP),
+                new SqlParameter("@daXoa", DTO.TrangThaiCongVanDen.DA_XOA)
+            );
         }
 
         // --- LÃNH ĐẠO: Chỉ xem những gì được trình đích danh cho mình ---

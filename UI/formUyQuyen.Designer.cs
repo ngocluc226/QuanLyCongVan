@@ -32,7 +32,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(34, 38);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(126, 17);
+            this.label1.Size = new System.Drawing.Size(113, 16);
             this.label1.TabIndex = 0;
             this.label1.Text = "Ủy quyền cho KH:";
             // 
@@ -50,7 +50,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(34, 85);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(64, 17);
+            this.label2.Size = new System.Drawing.Size(59, 16);
             this.label2.TabIndex = 2;
             this.label2.Text = "Từ ngày:";
             // 
@@ -67,7 +67,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(34, 131);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(73, 17);
+            this.label3.Size = new System.Drawing.Size(67, 16);
             this.label3.TabIndex = 4;
             this.label3.Text = "Đến ngày:";
             // 
@@ -125,6 +125,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cmbNguoiNhan);
             this.Controls.Add(this.label1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "formUyQuyen";
             this.Text = "Quản Lý Ủy Quyền";
             ((System.ComponentModel.ISupportInitialize)(this.dgvUyQuyen)).EndInit();

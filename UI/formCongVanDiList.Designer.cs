@@ -79,7 +79,7 @@
             this.lblTong.ForeColor = System.Drawing.Color.Black;
             this.lblTong.Location = new System.Drawing.Point(40, 131);
             this.lblTong.Name = "lblTong";
-            this.lblTong.Size = new System.Drawing.Size(46, 20);
+            this.lblTong.Size = new System.Drawing.Size(41, 17);
             this.lblTong.TabIndex = 59;
             this.lblTong.Text = "Tổng";
             // 
@@ -90,7 +90,7 @@
             this.lbTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
             this.lbTitle.Location = new System.Drawing.Point(695, 116);
             this.lbTitle.Name = "lbTitle";
-            this.lbTitle.Size = new System.Drawing.Size(319, 36);
+            this.lbTitle.Size = new System.Drawing.Size(253, 29);
             this.lbTitle.TabIndex = 58;
             this.lbTitle.Text = "Danh sách công văn đi";
             // 
@@ -101,7 +101,7 @@
             this.label4.ForeColor = System.Drawing.Color.Red;
             this.label4.Location = new System.Drawing.Point(641, 9);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(376, 41);
+            this.label4.Size = new System.Drawing.Size(302, 32);
             this.label4.TabIndex = 57;
             this.label4.Text = "THỐNG KÊ CÔNG VĂN ĐI";
             // 
@@ -125,7 +125,7 @@
             this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
             this.label2.Location = new System.Drawing.Point(628, 67);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(87, 22);
+            this.label2.Size = new System.Drawing.Size(70, 18);
             this.label2.TabIndex = 55;
             this.label2.Text = "Đến ngày";
             // 
@@ -154,7 +154,7 @@
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
             this.label1.Location = new System.Drawing.Point(400, 67);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(76, 22);
+            this.label1.Size = new System.Drawing.Size(60, 18);
             this.label1.TabIndex = 52;
             this.label1.Text = "Từ ngày";
             // 
@@ -174,6 +174,7 @@
             this.Controls.Add(this.dtpTo);
             this.Controls.Add(this.dtpFrom);
             this.Controls.Add(this.label1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "formCongVanDiList";
             this.Text = "formCongVanDiList";
             ((System.ComponentModel.ISupportInitialize)(this.dgvVanBan)).EndInit();

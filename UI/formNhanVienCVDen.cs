@@ -273,5 +273,7 @@ namespace UI
             cbSearchCol.DisplayMember = "Text";
             cbSearchCol.ValueMember = "Value";
         }
+
+        
     }
 }

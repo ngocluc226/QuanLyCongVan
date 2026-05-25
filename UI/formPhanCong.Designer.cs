@@ -44,7 +44,7 @@
             // 
             this.cbUser.FormattingEnabled = true;
             this.cbUser.Location = new System.Drawing.Point(552, 201);
-            this.cbUser.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbUser.Margin = new System.Windows.Forms.Padding(4);
             this.cbUser.Name = "cbUser";
             this.cbUser.Size = new System.Drawing.Size(160, 24);
             this.cbUser.TabIndex = 0;
@@ -53,7 +53,7 @@
             // 
             this.cbPhongBan.FormattingEnabled = true;
             this.cbPhongBan.Location = new System.Drawing.Point(188, 204);
-            this.cbPhongBan.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbPhongBan.Margin = new System.Windows.Forms.Padding(4);
             this.cbPhongBan.Name = "cbPhongBan";
             this.cbPhongBan.Size = new System.Drawing.Size(187, 24);
             this.cbPhongBan.TabIndex = 1;
@@ -82,7 +82,7 @@
             // txtYKien
             // 
             this.txtYKien.Location = new System.Drawing.Point(188, 263);
-            this.txtYKien.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtYKien.Margin = new System.Windows.Forms.Padding(4);
             this.txtYKien.Multiline = true;
             this.txtYKien.Name = "txtYKien";
             this.txtYKien.Size = new System.Drawing.Size(524, 61);
@@ -101,7 +101,7 @@
             // btnSave
             // 
             this.btnSave.Location = new System.Drawing.Point(343, 348);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(4);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(100, 28);
             this.btnSave.TabIndex = 6;
@@ -116,7 +116,7 @@
             this.label4.ForeColor = System.Drawing.Color.Red;
             this.label4.Location = new System.Drawing.Point(225, 26);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(456, 41);
+            this.label4.Size = new System.Drawing.Size(366, 32);
             this.label4.TabIndex = 44;
             this.label4.Text = "PHÂN CÔNG XỬ LÝ CÔNG VĂN";
             // 
@@ -124,9 +124,9 @@
             // 
             this.rdPhongBan.AutoSize = true;
             this.rdPhongBan.Location = new System.Drawing.Point(85, 110);
-            this.rdPhongBan.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rdPhongBan.Margin = new System.Windows.Forms.Padding(4);
             this.rdPhongBan.Name = "rdPhongBan";
-            this.rdPhongBan.Size = new System.Drawing.Size(123, 20);
+            this.rdPhongBan.Size = new System.Drawing.Size(120, 20);
             this.rdPhongBan.TabIndex = 45;
             this.rdPhongBan.TabStop = true;
             this.rdPhongBan.Text = "Giao cho phòng";
@@ -137,9 +137,9 @@
             // 
             this.rdCaNhan.AutoSize = true;
             this.rdCaNhan.Location = new System.Drawing.Point(298, 110);
-            this.rdCaNhan.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rdCaNhan.Margin = new System.Windows.Forms.Padding(4);
             this.rdCaNhan.Name = "rdCaNhan";
-            this.rdCaNhan.Size = new System.Drawing.Size(132, 20);
+            this.rdCaNhan.Size = new System.Drawing.Size(129, 20);
             this.rdCaNhan.TabIndex = 46;
             this.rdCaNhan.TabStop = true;
             this.rdCaNhan.Text = "Giao cho cá nhân";
@@ -161,9 +161,9 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cbPhongBan);
             this.Controls.Add(this.cbUser);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "formPhanCong";
-            this.Text = "formPhanCong";
+            this.Text = "Phân công";
             this.Load += new System.EventHandler(this.formPhanCong_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

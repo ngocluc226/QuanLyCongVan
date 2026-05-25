@@ -51,10 +51,10 @@
             // 
             // btnPhanCong
             // 
-            this.btnPhanCong.BackColor = System.Drawing.Color.Blue;
+            this.btnPhanCong.BackColor = System.Drawing.Color.White;
             this.btnPhanCong.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.btnPhanCong.ForeColor = System.Drawing.Color.White;
-            this.btnPhanCong.Location = new System.Drawing.Point(53, 117);
+            this.btnPhanCong.ForeColor = System.Drawing.Color.Black;
+            this.btnPhanCong.Location = new System.Drawing.Point(44, 100);
             this.btnPhanCong.Margin = new System.Windows.Forms.Padding(4);
             this.btnPhanCong.Name = "btnPhanCong";
             this.btnPhanCong.Size = new System.Drawing.Size(122, 47);
@@ -67,7 +67,7 @@
             // 
             this.dgvCongVan.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvCongVan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvCongVan.Location = new System.Drawing.Point(53, 183);
+            this.dgvCongVan.Location = new System.Drawing.Point(0, 39);
             this.dgvCongVan.Margin = new System.Windows.Forms.Padding(4);
             this.dgvCongVan.Name = "dgvCongVan";
             this.dgvCongVan.RowHeadersWidth = 51;
@@ -91,7 +91,7 @@
             this.btnOpen.BackColor = System.Drawing.Color.Blue;
             this.btnOpen.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnOpen.ForeColor = System.Drawing.Color.White;
-            this.btnOpen.Location = new System.Drawing.Point(881, 117);
+            this.btnOpen.Location = new System.Drawing.Point(615, 100);
             this.btnOpen.Margin = new System.Windows.Forms.Padding(4);
             this.btnOpen.Name = "btnOpen";
             this.btnOpen.Size = new System.Drawing.Size(134, 47);
@@ -105,7 +105,7 @@
             this.btnRefresh.BackColor = System.Drawing.Color.Blue;
             this.btnRefresh.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnRefresh.ForeColor = System.Drawing.Color.White;
-            this.btnRefresh.Location = new System.Drawing.Point(372, 95);
+            this.btnRefresh.Location = new System.Drawing.Point(343, 100);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(134, 47);
             this.btnRefresh.TabIndex = 64;
@@ -120,7 +120,7 @@
             this.tabControl1.Location = new System.Drawing.Point(40, 162);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1153, 649);
+            this.tabControl1.Size = new System.Drawing.Size(1182, 649);
             this.tabControl1.TabIndex = 65;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
@@ -130,7 +130,7 @@
             this.tabChoXuLy.Location = new System.Drawing.Point(4, 22);
             this.tabChoXuLy.Name = "tabChoXuLy";
             this.tabChoXuLy.Padding = new System.Windows.Forms.Padding(3);
-            this.tabChoXuLy.Size = new System.Drawing.Size(1145, 623);
+            this.tabChoXuLy.Size = new System.Drawing.Size(1174, 623);
             this.tabChoXuLy.TabIndex = 0;
             this.tabChoXuLy.Text = "Chờ xử lý";
             this.tabChoXuLy.UseVisualStyleBackColor = true;

@@ -1,16 +1,9 @@
-﻿//using DAL;
-using BLL;
+﻿using BLL;
 using DAL;
 using DTO;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace UI
@@ -28,13 +21,21 @@ namespace UI
             Utils.SyncAllButtons(this);
             LoadData();
         }
+
         private void LoadData()
         {
-            dgvCongVan.DataSource = BLL.CongVanDenBLL.Instance.GetCongVanMoiNhap(); // Tab 1
-            dgvDaXuly.DataSource = BLL.CongVanDenBLL.Instance.GetCongVanDaXuLyVanThu(); // Tab 2
-            LoadLanhDao();
+            dgvCongVan.DataSource = null;
+            dgvDaXuly.DataSource = null;
 
+            // Tab 1 (tabChoXuLy): Công văn mới nhập, trạng thái là 'Đã nhập'
+            dgvCongVan.DataSource = BLL.CongVanDenBLL.Instance.GetCongVanMoiNhap();
+
+            // Tab 2 (tabDaXuLy): Lịch sử các công văn đã trình đi
+            dgvDaXuly.DataSource = BLL.CongVanDenBLL.Instance.GetCongVanDaXuLyVanThu();
+
+            LoadLanhDao();
         }
+
         private void InitDataGridDaXuLy()
         {
             dgvDaXuly.AutoGenerateColumns = false;
@@ -48,6 +49,7 @@ namespace UI
             dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TrangThai", HeaderText = "Trạng thái hiện tại", DataPropertyName = "TrangThai", Width = 130 });
             dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "FileDinhKem", DataPropertyName = "FileDinhKem", Visible = false });
         }
+
         private void InitDataGridView()
         {
             dgvCongVan.AutoGenerateColumns = false;
@@ -73,22 +75,22 @@ namespace UI
             dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TrangThai", HeaderText = "Trạng thái", DataPropertyName = "TrangThai", Width = 130 });
             dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "FileDinhKem", DataPropertyName = "FileDinhKem", Visible = false });
         }
+
         private int GetSelectedId()
         {
             if (dgvCongVan.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Chọn công văn!");
+                MessageBox.Show("Vui lòng chọn công văn từ danh sách chờ xử lý!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return -1;
             }
-
             return Convert.ToInt32(dgvCongVan.SelectedRows[0].Cells["Id"].Value);
         }
+
         private void LoadLanhDao()
         {
             var dt = UserService.Instance.GetByRole("LanhDao");
-
             cboLanhDao.DataSource = dt;
-            cboLanhDao.DisplayMember = "TenNguoiDung";   // hoặc TenNguoiDung
+            cboLanhDao.DisplayMember = "TenNguoiDung";
             cboLanhDao.ValueMember = "MaNguoiDung";
         }
 
@@ -104,26 +106,44 @@ namespace UI
             int congVanId = GetSelectedId();
             if (congVanId == -1) return;
 
+            if (cboLanhDao.SelectedValue == null)
+            {
+                MessageBox.Show("Vui lòng chọn một Lãnh đạo để trình duyệt!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             string lanhDaoId = cboLanhDao.SelectedValue.ToString();
             string nguoiTrinhId = Session.UserId;
 
             bool result = TrinhLanhDaoBLL.Instance.Trinh(congVanId, nguoiTrinhId, lanhDaoId);
 
-            MessageBox.Show(result ? "Trình thành công!" : "Lỗi!");
+            if (result)
+            {
+                MessageBox.Show("Trình lãnh đạo thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadData();
+            }
+            else
+            {
+                MessageBox.Show("Có lỗi xảy ra trong quá trình trình văn bản!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void dgvCongVan_SelectionChanged(object sender, EventArgs e)
         {
-            if (dgvCongVan.SelectedRows.Count == 0) return;
+            if (dgvCongVan.SelectedRows.Count == 0)
+            {
+                btnTrinh.Enabled = false;
+                return;
+            }
 
             string tt = dgvCongVan.SelectedRows[0].Cells["TrangThai"].Value.ToString();
-
-            btnTrinh.Enabled = tt == DTO.TrangThaiCongVanDen.DA_NHAP;
+            btnTrinh.Enabled = (tt == DTO.TrangThaiCongVanDen.DA_NHAP);
         }
 
         private void btnOpen_Click(object sender, EventArgs e)
         {
             string path = "";
+            // Sử dụng chính xác biến tabChoXuLy của bạn
             if (tabControl1.SelectedTab == tabChoXuLy)
             {
                 if (dgvCongVan.SelectedRows.Count == 0) return;
@@ -135,7 +155,11 @@ namespace UI
                 path = dgvDaXuly.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
             }
 
-            if (string.IsNullOrEmpty(path)) return;
+            if (string.IsNullOrEmpty(path))
+            {
+                MessageBox.Show("Công văn này không đính kèm tệp văn bản!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
             string fullPath = Path.Combine(Application.StartupPath, path);
             formFileViewer f = new formFileViewer(fullPath);
             f.ShowDialog();
@@ -143,49 +167,89 @@ namespace UI
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // Sử dụng chính xác biến tabChoXuLy của bạn
             if (tabControl1.SelectedTab == tabChoXuLy)
-                btnTrinh.Visible = true; // Chỉ cho phép trình ở tab chờ xử lý
-            else if (tabControl1.SelectedTab == tabDaXuLy)
+            {
+                btnTrinh.Visible = true;
+                cboLanhDao.Visible = true;
+            }
+            else
+            {
                 btnTrinh.Visible = false;
+                cboLanhDao.Visible = false;
+            }
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            if (cbSearchCol.SelectedValue == null) return;
+
             string column = cbSearchCol.SelectedValue.ToString();
             string value = txtSearchValue.Text.Trim();
 
             if (string.IsNullOrEmpty(value))
             {
-                LoadData(); // Nếu để trống thì hiện tất cả như cũ
+                LoadData();
                 return;
             }
 
-            // Kiểm tra đang ở tab nào
-            bool isTab1 = (tabControl1.SelectedTab == tabChoXuLy);
+            // Đồng bộ kiểm tra tabChoXuLy cho chức năng tìm kiếm phân vùng
+            bool isTabChoXuLy = (tabControl1.SelectedTab == tabChoXuLy);
 
-            // Gọi BLL tìm kiếm (Ví dụ này cho Role Lãnh đạo, các form khác thay tương ứng)
-            DataTable dtResult = BLL.CongVanDenBLL.Instance.SearchInTab("VanThu", isTab1, column, value);
+            DataTable dtResult = BLL.CongVanDenBLL.Instance.SearchInTab("VanThu", isTabChoXuLy, column, value);
 
-            // Hiển thị kết quả lên đúng lưới của tab đó
-            if (isTab1)
+            if (isTabChoXuLy)
                 dgvCongVan.DataSource = dtResult;
             else
                 dgvDaXuly.DataSource = dtResult;
         }
+
         private void InitSearchCombo()
         {
             var searchFields = new[] {
-        new { Text = "Số văn bản", Value = "SoVanBan" },
-        new { Text = "Trích yếu", Value = "TrichYeu" },
-        new { Text = "Nơi gửi/nhận", Value = "NoiGui" }
-    };
+                new { Text = "Số văn bản", Value = "SoVanBan" },
+                new { Text = "Trích yếu", Value = "TrichYeu" },
+                new { Text = "Nơi gửi/nhận", Value = "NoiGui" }
+            };
             cbSearchCol.DataSource = searchFields;
             cbSearchCol.DisplayMember = "Text";
             cbSearchCol.ValueMember = "Value";
+            cbSearchCol.SelectedIndex = 0;
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
+            txtSearchValue.Clear();
+            LoadData();
+        }
+
+        private void btnKiemTraAI_Click(object sender, EventArgs e)
+        {
+            string path = "";
+
+            // 1. Xác định tệp tin đính kèm của công văn cần quét dựa trên Tab người dùng đang chọn
+            if (tabControl1.SelectedTab == tabChoXuLy)
+            {
+                if (dgvCongVan.SelectedRows.Count == 0) return;
+                path = dgvCongVan.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
+            }
+            else
+            {
+                if (dgvDaXuly.SelectedRows.Count == 0) return;
+                path = dgvDaXuly.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
+            }
+
+            if (string.IsNullOrEmpty(path))
+            {
+                MessageBox.Show("Văn bản này không có tệp đính kèm (PDF/Word/Image) để AI thực hiện phân tích thể thức!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // 2. Gọi Form xử lý AI bất đồng bộ mã hóa OpenRouter mà chúng ta đã xây dựng
+            formKiemTraAI frmAI = new formKiemTraAI(path);
+            frmAI.ShowDialog();
+
+            // 3. Cập nhật lại giao diện sau khi tắt hộp thoại kiểm tra
             LoadData();
         }
     }

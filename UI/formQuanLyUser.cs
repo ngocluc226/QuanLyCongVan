@@ -54,7 +54,7 @@ namespace UI
             dgvTaiKhoan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "colTenPhongBan",
-                HeaderText = "Phòng ban trực thuộc",
+                HeaderText = "Phòng ban",
                 DataPropertyName = "TenPhongBan",
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
             });

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -101,6 +102,46 @@ namespace UI
             {
                 MessageBox.Show("Vui lòng chọn bản thảo cần nộp duyệt!");
             }
+        }
+
+        private void btnKiemTraAI_Click(object sender, EventArgs e)
+        {
+            string path = "";
+
+            //// 1. Xác định tệp tin đính kèm của công văn cần quét dựa trên Tab người dùng đang chọn
+            //if (tabControl1.SelectedTab == tabChoXuLy)
+            //{
+            //    if (dgvCongVan.SelectedRows.Count == 0) return;
+                path = dgvCongVan.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
+            //}
+            //else
+            //{
+            //    if (dgvDaXuly.SelectedRows.Count == 0) return;
+            //    path = dgvDaXuly.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
+            //}
+
+            if (string.IsNullOrEmpty(path))
+            {
+                MessageBox.Show("Văn bản này không có tệp đính kèm (PDF/Word/Image) để AI thực hiện phân tích thể thức!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // 2. Gọi Form xử lý AI bất đồng bộ mã hóa OpenRouter mà chúng ta đã xây dựng
+            formKiemTraAI frmAI = new formKiemTraAI(path);
+            frmAI.ShowDialog();
+
+            // 3. Cập nhật lại giao diện sau khi tắt hộp thoại kiểm tra
+            LoadData(); 
+        }
+
+        private void btnOpen_Click(object sender, EventArgs e)
+        {
+            string path = dgvCongVan.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
+
+            if (string.IsNullOrEmpty(path)) return;
+            string fullPath = Path.Combine(Application.StartupPath, path);
+            formFileViewer f = new formFileViewer(fullPath);
+            f.ShowDialog();
         }
     }
 }

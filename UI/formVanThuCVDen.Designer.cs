@@ -43,6 +43,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.btnRefresh = new System.Windows.Forms.Button();
+            this.btnKiemTraAI = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCongVan)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabChoXuLy.SuspendLayout();
@@ -62,9 +63,9 @@
             // 
             // btnTrinh
             // 
-            this.btnTrinh.Location = new System.Drawing.Point(347, 66);
+            this.btnTrinh.Location = new System.Drawing.Point(618, 58);
             this.btnTrinh.Name = "btnTrinh";
-            this.btnTrinh.Size = new System.Drawing.Size(94, 34);
+            this.btnTrinh.Size = new System.Drawing.Size(130, 34);
             this.btnTrinh.TabIndex = 1;
             this.btnTrinh.Text = "Trình lãnh đạo";
             this.btnTrinh.UseVisualStyleBackColor = true;
@@ -83,7 +84,7 @@
             // 
             // btnOpen
             // 
-            this.btnOpen.Location = new System.Drawing.Point(552, 31);
+            this.btnOpen.Location = new System.Drawing.Point(223, 23);
             this.btnOpen.Name = "btnOpen";
             this.btnOpen.Size = new System.Drawing.Size(105, 32);
             this.btnOpen.TabIndex = 53;
@@ -94,7 +95,7 @@
             // cboLanhDao
             // 
             this.cboLanhDao.FormattingEnabled = true;
-            this.cboLanhDao.Location = new System.Drawing.Point(295, 31);
+            this.cboLanhDao.Location = new System.Drawing.Point(596, 23);
             this.cboLanhDao.Name = "cboLanhDao";
             this.cboLanhDao.Size = new System.Drawing.Size(183, 21);
             this.cboLanhDao.TabIndex = 54;
@@ -103,7 +104,7 @@
             // 
             this.tabControl1.Controls.Add(this.tabChoXuLy);
             this.tabControl1.Controls.Add(this.tabDaXuLy);
-            this.tabControl1.Location = new System.Drawing.Point(38, 106);
+            this.tabControl1.Location = new System.Drawing.Point(38, 168);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(1158, 647);
@@ -147,23 +148,23 @@
             "Số văn bản",
             "Nơi gửi",
             "Trích yếu"});
-            this.cbSearchCol.Location = new System.Drawing.Point(946, 38);
+            this.cbSearchCol.Location = new System.Drawing.Point(909, 37);
             this.cbSearchCol.Name = "cbSearchCol";
             this.cbSearchCol.Size = new System.Drawing.Size(145, 21);
             this.cbSearchCol.TabIndex = 56;
             // 
             // txtSearchValue
             // 
-            this.txtSearchValue.Location = new System.Drawing.Point(946, 81);
+            this.txtSearchValue.Location = new System.Drawing.Point(909, 80);
             this.txtSearchValue.Name = "txtSearchValue";
             this.txtSearchValue.Size = new System.Drawing.Size(145, 20);
             this.txtSearchValue.TabIndex = 57;
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(1105, 36);
+            this.btnSearch.Location = new System.Drawing.Point(853, 123);
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(75, 23);
+            this.btnSearch.Size = new System.Drawing.Size(168, 23);
             this.btnSearch.TabIndex = 58;
             this.btnSearch.Text = "Tìm kiếm";
             this.btnSearch.UseVisualStyleBackColor = true;
@@ -172,7 +173,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(864, 41);
+            this.label1.Location = new System.Drawing.Point(827, 40);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(76, 13);
             this.label1.TabIndex = 59;
@@ -181,7 +182,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(887, 84);
+            this.label2.Location = new System.Drawing.Point(850, 83);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(53, 13);
             this.label2.TabIndex = 60;
@@ -189,7 +190,7 @@
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(697, 31);
+            this.btnRefresh.Location = new System.Drawing.Point(1087, 31);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(105, 32);
             this.btnRefresh.TabIndex = 61;
@@ -197,11 +198,22 @@
             this.btnRefresh.UseVisualStyleBackColor = true;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
+            // btnKiemTraAI
+            // 
+            this.btnKiemTraAI.Location = new System.Drawing.Point(352, 23);
+            this.btnKiemTraAI.Name = "btnKiemTraAI";
+            this.btnKiemTraAI.Size = new System.Drawing.Size(207, 32);
+            this.btnKiemTraAI.TabIndex = 62;
+            this.btnKiemTraAI.Text = "Kiểm tra thể thức bằng AI";
+            this.btnKiemTraAI.UseVisualStyleBackColor = true;
+            this.btnKiemTraAI.Click += new System.EventHandler(this.btnKiemTraAI_Click);
+            // 
             // formVanThuCVDen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1216, 783);
+            this.ClientSize = new System.Drawing.Size(1216, 834);
+            this.Controls.Add(this.btnKiemTraAI);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -243,5 +255,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnRefresh;
+        private System.Windows.Forms.Button btnKiemTraAI;
     }
 }

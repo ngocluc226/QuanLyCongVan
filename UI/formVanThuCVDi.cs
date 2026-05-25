@@ -19,6 +19,8 @@ namespace UI
         {
             InitializeComponent();
             InitEvents();
+            Utils.FormatDataGridView(dgvCongVan);
+            Utils.SyncAllButtons(this);
         }
 
         private void InitEvents()
@@ -114,6 +116,11 @@ namespace UI
             string fullPath = Path.Combine(Application.StartupPath, path);
             formFileViewer f = new formFileViewer(fullPath);
             f.ShowDialog();
+        }
+
+        private void formVanThuCVDi_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
