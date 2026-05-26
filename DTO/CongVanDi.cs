@@ -21,6 +21,8 @@ namespace DTO
         public string FileDinhKem { get; set; }
         public string TrangThai { get; set; }
         public int? LienKetCongVanDenId { get; set; }
-        public DateTime? HanXuLy { get; set; }
+        public string NguoiTaoId { get; set; }
+        public string MaPhongBanTao { get; set; }
+        public string LanhDaoDuyetId { get; set; }
     }
 }

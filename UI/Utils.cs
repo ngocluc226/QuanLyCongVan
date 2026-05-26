@@ -100,6 +100,55 @@ namespace UI
             // 5. Tăng chiều cao các dòng để dữ liệu "thở" được, không bị dính chặt vào nhau
             dgv.RowTemplate.Height = 32;
         }
+
+        public static void FormatCongVanDiGrid(DataGridView dgv)
+        {
+            FormatDataGridView(dgv);
+
+            dgv.DataBindingComplete -= DgvCongVanDi_DataBindingComplete;
+            dgv.DataBindingComplete += DgvCongVanDi_DataBindingComplete;
+        }
+
+        private static void DgvCongVanDi_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            var dgv = sender as DataGridView;
+            if (dgv == null) return;
+
+            foreach (DataGridViewColumn col in dgv.Columns)
+            {
+                col.Visible = false;
+            }
+
+            if (dgv.Columns["SoVanBan"] != null)
+            {
+                dgv.Columns["SoVanBan"].Visible = true;
+                dgv.Columns["SoVanBan"].HeaderText = "Số văn bản";
+                dgv.Columns["SoVanBan"].DisplayIndex = 0;
+            }
+            
+            if (dgv.Columns["TrichYeu"] != null)
+            {
+                dgv.Columns["TrichYeu"].Visible = true;
+                dgv.Columns["TrichYeu"].HeaderText = "Nội dung trích yếu";
+                dgv.Columns["TrichYeu"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dgv.Columns["TrichYeu"].DisplayIndex = 1;
+            }
+            
+            if (dgv.Columns["DoKhan"] != null)
+            {
+                dgv.Columns["DoKhan"].Visible = true;
+                dgv.Columns["DoKhan"].HeaderText = "Độ khẩn";
+                dgv.Columns["DoKhan"].DisplayIndex = 2;
+            }
+            
+            if (dgv.Columns["NguoiKy"] != null)
+            {
+                dgv.Columns["NguoiKy"].Visible = true;
+                dgv.Columns["NguoiKy"].HeaderText = "Người ký";
+                dgv.Columns["NguoiKy"].DisplayIndex = 3;
+            }
+        }
+
         // 1. Hàm định dạng riêng cho từng nút bấm đơn lẻ
         public static void FormatButton(Button btn, bool isDanger = false)
         {

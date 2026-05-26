@@ -17,8 +17,29 @@ namespace UI
         {
             InitializeComponent();
             InitEvents();
+            InitDataGridView();
             Utils.FormatDataGridView(dgvCongVan);
-                
+        }
+
+        private void InitDataGridView()
+        {
+            dgvCongVan.AutoGenerateColumns = false;
+            dgvCongVan.Columns.Clear();
+            dgvCongVan.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Id", DataPropertyName = "Id", Visible = false });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "SoDi", DataPropertyName = "SoDi", Visible = false });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NgayDi", DataPropertyName = "NgayDi", Visible = false });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NoiNhan", DataPropertyName = "NoiNhan", Visible = false });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "DoMat", DataPropertyName = "DoMat", Visible = false });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "FileDinhKem", DataPropertyName = "FileDinhKem", Visible = false });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TrangThai", DataPropertyName = "TrangThai", Visible = false });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "LienKetCongVanDenId", DataPropertyName = "LienKetCongVanDenId", Visible = false });
+
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "SoVanBan", HeaderText = "Số văn bản", DataPropertyName = "SoVanBan" });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TrichYeu", HeaderText = "Nội dung trích yếu", DataPropertyName = "TrichYeu", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "DoKhan", HeaderText = "Độ khẩn", DataPropertyName = "DoKhan" });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NguoiKy", HeaderText = "Người ký", DataPropertyName = "NguoiKy" });
         }
 
         private void InitEvents()
@@ -30,7 +51,10 @@ namespace UI
 
         private void LoadData()
         {
-            dgvCongVan.DataSource = BLL.CongVanDiBLL.Instance.GetByTrangThai(DTO.TrangThaiCongVanDi.CHO_KY_LANH_DAO);
+            if (DTO.Session.CurrentUser != null)
+            {
+                dgvCongVan.DataSource = BLL.CongVanDiBLL.Instance.GetByLanhDaoDuyetId(DTO.Session.CurrentUser.MaNguoiDung, DTO.TrangThaiCongVanDi.CHO_KY_LANH_DAO);
+            }
         }
 
         private void DuyetCV()

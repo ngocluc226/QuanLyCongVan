@@ -1,4 +1,4 @@
-﻿using BLL;
+using BLL;
 using DTO;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,6 @@ namespace UI
 {
     public partial class formPhongBan : Form
     {
-        private bool isAdd = false;
         public formPhongBan()
         {
             InitializeComponent();
@@ -44,7 +43,7 @@ namespace UI
 
             if (string.IsNullOrEmpty(ma) || string.IsNullOrEmpty(ten))
             {
-                MessageBox.Show("Nhập đầy đủ!");
+                MessageBox.Show("Nh?p d?y d?!");
                 return;
             }
 
@@ -58,7 +57,7 @@ namespace UI
 
             if (result)
             {
-                MessageBox.Show("Thành công!");
+                MessageBox.Show("Th�nh c�ng!");
                 LoadData();
 
                 // Reset state so user can add new entries after saving
@@ -66,7 +65,7 @@ namespace UI
                 txtMa.Clear();
                 txtTen.Clear();
                 txtMa.Focus();
-                isAdd = false;
+                // isAdd = false;
             }
         }
         private void btnEdit_Click(object sender, EventArgs e)
@@ -74,11 +73,11 @@ namespace UI
             // Ensure a row is selected before entering edit mode
             if (dgvPhongBan.CurrentRow == null)
             {
-                MessageBox.Show("Chọn phòng ban cần sửa");
+                MessageBox.Show("Ch?n ph�ng ban c?n s?a");
                 return;
             }
 
-            isAdd = false;
+            // isAdd = false;
             txtMa.Enabled = false;
             txtTen.Focus();
         }
@@ -87,13 +86,13 @@ namespace UI
         {
             string ma = txtMa.Text;
 
-            if (MessageBox.Show("Xóa?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show("X�a?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.No)
                 return;
 
             if (BLL.PhongBanBLL.Instance.Delete(ma))
             {
-                LogBLL.Instance.WriteLog("Xóa phòng ban: " + ma, Session.UserName);
-                MessageBox.Show("Đã xóa!");
+                LogBLL.Instance.WriteLog("X�a ph�ng ban: " + ma, Session.UserName);
+                MessageBox.Show("�� x�a!");
                 LoadData();
             }
         }

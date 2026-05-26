@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Windows.Forms;
 using System.IO;
 using BLL;
@@ -8,31 +9,91 @@ namespace UI
 {
     public partial class formTruongPhongCVDi : Form
     {
+        private System.Windows.Forms.ComboBox cboLanhDao;
+        private System.Windows.Forms.Label lblLanhDao;
+
         public formTruongPhongCVDi()
         {
             InitializeComponent();
+            InitDynamicControls();
             InitEvents();
+            InitDataGridView();
+            Utils.FormatDataGridView(dgvCongVan);
+        }
+
+        private void InitDataGridView()
+        {
+            dgvCongVan.AutoGenerateColumns = false;
+            dgvCongVan.Columns.Clear();
+            dgvCongVan.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Id", DataPropertyName = "Id", Visible = false });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "SoDi", DataPropertyName = "SoDi", Visible = false });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NgayDi", DataPropertyName = "NgayDi", Visible = false });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NoiNhan", DataPropertyName = "NoiNhan", Visible = false });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "DoMat", DataPropertyName = "DoMat", Visible = false });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "FileDinhKem", DataPropertyName = "FileDinhKem", Visible = false });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TrangThai", DataPropertyName = "TrangThai", Visible = false });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "LienKetCongVanDenId", DataPropertyName = "LienKetCongVanDenId", Visible = false });
+
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "SoVanBan", HeaderText = "Số văn bản", DataPropertyName = "SoVanBan" });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TrichYeu", HeaderText = "Nội dung trích yếu", DataPropertyName = "TrichYeu", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "DoKhan", HeaderText = "Độ khẩn", DataPropertyName = "DoKhan" });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NguoiKy", HeaderText = "Người ký", DataPropertyName = "NguoiKy" });
+        }
+
+        private void InitDynamicControls()
+        {
+            lblLanhDao = new System.Windows.Forms.Label();
+            lblLanhDao.Text = "Chọn Lãnh đạo:";
+            lblLanhDao.Location = new System.Drawing.Point(450, 108);
+            lblLanhDao.AutoSize = true;
+
+            cboLanhDao = new System.Windows.Forms.ComboBox();
+            cboLanhDao.Location = new System.Drawing.Point(550, 105);
+            cboLanhDao.Size = new System.Drawing.Size(200, 24);
+            cboLanhDao.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            this.Controls.Add(lblLanhDao);
+            this.Controls.Add(cboLanhDao);
         }
 
         private void InitEvents()
         {
             this.Load += (s, e) => LoadData();
+            this.Load += (s, e) => LoadLanhDao();
             this.btnDuyet.Click += (s, e) => DuyetCV();
             this.btnTuChoi.Click += (s, e) => TuChoiCV();
             this.btnXem.Click += (s, e) => XemFile();
         }
 
+        private void LoadLanhDao()
+        {
+            DataTable dt = UserService.Instance.GetByRole("LanhDao");
+            cboLanhDao.DataSource = dt;
+            cboLanhDao.DisplayMember = "TenNguoiDung";
+            cboLanhDao.ValueMember = "MaNguoiDung";
+        }
+
         private void LoadData()
         {
-            if (Session.CurrentUser != null && UyQuyenBLL.Instance.CheckHasActiveUyQuyenLanhDao(Session.CurrentUser.MaNguoiDung))
+            if (Session.CurrentUser != null)
             {
-                dgvCongVan.DataSource = CongVanDiBLL.Instance.GetByTrangThais(
-                    TrangThaiCongVanDi.CHO_DUYET_TRUONG_PHONG, 
-                    TrangThaiCongVanDi.CHO_KY_LANH_DAO);
-            }
-            else
-            {
-                dgvCongVan.DataSource = CongVanDiBLL.Instance.GetByTrangThai(TrangThaiCongVanDi.CHO_DUYET_TRUONG_PHONG);
+                DataTable dt = CongVanDiBLL.Instance.GetByPhongBanTao(Session.CurrentUser.MaPhongBan, TrangThaiCongVanDi.CHO_DUYET_TRUONG_PHONG);
+
+                if (UyQuyenBLL.Instance.CheckHasActiveUyQuyenLanhDao(Session.CurrentUser.MaNguoiDung))
+                {
+                    // Lấy ra danh sách lãnh đạo đã ủy quyền cho người này
+                    DataTable dtUyQuyen = UyQuyenBLL.Instance.GetByNguoiDuocUyQuyen(Session.CurrentUser.MaNguoiDung);
+                    foreach (DataRow row in dtUyQuyen.Rows)
+                    {
+                        string lanhDaoId = row["MaNguoiUyQuyen"].ToString();
+                        DataTable dtLanhDao = CongVanDiBLL.Instance.GetByLanhDaoDuyetId(lanhDaoId, TrangThaiCongVanDi.CHO_KY_LANH_DAO);
+                        dt.Merge(dtLanhDao);
+                    }
+                }
+
+                dgvCongVan.DataSource = dt;
             }
         }
 
@@ -45,10 +106,24 @@ namespace UI
                 
                 if (trangThai == TrangThaiCongVanDi.CHO_DUYET_TRUONG_PHONG)
                 {
-                    if (CongVanDiBLL.Instance.ChuyenTrangThai(id, TrangThaiCongVanDi.CHO_KY_LANH_DAO, "Trưởng phòng đã duyệt"))
+                    if (cboLanhDao.SelectedValue == null)
                     {
-                        MessageBox.Show("Duyệt và chuyển Lãnh đạo ký thành công!");
-                        LoadData();
+                        MessageBox.Show("Vui lòng chọn Lãnh đạo duyệt!");
+                        return;
+                    }
+
+                    // Update LanhDaoDuyetId first
+                    var cv = CongVanDiBLL.Instance.GetById(id);
+                    if (cv != null)
+                    {
+                        cv.LanhDaoDuyetId = cboLanhDao.SelectedValue.ToString();
+                        CongVanDiBLL.Instance.Update(cv);
+                        
+                        if (CongVanDiBLL.Instance.ChuyenTrangThai(id, TrangThaiCongVanDi.CHO_KY_LANH_DAO, "Trưởng phòng đã duyệt"))
+                        {
+                            MessageBox.Show("Duyệt và chuyển Lãnh đạo ký thành công!");
+                            LoadData();
+                        }
                     }
                 }
                 else if (trangThai == TrangThaiCongVanDi.CHO_KY_LANH_DAO)

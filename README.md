@@ -323,6 +323,34 @@ INSERT INTO NguoiDung (MaNguoiDung, TenNguoiDung, TenDangNhap, MatKhau, Quyen, M
 ('U004', N'Lê Trưởng Phòng IT', 'truongphong', '123', 'TruongPhong', 'IT'),
 ('U005', N'Phạm Chuyên Viên IT', 'nhanvien', '123', 'NhanVien', 'IT');
 GO
+-- Trưởng phòng HCNS
+('U006', N'Lê Trưởng Phòng HCNS', 'truongphongHCNS', '123', 'TruongPhongHCNS', 'HCNS'),
+
+-- Nhân viên HCNS
+('U007', N'Nguyễn Nhân Viên HCNS', 'nhanvienHCNS', '123', 'NhanVienHCNS', 'HCNS'),
+
+-- Trưởng phòng Kế Toán
+('U008', N'Phạm Trưởng Phòng Kế Toán', 'truongphongKT', '123', 'TruongPhongKT', 'KT'),
+
+-- Nhân viên Kế Toán
+('U009', N'Hoàng Nhân Viên Kế Toán', 'nhanvienKT', '123', 'NhanVienKT', 'KT'),
+
+-- Trưởng phòng Kinh Doanh
+('U010', N'Đỗ Trưởng Phòng Kinh Doanh', 'truongphongKD', '123', 'TruongPhongKD', 'KD'),
+
+-- Nhân viên Kinh Doanh
+('U011', N'Vũ Nhân Viên Kinh Doanh', 'nhanvienKD', '123', 'NhanVienKD', 'KD'),
+
+-- Trưởng phòng Nhân sự
+('U012', N'Ngô Trưởng Phòng Nhân Sự', 'truongphongNS', '123', 'TruongPhongNS', 'NS'),
+
+-- Nhân viên Nhân sự
+('U013', N'Bùi Nhân Viên Nhân Sự', 'nhanvienNS', '123', 'NhanVienNS', 'NS'),
+
+-- Lãnh đạo công ty
+('U014', N'Nguyễn Tổng Giám Đốc', 'tonggiamdoc', '123', 'TongGiamDoc', NULL),
+('U015', N'Trần Phó Giám Đốc', 'phogiamdoc', '123', 'PhoGiamDoc', NULL);
+GO
 
 
 //////
