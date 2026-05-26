@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -26,15 +26,6 @@ namespace UI
             InitializeComponent();
             _cvEdit = cv;
             if (cv != null && cv.Id > 0) this.Tag = cv.Id;
-
-            // Gán sự kiện cho các nút điều khiển
-            this.Load += new System.EventHandler(this.formCongVanDiCreate_Load);
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
-            this.btnChonFile.Click += new System.EventHandler(this.btnChonFile_Click);
-            this.btnMoFile.Click += new System.EventHandler(this.btnMoFile_Click);
-            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
         }
 
         private void formCongVanDiCreate_Load(object sender, EventArgs e)
@@ -57,93 +48,34 @@ namespace UI
             cboCongVanDen.DisplayMember = "TrichYeu";
             cboCongVanDen.SelectedIndex = 0; // Trống thay vì chọn dòng đầu tiên
 
-            // Kiểm tra Role để tối ưu hóa UI
-            bool isNhanVien = (Session.CurrentUser != null && Session.CurrentUser.Quyen == "NhanVien");
+            txtSoDi.Text = CongVanDiBLL.Instance.GenerateSoDi();
+            txtSoDi.Enabled = false;
 
-            if (isNhanVien)
+            label1.Text = "DỰ THẢO CÔNG VĂN ĐI";
+            txtSoVanBan.Enabled = false;
+            dtpNgayBanHanh.Enabled = false;
+            cbTrangThai.Enabled = false;
+            
+            // Đổ dữ liệu nếu ở chế độ Sửa
+            if (_cvEdit != null)
             {
-                txtSoDi.Text = CongVanDiBLL.Instance.GenerateSoDi();
-                txtSoDi.Enabled = false;
-
-                // Cấu hình giao diện cho Nhân viên lập dự thảo
-                label1.Text = "DỰ THẢO CÔNG VĂN ĐI";
-                txtSoVanBan.Enabled = false;
-                dtpNgayBanHanh.Enabled = false;
-                cbTrangThai.Enabled = false;
+                txtSoDi.Text = _cvEdit.SoDi;
+                dtpNgayDi.Value = _cvEdit.NgayDi;
+                cbNoiNhan.Text = _cvEdit.NoiNhan;
+                txtNguoiKy.Text = _cvEdit.NguoiKy;
+                txtTrichYeu.Text = _cvEdit.TrichYeu;
+                cbDoKhan.Text = _cvEdit.DoKhan;
+                cbDoMat.Text = _cvEdit.DoMat;
+                txtFile.Text = _cvEdit.FileDinhKem;
                 
-                // Ẩn phần tìm kiếm và Grid bên dưới vì NV chỉ tập trung vào Form
-                txtSearch.Visible = false;
-                cbSearch.Visible = false;
-                btnSearch.Visible = false;
-                label52.Visible = false;
-                
-                // Đổ dữ liệu nếu ở chế độ Sửa
-                if (_cvEdit != null)
-                {
-                    txtSoDi.Text = _cvEdit.SoDi;
-                    dtpNgayDi.Value = _cvEdit.NgayDi;
-                    cbNoiNhan.Text = _cvEdit.NoiNhan;
-                    txtNguoiKy.Text = _cvEdit.NguoiKy;
-                    txtTrichYeu.Text = _cvEdit.TrichYeu;
-                    cbDoKhan.Text = _cvEdit.DoKhan;
-                    cbDoMat.Text = _cvEdit.DoMat;
-                    txtFile.Text = _cvEdit.FileDinhKem;
-                    
-                    if (_cvEdit.LienKetCongVanDenId.HasValue)
-                        cboCongVanDen.SelectedValue = _cvEdit.LienKetCongVanDenId.Value;
-                }
-            }
-            else
-            {
-                // Vai trò Văn Thư: Cần load Grid danh sách chờ ban hành
-                // Mở khóa cho Văn thư tự nhập số đi và số văn bản bằng tay (không tự tăng)
-                txtSoDi.Enabled = true;
-                txtSoVanBan.Enabled = true;
-                txtSoDi.Text = ""; // Để trống cho Văn thư tự nhập
-                
-                LoadData();
-
-                dgvChoBanHanh.Visible = true;
-                dgvChoBanHanh.CellClick += (s, ev) => {
-                    if (dgvChoBanHanh.SelectedRows.Count > 0)
-                    {
-                        var row = dgvChoBanHanh.SelectedRows[0];
-                        txtSoDi.Text = row.Cells["SoDi"].Value?.ToString();
-                        txtSoVanBan.Text = row.Cells["SoVanBan"].Value?.ToString();
-                        txtTrichYeu.Text = row.Cells["TrichYeu"].Value?.ToString();
-                        txtNguoiKy.Text = row.Cells["NguoiKy"].Value?.ToString();
-                        cbNoiNhan.Text = row.Cells["NoiNhan"].Value?.ToString();
-                        cbDoKhan.Text = row.Cells["DoKhan"].Value?.ToString();
-                        cbDoMat.Text = row.Cells["DoMat"].Value?.ToString();
-                        txtFile.Text = row.Cells["FileDinhKem"].Value?.ToString();
-                        dtpNgayDi.Value = Convert.ToDateTime(row.Cells["NgayDi"].Value);
-
-                        // Load liên kết công văn đến nếu có
-                        if (row.Cells["LienKetCongVanDenId"] != null && row.Cells["LienKetCongVanDenId"].Value != DBNull.Value)
-                        {
-                            cboCongVanDen.SelectedValue = Convert.ToInt32(row.Cells["LienKetCongVanDenId"].Value);
-                        }
-                        else
-                        {
-                            cboCongVanDen.SelectedIndex = 0;
-                        }
-
-                        // Lưu Id vào tag
-                        this.Tag = row.Cells["Id"].Value;
-                    }
-                };
-                
-                // Cập nhật datasource ban đầu cho dgv vừa thêm
-                dgvChoBanHanh.DataSource = CongVanDiBLL.Instance.GetByTrangThai(DTO.TrangThaiCongVanDi.CHO_BAN_HANH);
+                if (_cvEdit.LienKetCongVanDenId.HasValue)
+                    cboCongVanDen.SelectedValue = _cvEdit.LienKetCongVanDenId.Value;
             }
         }
 
         private void LoadData()
         {
-            if (dgvChoBanHanh != null)
-            {
-                dgvChoBanHanh.DataSource = CongVanDiBLL.Instance.GetByTrangThai(DTO.TrangThaiCongVanDi.CHO_BAN_HANH);
-            }
+            // Do nothing as dgvChoBanHanh does not exist in this form
         }
 
         private void btnSave_Click(object sender, EventArgs e)

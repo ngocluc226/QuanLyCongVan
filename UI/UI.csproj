@@ -262,6 +262,9 @@
     <EmbeddedResource Include="formLanhDao.resx">
       <DependentUpon>formLanhDao.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="formTruongPhongCVDi.resx">
+      <DependentUpon>formTruongPhongCVDi.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="formUyQuyen.resx">
       <DependentUpon>formUyQuyen.cs</DependentUpon>
     </EmbeddedResource>

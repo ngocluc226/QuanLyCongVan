@@ -81,12 +81,15 @@
             // 
             // btnLuu
             // 
+            this.btnLuu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.btnLuu.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.btnLuu.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.btnLuu.Location = new System.Drawing.Point(461, 114);
             this.btnLuu.Name = "btnLuu";
-            this.btnLuu.Size = new System.Drawing.Size(126, 34);
+            this.btnLuu.Size = new System.Drawing.Size(181, 46);
             this.btnLuu.TabIndex = 6;
             this.btnLuu.Text = "Lưu Ủy Quyền";
-            this.btnLuu.UseVisualStyleBackColor = true;
+            this.btnLuu.UseVisualStyleBackColor = false;
             // 
             // dgvUyQuyen
             // 
@@ -104,12 +107,15 @@
             // 
             // btnHuyUyQuyen
             // 
-            this.btnHuyUyQuyen.Location = new System.Drawing.Point(636, 442);
+            this.btnHuyUyQuyen.BackColor = System.Drawing.Color.Red;
+            this.btnHuyUyQuyen.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.btnHuyUyQuyen.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnHuyUyQuyen.Location = new System.Drawing.Point(581, 442);
             this.btnHuyUyQuyen.Name = "btnHuyUyQuyen";
-            this.btnHuyUyQuyen.Size = new System.Drawing.Size(126, 34);
+            this.btnHuyUyQuyen.Size = new System.Drawing.Size(181, 43);
             this.btnHuyUyQuyen.TabIndex = 8;
             this.btnHuyUyQuyen.Text = "Hủy Ủy Quyền";
-            this.btnHuyUyQuyen.UseVisualStyleBackColor = true;
+            this.btnHuyUyQuyen.UseVisualStyleBackColor = false;
             // 
             // formUyQuyen
             // 

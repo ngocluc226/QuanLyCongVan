@@ -18,7 +18,9 @@ namespace UI
             InitializeComponent();
             InitEvents();
             InitDataGridView();
+            InitDataGridDaXuLy();
             Utils.FormatDataGridView(dgvCongVan);
+            Utils.FormatDataGridView(dgvDaXuly);
         }
 
         private void InitDataGridView()
@@ -42,6 +44,26 @@ namespace UI
             dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NguoiKy", HeaderText = "Người ký", DataPropertyName = "NguoiKy" });
         }
 
+        private void InitDataGridDaXuLy()
+        {
+            dgvDaXuly.AutoGenerateColumns = false;
+            dgvDaXuly.Columns.Clear();
+            dgvDaXuly.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Id", DataPropertyName = "Id", Visible = false });
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "SoDi", DataPropertyName = "SoDi", Visible = false });
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NgayDi", DataPropertyName = "NgayDi", Visible = false });
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NoiNhan", DataPropertyName = "NoiNhan", Visible = false });
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "DoMat", DataPropertyName = "DoMat", Visible = false });
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "FileDinhKem", DataPropertyName = "FileDinhKem", Visible = false });
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "LienKetCongVanDenId", DataPropertyName = "LienKetCongVanDenId", Visible = false });
+
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "SoVanBan", HeaderText = "Số văn bản", DataPropertyName = "SoVanBan" });
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TrichYeu", HeaderText = "Nội dung trích yếu", DataPropertyName = "TrichYeu", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NguoiKy", HeaderText = "Người ký", DataPropertyName = "NguoiKy" });
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TrangThai", HeaderText = "Trạng thái", DataPropertyName = "TrangThai" });
+        }
+
         private void InitEvents()
         {
             this.Load += (s, e) => LoadData();
@@ -54,6 +76,7 @@ namespace UI
             if (DTO.Session.CurrentUser != null)
             {
                 dgvCongVan.DataSource = BLL.CongVanDiBLL.Instance.GetByLanhDaoDuyetId(DTO.Session.CurrentUser.MaNguoiDung, DTO.TrangThaiCongVanDi.CHO_KY_LANH_DAO);
+                dgvDaXuly.DataSource = BLL.CongVanDiBLL.Instance.GetByLanhDaoDuyetId(DTO.Session.CurrentUser.MaNguoiDung, DTO.TrangThaiCongVanDi.CHO_BAN_HANH, DTO.TrangThaiCongVanDi.TU_CHOI, DTO.TrangThaiCongVanDi.DA_BAN_HANH);
             }
         }
 
@@ -122,10 +145,34 @@ namespace UI
             }
         }
 
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedTab == tabChoXuLy)
+            {
+                btnDuyet.Visible = true;
+                btnTuChoi.Visible = true;
+            }
+            else
+            {
+                btnDuyet.Visible = false;
+                btnTuChoi.Visible = false;
+            }
+        }
+
         private void btnOpen_Click(object sender, EventArgs e)
         {
-            string path  = dgvCongVan.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
-            
+            string path;
+            if (tabControl1.SelectedTab == tabChoXuLy)
+            {
+                if (dgvCongVan.SelectedRows.Count == 0) return;
+                path = dgvCongVan.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
+            }
+            else
+            {
+                if (dgvDaXuly.SelectedRows.Count == 0) return;
+                path = dgvDaXuly.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
+            }
+
             if (string.IsNullOrEmpty(path)) return;
             string fullPath = Path.Combine(Application.StartupPath, path);
             formFileViewer f = new formFileViewer(fullPath);
