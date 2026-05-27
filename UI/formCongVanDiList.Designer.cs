@@ -44,10 +44,10 @@
             // 
             // btnOpen
             // 
-            this.btnOpen.Location = new System.Drawing.Point(1251, 115);
+            this.btnOpen.Location = new System.Drawing.Point(44, 173);
             this.btnOpen.Margin = new System.Windows.Forms.Padding(4);
             this.btnOpen.Name = "btnOpen";
-            this.btnOpen.Size = new System.Drawing.Size(140, 28);
+            this.btnOpen.Size = new System.Drawing.Size(140, 42);
             this.btnOpen.TabIndex = 62;
             this.btnOpen.Text = "Xem văn bản";
             this.btnOpen.UseVisualStyleBackColor = true;
@@ -65,11 +65,11 @@
             // dgvVanBan
             // 
             this.dgvVanBan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvVanBan.Location = new System.Drawing.Point(44, 168);
+            this.dgvVanBan.Location = new System.Drawing.Point(44, 233);
             this.dgvVanBan.Margin = new System.Windows.Forms.Padding(4);
             this.dgvVanBan.Name = "dgvVanBan";
             this.dgvVanBan.RowHeadersWidth = 51;
-            this.dgvVanBan.Size = new System.Drawing.Size(1687, 522);
+            this.dgvVanBan.Size = new System.Drawing.Size(1687, 457);
             this.dgvVanBan.TabIndex = 60;
             // 
             // lblTong
@@ -77,9 +77,9 @@
             this.lblTong.AutoSize = true;
             this.lblTong.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTong.ForeColor = System.Drawing.Color.Black;
-            this.lblTong.Location = new System.Drawing.Point(40, 131);
+            this.lblTong.Location = new System.Drawing.Point(443, 185);
             this.lblTong.Name = "lblTong";
-            this.lblTong.Size = new System.Drawing.Size(41, 17);
+            this.lblTong.Size = new System.Drawing.Size(46, 20);
             this.lblTong.TabIndex = 59;
             this.lblTong.Text = "Tổng";
             // 
@@ -90,7 +90,7 @@
             this.lbTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
             this.lbTitle.Location = new System.Drawing.Point(695, 116);
             this.lbTitle.Name = "lbTitle";
-            this.lbTitle.Size = new System.Drawing.Size(253, 29);
+            this.lbTitle.Size = new System.Drawing.Size(319, 36);
             this.lbTitle.TabIndex = 58;
             this.lbTitle.Text = "Danh sách công văn đi";
             // 
@@ -101,7 +101,7 @@
             this.label4.ForeColor = System.Drawing.Color.Red;
             this.label4.Location = new System.Drawing.Point(641, 9);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(302, 32);
+            this.label4.Size = new System.Drawing.Size(376, 41);
             this.label4.TabIndex = 57;
             this.label4.Text = "THỐNG KÊ CÔNG VĂN ĐI";
             // 
@@ -110,10 +110,10 @@
             this.btnShow.BackColor = System.Drawing.Color.Blue;
             this.btnShow.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnShow.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnShow.Location = new System.Drawing.Point(1143, 61);
+            this.btnShow.Location = new System.Drawing.Point(242, 173);
             this.btnShow.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnShow.Name = "btnShow";
-            this.btnShow.Size = new System.Drawing.Size(155, 34);
+            this.btnShow.Size = new System.Drawing.Size(155, 42);
             this.btnShow.TabIndex = 56;
             this.btnShow.Text = "Thống kê";
             this.btnShow.UseVisualStyleBackColor = false;
@@ -125,7 +125,7 @@
             this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
             this.label2.Location = new System.Drawing.Point(628, 67);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(70, 18);
+            this.label2.Size = new System.Drawing.Size(87, 22);
             this.label2.TabIndex = 55;
             this.label2.Text = "Đến ngày";
             // 
@@ -154,7 +154,7 @@
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
             this.label1.Location = new System.Drawing.Point(400, 67);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(60, 18);
+            this.label1.Size = new System.Drawing.Size(76, 22);
             this.label1.TabIndex = 52;
             this.label1.Text = "Từ ngày";
             // 

@@ -55,89 +55,117 @@ namespace UI
 
         private void LoadData()
         {
-            dgvCongVan.DataSource = CongVanDiBLL.Instance.GetByTrangThai(TrangThaiCongVanDi.CHO_BAN_HANH);
-            if (dgvCongVan.Rows.Count == 0)
+            try
             {
-                txtSoVanBan.Clear();
-                dtpNgayBanHanh.Value = DateTime.Now;
+                dgvCongVan.DataSource = CongVanDiBLL.Instance.GetByTrangThai(TrangThaiCongVanDi.CHO_BAN_HANH);
+                if (dgvCongVan.Rows.Count == 0)
+                {
+                    txtSoVanBan.Clear();
+                    dtpNgayBanHanh.Value = DateTime.Now;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi tải dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        
+
         private void BindDataToControls()
         {
-            if (dgvCongVan.SelectedRows.Count > 0)
+            try
             {
-                var row = dgvCongVan.SelectedRows[0];
-                txtSoVanBan.Text = ""; // Để trống cho cán bộ điền
-                dtpNgayBanHanh.Value = DateTime.Now;
+                if (dgvCongVan.SelectedRows.Count > 0)
+                {
+                    var row = dgvCongVan.SelectedRows[0];
+                    txtSoVanBan.Text = ""; // Để trống cho cán bộ điền
+                    dtpNgayBanHanh.Value = DateTime.Now;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi gán dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void BanHanh()
         {
-            if (dgvCongVan.SelectedRows.Count == 0)
+            try
             {
-                MessageBox.Show("Vui lòng chọn công văn chờ ban hành!");
-                return;
+                if (dgvCongVan.SelectedRows.Count == 0)
+                {
+                    MessageBox.Show("Vui lòng chọn công văn chờ ban hành!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(txtSoVanBan.Text))
+                {
+                    MessageBox.Show("Vui lòng nhập Số văn bản!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtSoVanBan.Focus();
+                    return;
+                }
+
+                int id = Convert.ToInt32(dgvCongVan.SelectedRows[0].Cells["Id"].Value);
+                var row = dgvCongVan.SelectedRows[0];
+
+                CongVanDi cv = new CongVanDi()
+                {
+                    Id = id,
+                    SoDi = row.Cells["SoDi"].Value?.ToString(),
+                    SoVanBan = txtSoVanBan.Text.Trim(),
+                    NgayDi = Convert.ToDateTime(row.Cells["NgayDi"].Value),
+                    NgayBanHanh = dtpNgayBanHanh.Value,
+                    NoiNhan = row.Cells["NoiNhan"].Value?.ToString(),
+                    NguoiKy = row.Cells["NguoiKy"].Value?.ToString(),
+                    TrichYeu = row.Cells["TrichYeu"].Value?.ToString(),
+                    DoKhan = row.Cells["DoKhan"].Value?.ToString(),
+                    DoMat = row.Cells["DoMat"].Value?.ToString(),
+                    FileDinhKem = row.Cells["FileDinhKem"].Value?.ToString(),
+                    TrangThai = TrangThaiCongVanDi.DA_BAN_HANH
+                };
+
+                if (CongVanDiBLL.Instance.Update(cv))
+                {
+                    CongVanDiBLL.Instance.ChuyenTrangThai(id, TrangThaiCongVanDi.DA_BAN_HANH, "Văn thư cấp số văn bản và ban hành.");
+                    MessageBox.Show("Ban hành thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadData();
+                }
+                else
+                {
+                    MessageBox.Show("Gặp lỗi trong quá trình ban hành!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-
-            if (string.IsNullOrWhiteSpace(txtSoVanBan.Text))
+            catch (Exception ex)
             {
-                MessageBox.Show("Vui lòng nhập Số văn bản!");
-                txtSoVanBan.Focus();
-                return;
-            }
-
-            int id = Convert.ToInt32(dgvCongVan.SelectedRows[0].Cells["Id"].Value);
-            var row = dgvCongVan.SelectedRows[0];
-
-            CongVanDi cv = new CongVanDi()
-            {
-                Id = id,
-                SoDi = row.Cells["SoDi"].Value?.ToString(),
-                SoVanBan = txtSoVanBan.Text.Trim(),
-                NgayDi = Convert.ToDateTime(row.Cells["NgayDi"].Value),
-                NgayBanHanh = dtpNgayBanHanh.Value,
-                NoiNhan = row.Cells["NoiNhan"].Value?.ToString(),
-                NguoiKy = row.Cells["NguoiKy"].Value?.ToString(),
-                TrichYeu = row.Cells["TrichYeu"].Value?.ToString(),
-                DoKhan = row.Cells["DoKhan"].Value?.ToString(),
-                DoMat = row.Cells["DoMat"].Value?.ToString(),
-                FileDinhKem = row.Cells["FileDinhKem"].Value?.ToString(),
-                TrangThai = TrangThaiCongVanDi.DA_BAN_HANH
-            };
-
-            if (CongVanDiBLL.Instance.Update(cv))
-            {
-                CongVanDiBLL.Instance.ChuyenTrangThai(id, TrangThaiCongVanDi.DA_BAN_HANH, "Văn thư cấp số văn bản và ban hành.");
-                MessageBox.Show("Ban hành thành công!");
-                LoadData();
-            }
-            else
-            {
-                MessageBox.Show("Gặp lỗi trong quá trình ban hành!");
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void XemFile()
         {
-            if (dgvCongVan.SelectedRows.Count == 0)
+            try
             {
-                MessageBox.Show("Vui lòng chọn công văn!");
-                return;
+                if (dgvCongVan.SelectedRows.Count == 0)
+                {
+                    MessageBox.Show("Vui lòng chọn công văn!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string path = dgvCongVan.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
+
+                if (string.IsNullOrEmpty(path))
+                {
+                    MessageBox.Show("Không có file đính kèm!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string fullPath = Path.Combine(Application.StartupPath, path);
+                formFileViewer f = new formFileViewer(fullPath);
+                f.ShowDialog();
             }
-
-            string path = dgvCongVan.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
-
-            if (string.IsNullOrEmpty(path))
+            catch (Exception ex)
             {
-                MessageBox.Show("Không có file đính kèm!");
-                return;
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            string fullPath = Path.Combine(Application.StartupPath, path);
-            formFileViewer f = new formFileViewer(fullPath);
-            f.ShowDialog();
         }
 
         private void formVanThuCVDi_Load(object sender, EventArgs e)

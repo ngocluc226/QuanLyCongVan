@@ -127,73 +127,53 @@ namespace UI
 
         private void LoadData()
         {
-            _dictCvDen.Clear();
-            DataTable dtCVDen = BLL.CongVanDenBLL.Instance.GetAll();
-            foreach (DataRow r in dtCVDen.Rows)
+            try
             {
-                int id = Convert.ToInt32(r["Id"]);
-                string trichYeu = r["TrichYeu"] != DBNull.Value ? r["TrichYeu"].ToString() : "";
-                _dictCvDen[id] = trichYeu;
+                _dictCvDen.Clear();
+                DataTable dtCVDen = BLL.CongVanDenBLL.Instance.GetAll();
+                foreach (DataRow r in dtCVDen.Rows)
+                {
+                    int id = Convert.ToInt32(r["Id"]);
+                    string trichYeu = r["TrichYeu"] != DBNull.Value ? r["TrichYeu"].ToString() : "";
+                    _dictCvDen[id] = trichYeu;
+                }
+
+                if (DTO.Session.CurrentUser != null)
+                {
+                    dgvCongVan.DataSource = BLL.CongVanDiBLL.Instance.GetByNguoiTaoId(
+                        DTO.Session.CurrentUser.MaNguoiDung,
+                        DTO.TrangThaiCongVanDi.DU_THAO, 
+                        DTO.TrangThaiCongVanDi.TU_CHOI
+                    );
+
+                    dgvChoDuyet.DataSource = BLL.CongVanDiBLL.Instance.GetByNguoiTaoId(
+                        DTO.Session.CurrentUser.MaNguoiDung,
+                        DTO.TrangThaiCongVanDi.CHO_DUYET_TRUONG_PHONG, 
+                        DTO.TrangThaiCongVanDi.CHO_KY_LANH_DAO,
+                        DTO.TrangThaiCongVanDi.CHO_BAN_HANH
+                    );
+
+                    dgvDaBanHanh.DataSource = BLL.CongVanDiBLL.Instance.GetByNguoiTaoId(
+                        DTO.Session.CurrentUser.MaNguoiDung,
+                        DTO.TrangThaiCongVanDi.DA_BAN_HANH
+                    );
+                }
             }
-
-            if (DTO.Session.CurrentUser != null)
+            catch (Exception ex)
             {
-                dgvCongVan.DataSource = BLL.CongVanDiBLL.Instance.GetByNguoiTaoId(
-                    DTO.Session.CurrentUser.MaNguoiDung,
-                    DTO.TrangThaiCongVanDi.DU_THAO, 
-                    DTO.TrangThaiCongVanDi.TU_CHOI
-                );
-
-                dgvChoDuyet.DataSource = BLL.CongVanDiBLL.Instance.GetByNguoiTaoId(
-                    DTO.Session.CurrentUser.MaNguoiDung,
-                    DTO.TrangThaiCongVanDi.CHO_DUYET_TRUONG_PHONG, 
-                    DTO.TrangThaiCongVanDi.CHO_KY_LANH_DAO,
-                    DTO.TrangThaiCongVanDi.CHO_BAN_HANH
-                );
-
-                dgvDaBanHanh.DataSource = BLL.CongVanDiBLL.Instance.GetByNguoiTaoId(
-                    DTO.Session.CurrentUser.MaNguoiDung,
-                    DTO.TrangThaiCongVanDi.DA_BAN_HANH
-                );
+                MessageBox.Show("Lỗi tải dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void ThemDraft()
         {
-            var cv = new DTO.CongVanDi()
+            try
             {
-                SoDi = BLL.CongVanDiBLL.Instance.GenerateSoDi(),
-                NgayDi = DateTime.Now,
-                TrangThai = DTO.TrangThaiCongVanDi.DU_THAO
-            };
-
-            using (var f = new formCongVanDiCreate(cv))
-            {
-                if (f.ShowDialog() == DialogResult.OK)
-                {
-                    LoadData();
-                }
-            }
-        }
-
-        private void SuaDraft()
-        {
-            if (dgvCongVan.SelectedRows.Count > 0)
-            {
-                var row = dgvCongVan.SelectedRows[0];
                 var cv = new DTO.CongVanDi()
                 {
-                    Id = Convert.ToInt32(row.Cells["Id"].Value),
-                    SoDi = row.Cells["SoDi"].Value?.ToString(),
-                    NgayDi = Convert.ToDateTime(row.Cells["NgayDi"].Value),
-                    NoiNhan = row.Cells["NoiNhan"].Value?.ToString(),
-                    NguoiKy = row.Cells["NguoiKy"].Value?.ToString(),
-                    TrichYeu = row.Cells["TrichYeu"].Value?.ToString(),
-                    DoKhan = row.Cells["DoKhan"].Value?.ToString(),
-                    DoMat = row.Cells["DoMat"].Value?.ToString(),
-                    FileDinhKem = row.Cells["FileDinhKem"].Value?.ToString(),
-                    TrangThai = row.Cells["TrangThai"].Value?.ToString(),
-                    LienKetCongVanDenId = row.Cells["LienKetCongVanDenId"]?.Value != DBNull.Value ? (int?)Convert.ToInt32(row.Cells["LienKetCongVanDenId"].Value) : null
+                    SoDi = BLL.CongVanDiBLL.Instance.GenerateSoDi(),
+                    NgayDi = DateTime.Now,
+                    TrangThai = DTO.TrangThaiCongVanDi.DU_THAO
                 };
 
                 using (var f = new formCongVanDiCreate(cv))
@@ -204,26 +184,74 @@ namespace UI
                     }
                 }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Vui lòng chọn bản dự thảo cần sửa!");
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void SuaDraft()
+        {
+            try
+            {
+                if (dgvCongVan.SelectedRows.Count > 0)
+                {
+                    var row = dgvCongVan.SelectedRows[0];
+                    var cv = new DTO.CongVanDi()
+                    {
+                        Id = Convert.ToInt32(row.Cells["Id"].Value),
+                        SoDi = row.Cells["SoDi"].Value?.ToString(),
+                        NgayDi = Convert.ToDateTime(row.Cells["NgayDi"].Value),
+                        NoiNhan = row.Cells["NoiNhan"].Value?.ToString(),
+                        NguoiKy = row.Cells["NguoiKy"].Value?.ToString(),
+                        TrichYeu = row.Cells["TrichYeu"].Value?.ToString(),
+                        DoKhan = row.Cells["DoKhan"].Value?.ToString(),
+                        DoMat = row.Cells["DoMat"].Value?.ToString(),
+                        FileDinhKem = row.Cells["FileDinhKem"].Value?.ToString(),
+                        TrangThai = row.Cells["TrangThai"].Value?.ToString(),
+                        LienKetCongVanDenId = row.Cells["LienKetCongVanDenId"]?.Value != DBNull.Value ? (int?)Convert.ToInt32(row.Cells["LienKetCongVanDenId"].Value) : null
+                    };
+
+                    using (var f = new formCongVanDiCreate(cv))
+                    {
+                        if (f.ShowDialog() == DialogResult.OK)
+                        {
+                            LoadData();
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Vui lòng chọn bản dự thảo cần sửa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void NopDuyet()
         {
-            if (dgvCongVan.SelectedRows.Count > 0)
+            try
             {
-                int id = Convert.ToInt32(dgvCongVan.SelectedRows[0].Cells["Id"].Value);
-                if(BLL.CongVanDiBLL.Instance.ChuyenTrangThai(id, DTO.TrangThaiCongVanDi.CHO_DUYET_TRUONG_PHONG, "Nhân viên nộp"))
+                if (dgvCongVan.SelectedRows.Count > 0)
                 {
-                    MessageBox.Show("Đã nộp thành công!");
-                    LoadData();
+                    int id = Convert.ToInt32(dgvCongVan.SelectedRows[0].Cells["Id"].Value);
+                    if(BLL.CongVanDiBLL.Instance.ChuyenTrangThai(id, DTO.TrangThaiCongVanDi.CHO_DUYET_TRUONG_PHONG, "Nhân viên nộp"))
+                    {
+                        MessageBox.Show("Đã nộp thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        LoadData();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Vui lòng chọn bản thảo cần nộp duyệt!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Vui lòng chọn bản thảo cần nộp duyệt!");
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -245,33 +273,40 @@ namespace UI
 
         private void btnKiemTraAI_Click(object sender, EventArgs e)
         {
-            string path = "";
+            try
+            {
+                string path = "";
 
-            if (tabControl1.SelectedTab == tabDuThao)
-            {
-                if (dgvCongVan.SelectedRows.Count == 0) return;
-                path = dgvCongVan.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
-            }
-            else if (tabControl1.SelectedTab == tabChoDuyet)
-            {
-                if (dgvChoDuyet.SelectedRows.Count == 0) return;
-                path = dgvChoDuyet.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
-            }
-            else
-            {
-                if (dgvDaBanHanh.SelectedRows.Count == 0) return;
-                path = dgvDaBanHanh.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
-            }
+                if (tabControl1.SelectedTab == tabDuThao)
+                {
+                    if (dgvCongVan.SelectedRows.Count == 0) return;
+                    path = dgvCongVan.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
+                }
+                else if (tabControl1.SelectedTab == tabChoDuyet)
+                {
+                    if (dgvChoDuyet.SelectedRows.Count == 0) return;
+                    path = dgvChoDuyet.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
+                }
+                else
+                {
+                    if (dgvDaBanHanh.SelectedRows.Count == 0) return;
+                    path = dgvDaBanHanh.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
+                }
 
-            if (string.IsNullOrEmpty(path))
-            {
-                MessageBox.Show("Văn bản này không có tệp đính kèm (PDF/Word/Image) để AI thực hiện phân tích thể thức!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                if (string.IsNullOrEmpty(path))
+                {
+                    MessageBox.Show("Văn bản này không có tệp đính kèm (PDF/Word/Image) để AI thực hiện phân tích thể thức!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-            formKiemTraAI frmAI = new formKiemTraAI(path);
-            frmAI.ShowDialog();
-            LoadData(); 
+                formKiemTraAI frmAI = new formKiemTraAI(path);
+                frmAI.ShowDialog();
+                LoadData(); 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnOpen_Click(object sender, EventArgs e)
