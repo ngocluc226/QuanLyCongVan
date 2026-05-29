@@ -60,6 +60,26 @@ namespace BLL
             return DAL.CongVanDiDAL.Instance.GetByTrangThais(trangThais);
         }
 
+        public DTO.CongVanDi GetById(int id)
+        {
+            return DAL.CongVanDiDAL.Instance.GetById(id);
+        }
+
+        public DataTable GetByNguoiTaoId(string nguoiTaoId, params string[] trangThais)
+        {
+            return DAL.CongVanDiDAL.Instance.GetByNguoiTaoId(nguoiTaoId, trangThais);
+        }
+
+        public DataTable GetByPhongBanTao(string maPhongBanTao, params string[] trangThais)
+        {
+            return DAL.CongVanDiDAL.Instance.GetByPhongBanTao(maPhongBanTao, trangThais);
+        }
+
+        public DataTable GetByLanhDaoDuyetId(string lanhDaoDuyetId, params string[] trangThais)
+        {
+            return DAL.CongVanDiDAL.Instance.GetByLanhDaoDuyetId(lanhDaoDuyetId, trangThais);
+        }
+
         public bool ChuyenTrangThai(int id, string trangThaiMoi, string ghiChu = "")
         {
             bool result = DAL.CongVanDiDAL.Instance.UpdateStatus(id, trangThaiMoi) > 0;

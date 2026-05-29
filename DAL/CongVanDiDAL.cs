@@ -29,9 +29,9 @@ namespace DAL
         public int Insert(CongVanDi cv)
         {
             string query = @"INSERT INTO CongVanDi 
-            (SoDi, SoVanBan, NgayDi, NgayBanHanh, NoiNhan, NguoiKy, TrichYeu, DoKhan, DoMat, FileDinhKem, TrangThai, LienKetCongVanDenId)
+            (SoDi, SoVanBan, NgayDi, NgayBanHanh, NoiNhan, NguoiKy, TrichYeu, DoKhan, DoMat, FileDinhKem, TrangThai, LienKetCongVanDenId, NguoiTaoId, MaPhongBanTao, LanhDaoDuyetId)
             VALUES 
-            (@SoDi, @SoVanBan, @NgayDi, @NgayBanHanh, @NoiNhan, @NguoiKy, @TrichYeu, @DoKhan, @DoMat, @FileDinhKem, @TrangThai, @LienKetCongVanDenId)";
+            (@SoDi, @SoVanBan, @NgayDi, @NgayBanHanh, @NoiNhan, @NguoiKy, @TrichYeu, @DoKhan, @DoMat, @FileDinhKem, @TrangThai, @LienKetCongVanDenId, @NguoiTaoId, @MaPhongBanTao, @LanhDaoDuyetId)";
 
             return DBHelper.Instance.ExecuteNonQuery(
                 query,
@@ -46,7 +46,10 @@ namespace DAL
                 new SqlParameter("@DoMat", (object)cv.DoMat ?? DBNull.Value),
                 new SqlParameter("@FileDinhKem", (object)cv.FileDinhKem ?? DBNull.Value),
                 new SqlParameter("@TrangThai", (object)cv.TrangThai ?? "Chưa xử lý"),
-                new SqlParameter("@LienKetCongVanDenId", (object)cv.LienKetCongVanDenId ?? DBNull.Value)
+                new SqlParameter("@LienKetCongVanDenId", (object)cv.LienKetCongVanDenId ?? DBNull.Value),
+                new SqlParameter("@NguoiTaoId", (object)cv.NguoiTaoId ?? DBNull.Value),
+                new SqlParameter("@MaPhongBanTao", (object)cv.MaPhongBanTao ?? DBNull.Value),
+                new SqlParameter("@LanhDaoDuyetId", (object)cv.LanhDaoDuyetId ?? DBNull.Value)
             );
         }
 
@@ -67,7 +70,8 @@ namespace DAL
             string query = @"UPDATE CongVanDi 
             SET SoDi = @SoDi, SoVanBan = @SoVanBan, NgayDi = @NgayDi, NgayBanHanh = @NgayBanHanh, 
                 NoiNhan = @NoiNhan, NguoiKy = @NguoiKy, TrichYeu = @TrichYeu, DoKhan = @DoKhan, 
-                DoMat = @DoMat, FileDinhKem = @FileDinhKem, TrangThai = @TrangThai, LienKetCongVanDenId = @LienKetCongVanDenId
+                DoMat = @DoMat, FileDinhKem = @FileDinhKem, TrangThai = @TrangThai, LienKetCongVanDenId = @LienKetCongVanDenId,
+                NguoiTaoId = @NguoiTaoId, MaPhongBanTao = @MaPhongBanTao, LanhDaoDuyetId = @LanhDaoDuyetId
             WHERE Id = @Id";
 
             return DBHelper.Instance.ExecuteNonQuery(
@@ -84,7 +88,10 @@ namespace DAL
                 new SqlParameter("@DoMat", (object)cv.DoMat ?? DBNull.Value),
                 new SqlParameter("@FileDinhKem", (object)cv.FileDinhKem ?? DBNull.Value),
                 new SqlParameter("@TrangThai", (object)cv.TrangThai ?? DBNull.Value),
-                new SqlParameter("@LienKetCongVanDenId", (object)cv.LienKetCongVanDenId ?? DBNull.Value)
+                new SqlParameter("@LienKetCongVanDenId", (object)cv.LienKetCongVanDenId ?? DBNull.Value),
+                new SqlParameter("@NguoiTaoId", (object)cv.NguoiTaoId ?? DBNull.Value),
+                new SqlParameter("@MaPhongBanTao", (object)cv.MaPhongBanTao ?? DBNull.Value),
+                new SqlParameter("@LanhDaoDuyetId", (object)cv.LanhDaoDuyetId ?? DBNull.Value)
             );
         }
 
@@ -132,6 +139,36 @@ namespace DAL
             );
         }
 
+        public CongVanDi GetById(int id)
+        {
+            string query = "SELECT * FROM CongVanDi WHERE Id = @Id";
+            DataTable dt = DBHelper.Instance.ExecuteQuery(query, new SqlParameter("@Id", id));
+            if (dt.Rows.Count > 0)
+            {
+                DataRow r = dt.Rows[0];
+                return new CongVanDi
+                {
+                    Id = Convert.ToInt32(r["Id"]),
+                    SoDi = r["SoDi"]?.ToString(),
+                    SoVanBan = r["SoVanBan"]?.ToString(),
+                    NgayDi = Convert.ToDateTime(r["NgayDi"]),
+                    NgayBanHanh = r["NgayBanHanh"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(r["NgayBanHanh"]) : null,
+                    NoiNhan = r["NoiNhan"]?.ToString(),
+                    NguoiKy = r["NguoiKy"]?.ToString(),
+                    TrichYeu = r["TrichYeu"]?.ToString(),
+                    DoKhan = r["DoKhan"]?.ToString(),
+                    DoMat = r["DoMat"]?.ToString(),
+                    FileDinhKem = r["FileDinhKem"]?.ToString(),
+                    TrangThai = r["TrangThai"]?.ToString(),
+                    LienKetCongVanDenId = r["LienKetCongVanDenId"] != DBNull.Value ? (int?)Convert.ToInt32(r["LienKetCongVanDenId"]) : null,
+                    NguoiTaoId = r["NguoiTaoId"]?.ToString(),
+                    MaPhongBanTao = r["MaPhongBanTao"]?.ToString(),
+                    LanhDaoDuyetId = r["LanhDaoDuyetId"]?.ToString()
+                };
+            }
+            return null;
+        }
+
         public DataTable GetByTrangThai(string trangThai)
         {
             string query = "SELECT * FROM CongVanDi WHERE TrangThai = @TrangThai ORDER BY NgayDi DESC";
@@ -157,6 +194,72 @@ namespace DAL
 
             string query = $"SELECT * FROM CongVanDi WHERE TrangThai IN ({placeholder}) ORDER BY NgayDi DESC";
             return DBHelper.Instance.ExecuteQuery(query, pars);
+        }
+
+        public DataTable GetByNguoiTaoId(string nguoiTaoId, params string[] trangThais)
+        {
+            if (trangThais == null || trangThais.Length == 0)
+            {
+                string query = "SELECT * FROM CongVanDi WHERE NguoiTaoId = @NguoiTaoId ORDER BY NgayDi DESC";
+                return DBHelper.Instance.ExecuteQuery(query, new SqlParameter("@NguoiTaoId", nguoiTaoId));
+            }
+
+            string placeholder = "";
+            SqlParameter[] pars = new SqlParameter[trangThais.Length + 1];
+            pars[0] = new SqlParameter("@NguoiTaoId", nguoiTaoId);
+            for (int i = 0; i < trangThais.Length; i++)
+            {
+                placeholder += $"@t{i},";
+                pars[i + 1] = new SqlParameter($"@t{i}", trangThais[i]);
+            }
+            placeholder = placeholder.TrimEnd(',');
+
+            string queryWithStatus = $"SELECT * FROM CongVanDi WHERE NguoiTaoId = @NguoiTaoId AND TrangThai IN ({placeholder}) ORDER BY NgayDi DESC";
+            return DBHelper.Instance.ExecuteQuery(queryWithStatus, pars);
+        }
+
+        public DataTable GetByPhongBanTao(string maPhongBanTao, params string[] trangThais)
+        {
+            if (trangThais == null || trangThais.Length == 0)
+            {
+                string query = "SELECT * FROM CongVanDi WHERE MaPhongBanTao = @MaPhongBanTao ORDER BY NgayDi DESC";
+                return DBHelper.Instance.ExecuteQuery(query, new SqlParameter("@MaPhongBanTao", maPhongBanTao));
+            }
+
+            string placeholder = "";
+            SqlParameter[] pars = new SqlParameter[trangThais.Length + 1];
+            pars[0] = new SqlParameter("@MaPhongBanTao", maPhongBanTao);
+            for (int i = 0; i < trangThais.Length; i++)
+            {
+                placeholder += $"@t{i},";
+                pars[i + 1] = new SqlParameter($"@t{i}", trangThais[i]);
+            }
+            placeholder = placeholder.TrimEnd(',');
+
+            string queryWithStatus = $"SELECT * FROM CongVanDi WHERE MaPhongBanTao = @MaPhongBanTao AND TrangThai IN ({placeholder}) ORDER BY NgayDi DESC";
+            return DBHelper.Instance.ExecuteQuery(queryWithStatus, pars);
+        }
+
+        public DataTable GetByLanhDaoDuyetId(string lanhDaoDuyetId, params string[] trangThais)
+        {
+            if (trangThais == null || trangThais.Length == 0)
+            {
+                string query = "SELECT * FROM CongVanDi WHERE LanhDaoDuyetId = @LanhDaoDuyetId ORDER BY NgayDi DESC";
+                return DBHelper.Instance.ExecuteQuery(query, new SqlParameter("@LanhDaoDuyetId", lanhDaoDuyetId));
+            }
+
+            string placeholder = "";
+            SqlParameter[] pars = new SqlParameter[trangThais.Length + 1];
+            pars[0] = new SqlParameter("@LanhDaoDuyetId", lanhDaoDuyetId);
+            for (int i = 0; i < trangThais.Length; i++)
+            {
+                placeholder += $"@t{i},";
+                pars[i + 1] = new SqlParameter($"@t{i}", trangThais[i]);
+            }
+            placeholder = placeholder.TrimEnd(',');
+
+            string queryWithStatus = $"SELECT * FROM CongVanDi WHERE LanhDaoDuyetId = @LanhDaoDuyetId AND TrangThai IN ({placeholder}) ORDER BY NgayDi DESC";
+            return DBHelper.Instance.ExecuteQuery(queryWithStatus, pars);
         }
     }
 }

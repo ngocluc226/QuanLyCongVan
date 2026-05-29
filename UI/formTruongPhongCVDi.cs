@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Windows.Forms;
 using System.IO;
 using BLL;
@@ -12,109 +13,257 @@ namespace UI
         {
             InitializeComponent();
             InitEvents();
+            InitDataGridView();
+            InitDataGridViewDaXuLy();
+            Utils.FormatDataGridView(dgvCongVan);
+            Utils.FormatDataGridView(dgvDaXuly);
+        }
+
+        private void InitDataGridView()
+        {
+            dgvCongVan.AutoGenerateColumns = false;
+            dgvCongVan.Columns.Clear();
+            dgvCongVan.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Id", DataPropertyName = "Id", Visible = false });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "SoDi", DataPropertyName = "SoDi", Visible = false });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NgayDi", DataPropertyName = "NgayDi", Visible = false });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NoiNhan", DataPropertyName = "NoiNhan", Visible = false });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "DoMat", DataPropertyName = "DoMat", Visible = false });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "FileDinhKem", DataPropertyName = "FileDinhKem", Visible = false });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TrangThai", DataPropertyName = "TrangThai", Visible = false });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "LienKetCongVanDenId", DataPropertyName = "LienKetCongVanDenId", Visible = false });
+
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "SoVanBan", HeaderText = "Số văn bản", DataPropertyName = "SoVanBan" });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TrichYeu", HeaderText = "Nội dung trích yếu", DataPropertyName = "TrichYeu", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "DoKhan", HeaderText = "Độ khẩn", DataPropertyName = "DoKhan" });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NguoiKy", HeaderText = "Người ký", DataPropertyName = "NguoiKy" });
+        }
+
+        private void InitDataGridViewDaXuLy()
+        {
+            dgvDaXuly.AutoGenerateColumns = false;
+            dgvDaXuly.Columns.Clear();
+            dgvDaXuly.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Id", DataPropertyName = "Id", Visible = false });
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "SoDi", DataPropertyName = "SoDi", Visible = false });
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NgayDi", DataPropertyName = "NgayDi", Visible = false });
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NoiNhan", DataPropertyName = "NoiNhan", Visible = false });
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "DoMat", DataPropertyName = "DoMat", Visible = false });
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "FileDinhKem", DataPropertyName = "FileDinhKem", Visible = false });
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "LienKetCongVanDenId", DataPropertyName = "LienKetCongVanDenId", Visible = false });
+
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "SoVanBan", HeaderText = "Số văn bản", DataPropertyName = "SoVanBan" });
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TrichYeu", HeaderText = "Nội dung trích yếu", DataPropertyName = "TrichYeu", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "DoKhan", HeaderText = "Độ khẩn", DataPropertyName = "DoKhan" });
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NguoiKy", HeaderText = "Người ký", DataPropertyName = "NguoiKy" });
+            dgvDaXuly.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TrangThai", HeaderText = "Trạng thái", DataPropertyName = "TrangThai" });
         }
 
         private void InitEvents()
         {
             this.Load += (s, e) => LoadData();
+            this.Load += (s, e) => LoadLanhDao();
             this.btnDuyet.Click += (s, e) => DuyetCV();
             this.btnTuChoi.Click += (s, e) => TuChoiCV();
             this.btnXem.Click += (s, e) => XemFile();
         }
 
+        private void LoadLanhDao()
+        {
+            try
+            {
+                DataTable dt = UserService.Instance.GetByRole("LanhDao");
+                cboLanhDao.DataSource = dt;
+                cboLanhDao.DisplayMember = "TenNguoiDung";
+                cboLanhDao.ValueMember = "MaNguoiDung";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi tải danh sách Lãnh đạo: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void LoadData()
         {
-            if (Session.CurrentUser != null && UyQuyenBLL.Instance.CheckHasActiveUyQuyenLanhDao(Session.CurrentUser.MaNguoiDung))
+            try
             {
-                dgvCongVan.DataSource = CongVanDiBLL.Instance.GetByTrangThais(
-                    TrangThaiCongVanDi.CHO_DUYET_TRUONG_PHONG, 
-                    TrangThaiCongVanDi.CHO_KY_LANH_DAO);
+                if (Session.CurrentUser != null)
+                {
+                    // Cho Xu Ly
+                    DataTable dt = CongVanDiBLL.Instance.GetByPhongBanTao(Session.CurrentUser.MaPhongBan, TrangThaiCongVanDi.CHO_DUYET_TRUONG_PHONG);
+
+                    if (UyQuyenBLL.Instance.CheckHasActiveUyQuyenLanhDao(Session.CurrentUser.MaNguoiDung))
+                    {
+                        DataTable dtUyQuyen = UyQuyenBLL.Instance.GetByNguoiDuocUyQuyen(Session.CurrentUser.MaNguoiDung);
+                        foreach (DataRow row in dtUyQuyen.Rows)
+                        {
+                            string lanhDaoId = row["MaNguoiUyQuyen"].ToString();
+                            DataTable dtLanhDao = CongVanDiBLL.Instance.GetByLanhDaoDuyetId(lanhDaoId, TrangThaiCongVanDi.CHO_KY_LANH_DAO);
+                            dt.Merge(dtLanhDao);
+                        }
+                    }
+
+                    dgvCongVan.DataSource = dt;
+
+                    // Da Xu Ly
+                    DataTable dtDaXuLy = CongVanDiBLL.Instance.GetByPhongBanTao(Session.CurrentUser.MaPhongBan, TrangThaiCongVanDi.CHO_KY_LANH_DAO, TrangThaiCongVanDi.TU_CHOI, TrangThaiCongVanDi.CHO_BAN_HANH, TrangThaiCongVanDi.DA_BAN_HANH);
+                    if (UyQuyenBLL.Instance.CheckHasActiveUyQuyenLanhDao(Session.CurrentUser.MaNguoiDung))
+                    {
+                        DataTable dtUyQuyen = UyQuyenBLL.Instance.GetByNguoiDuocUyQuyen(Session.CurrentUser.MaNguoiDung);
+                        foreach (DataRow row in dtUyQuyen.Rows)
+                        {
+                            string lanhDaoId = row["MaNguoiUyQuyen"].ToString();
+                            DataTable dtLanhDao = CongVanDiBLL.Instance.GetByLanhDaoDuyetId(lanhDaoId, TrangThaiCongVanDi.TU_CHOI, TrangThaiCongVanDi.CHO_BAN_HANH, TrangThaiCongVanDi.DA_BAN_HANH);
+                            dtDaXuLy.Merge(dtLanhDao);
+                        }
+                    }
+                    dgvDaXuly.DataSource = dtDaXuLy;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                dgvCongVan.DataSource = CongVanDiBLL.Instance.GetByTrangThai(TrangThaiCongVanDi.CHO_DUYET_TRUONG_PHONG);
+                MessageBox.Show("Lỗi tải dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void DuyetCV()
         {
-            if (dgvCongVan.SelectedRows.Count > 0)
+            try
             {
-                int id = Convert.ToInt32(dgvCongVan.SelectedRows[0].Cells["Id"].Value);
-                string trangThai = dgvCongVan.SelectedRows[0].Cells["TrangThai"].Value.ToString();
-                
-                if (trangThai == TrangThaiCongVanDi.CHO_DUYET_TRUONG_PHONG)
+                if (dgvCongVan.SelectedRows.Count > 0)
                 {
-                    if (CongVanDiBLL.Instance.ChuyenTrangThai(id, TrangThaiCongVanDi.CHO_KY_LANH_DAO, "Trưởng phòng đã duyệt"))
+                    int id = Convert.ToInt32(dgvCongVan.SelectedRows[0].Cells["Id"].Value);
+                    string trangThai = dgvCongVan.SelectedRows[0].Cells["TrangThai"].Value.ToString();
+
+                    if (trangThai == TrangThaiCongVanDi.CHO_DUYET_TRUONG_PHONG)
                     {
-                        MessageBox.Show("Duyệt và chuyển Lãnh đạo ký thành công!");
-                        LoadData();
+                        if (cboLanhDao.SelectedValue == null)
+                        {
+                            MessageBox.Show("Vui lòng chọn Lãnh đạo duyệt!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        // Update LanhDaoDuyetId first
+                        var cv = CongVanDiBLL.Instance.GetById(id);
+                        if (cv != null)
+                        {
+                            cv.LanhDaoDuyetId = cboLanhDao.SelectedValue.ToString();
+                            CongVanDiBLL.Instance.Update(cv);
+
+                            if (CongVanDiBLL.Instance.ChuyenTrangThai(id, TrangThaiCongVanDi.CHO_KY_LANH_DAO, "Trưởng phòng đã duyệt"))
+                            {
+                                MessageBox.Show("Duyệt và chuyển Lãnh đạo ký thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                LoadData();
+                            }
+                        }
+                    }
+                    else if (trangThai == TrangThaiCongVanDi.CHO_KY_LANH_DAO)
+                    {
+                        if (CongVanDiBLL.Instance.ChuyenTrangThai(id, TrangThaiCongVanDi.CHO_BAN_HANH, "Ký thay Lãnh đạo bởi " + Session.CurrentUser.TenNguoiDung))
+                        {
+                            MessageBox.Show("Duyệt (Ký thay) thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            LoadData();
+                        }
                     }
                 }
-                else if (trangThai == TrangThaiCongVanDi.CHO_KY_LANH_DAO)
+                else
                 {
-                    if (CongVanDiBLL.Instance.ChuyenTrangThai(id, TrangThaiCongVanDi.CHO_BAN_HANH, "Ký thay Lãnh đạo bởi " + Session.CurrentUser.TenNguoiDung))
-                    {
-                        MessageBox.Show("Duyệt (Ký thay) thành công!");
-                        LoadData();
-                    }
+                    MessageBox.Show("Vui lòng chọn công văn cần duyệt!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Vui lòng chọn công văn cần duyệt!");
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void TuChoiCV()
         {
-            if (dgvCongVan.SelectedRows.Count > 0)
+            try
             {
-                int id = Convert.ToInt32(dgvCongVan.SelectedRows[0].Cells["Id"].Value);
-                string trangThai = dgvCongVan.SelectedRows[0].Cells["TrangThai"].Value.ToString();
-                
-                var result = MessageBox.Show("Bạn có chắc chắn muốn TỪ CHỐI công văn này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                if (result == DialogResult.Yes)
+                if (dgvCongVan.SelectedRows.Count > 0)
                 {
-                    string lyDo = ShowPromptDialog("Nhập lý do từ chối:", "Lý do");
-                    if (string.IsNullOrEmpty(lyDo)) lyDo = "Không đạt yêu cầu";
-                    
-                    string trangThaiMoi = (trangThai == TrangThaiCongVanDi.CHO_KY_LANH_DAO) 
-                                        ? TrangThaiCongVanDi.CHO_DUYET_TRUONG_PHONG 
-                                        : TrangThaiCongVanDi.TU_CHOI;
+                    int id = Convert.ToInt32(dgvCongVan.SelectedRows[0].Cells["Id"].Value);
+                    string trangThai = dgvCongVan.SelectedRows[0].Cells["TrangThai"].Value.ToString();
 
-                    if (CongVanDiBLL.Instance.ChuyenTrangThai(id, trangThaiMoi, "Từ chối: " + lyDo))
+                    var result = MessageBox.Show("Bạn có chắc chắn muốn TỪ CHỐI công văn này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (result == DialogResult.Yes)
                     {
-                        MessageBox.Show("Từ chối thành công!");
-                        LoadData();
+                        string lyDo = ShowPromptDialog("Nhập lý do từ chối:", "Lý do");
+                        if (string.IsNullOrEmpty(lyDo)) lyDo = "Không đạt yêu cầu";
+
+                        string trangThaiMoi = (trangThai == TrangThaiCongVanDi.CHO_KY_LANH_DAO) 
+                                            ? TrangThaiCongVanDi.CHO_DUYET_TRUONG_PHONG 
+                                            : TrangThaiCongVanDi.TU_CHOI;
+
+                        if (CongVanDiBLL.Instance.ChuyenTrangThai(id, trangThaiMoi, "Từ chối: " + lyDo))
+                        {
+                            MessageBox.Show("Từ chối thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            LoadData();
+                        }
                     }
                 }
+                else
+                {
+                    MessageBox.Show("Vui lòng chọn công văn cần từ chối!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Vui lòng chọn công văn cần từ chối!");
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void XemFile()
         {
-            if (dgvCongVan.SelectedRows.Count == 0)
+            try
             {
-                MessageBox.Show("Vui lòng chọn công văn!");
-                return;
+                string path = "";
+                if (tabControl1.SelectedTab == tabChoXuLy)
+                {
+                    if (dgvCongVan.SelectedRows.Count == 0) return;
+                    path = dgvCongVan.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
+                }
+                else
+                {
+                    if (dgvDaXuly.SelectedRows.Count == 0) return;
+                    path = dgvDaXuly.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
+                }
+
+                if (string.IsNullOrEmpty(path))
+                {
+                    MessageBox.Show("Không có file đính kèm!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string fullPath = Path.Combine(Application.StartupPath, path);
+                formFileViewer f = new formFileViewer(fullPath);
+                f.ShowDialog();
             }
-
-            string path = dgvCongVan.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
-
-            if (string.IsNullOrEmpty(path))
+            catch (Exception ex)
             {
-                MessageBox.Show("Không có file đính kèm!");
-                return;
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
 
-            string fullPath = Path.Combine(Application.StartupPath, path);
-            formFileViewer f = new formFileViewer(fullPath);
-            f.ShowDialog();
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedTab == tabChoXuLy)
+            {
+                btnDuyet.Visible = true;
+                btnTuChoi.Visible = true;
+                cboLanhDao.Visible = true;
+                lblLanhDao.Visible = true;
+            }
+            else
+            {
+                btnDuyet.Visible = false;
+                btnTuChoi.Visible = false;
+                cboLanhDao.Visible = false;
+                lblLanhDao.Visible = false;
+            }
         }
 
         private string ShowPromptDialog(string text, string caption)
