@@ -43,7 +43,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.btnRefresh = new System.Windows.Forms.Button();
-            this.btnKiemTraAI = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCongVan)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabChoXuLy.SuspendLayout();
@@ -198,22 +197,11 @@
             this.btnRefresh.UseVisualStyleBackColor = true;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
-            // btnKiemTraAI
-            // 
-            this.btnKiemTraAI.Location = new System.Drawing.Point(352, 23);
-            this.btnKiemTraAI.Name = "btnKiemTraAI";
-            this.btnKiemTraAI.Size = new System.Drawing.Size(207, 32);
-            this.btnKiemTraAI.TabIndex = 62;
-            this.btnKiemTraAI.Text = "Kiểm tra thể thức bằng AI";
-            this.btnKiemTraAI.UseVisualStyleBackColor = true;
-            this.btnKiemTraAI.Click += new System.EventHandler(this.btnKiemTraAI_Click);
-            // 
             // formVanThuCVDen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1216, 834);
-            this.Controls.Add(this.btnKiemTraAI);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -255,6 +243,5 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnRefresh;
-        private System.Windows.Forms.Button btnKiemTraAI;
     }
 }

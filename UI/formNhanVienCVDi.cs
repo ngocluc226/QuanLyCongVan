@@ -19,6 +19,7 @@ namespace UI
         {
             InitializeComponent();
             InitEvents();
+
             InitDataGridView();
             InitDataGridChoDuyet();
             InitDataGridDaBanHanh();
@@ -92,6 +93,7 @@ namespace UI
             dgvDaBanHanh.Columns.Add(new DataGridViewTextBoxColumn() { Name = "DoKhan", HeaderText = "Độ khẩn", DataPropertyName = "DoKhan", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
             dgvDaBanHanh.Columns.Add(new DataGridViewTextBoxColumn() { Name = "DoMat", HeaderText = "Độ mật", DataPropertyName = "DoMat", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
             dgvDaBanHanh.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TrangThai", HeaderText = "Trạng thái", DataPropertyName = "TrangThai", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
+
         }
 
         private void InitEvents()
