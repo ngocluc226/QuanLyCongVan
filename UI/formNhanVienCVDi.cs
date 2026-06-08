@@ -17,6 +17,7 @@ namespace UI
         {
             InitializeComponent();
             InitEvents();
+            Utils.FormatDataGridView(dgvCongVan);
         }
 
         private void InitEvents()

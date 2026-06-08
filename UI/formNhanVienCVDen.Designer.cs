@@ -54,7 +54,7 @@
             // 
             this.btnXuLy.Location = new System.Drawing.Point(11, 19);
             this.btnXuLy.Name = "btnXuLy";
-            this.btnXuLy.Size = new System.Drawing.Size(83, 32);
+            this.btnXuLy.Size = new System.Drawing.Size(101, 32);
             this.btnXuLy.TabIndex = 0;
             this.btnXuLy.Text = "Xử lý";
             this.btnXuLy.UseVisualStyleBackColor = true;
@@ -62,9 +62,9 @@
             // 
             // btnHoanThanh
             // 
-            this.btnHoanThanh.Location = new System.Drawing.Point(128, 19);
+            this.btnHoanThanh.Location = new System.Drawing.Point(153, 19);
             this.btnHoanThanh.Name = "btnHoanThanh";
-            this.btnHoanThanh.Size = new System.Drawing.Size(83, 32);
+            this.btnHoanThanh.Size = new System.Drawing.Size(108, 32);
             this.btnHoanThanh.TabIndex = 1;
             this.btnHoanThanh.Text = "Hoàn thành";
             this.btnHoanThanh.UseVisualStyleBackColor = true;
