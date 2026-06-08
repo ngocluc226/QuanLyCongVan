@@ -1,4 +1,4 @@
-﻿using BLL;
+using BLL;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -75,6 +75,7 @@ namespace UI
 
             dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "DoKhan", HeaderText = "Độ khẩn", DataPropertyName = "DoKhan", Width = 100 });
             dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NguoiKy", HeaderText = "Người ký", DataPropertyName = "NguoiKy", Width = 120 });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TrangThai", HeaderText = "Trạng thái", DataPropertyName = "TrangThai", Width = 120 });
             dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "FileDinhKem", DataPropertyName = "FileDinhKem", Visible = false });
         }
         private void LoadData()
@@ -153,8 +154,8 @@ namespace UI
             // Kiểm tra đang ở tab nào
             bool isTab1 = (tabControl1.SelectedTab == tabChoXuLy);
 
-            // Gọi BLL tìm kiếm (Ví dụ này cho Role Lãnh đạo, các form khác thay tương ứng)
-            DataTable dtResult = BLL.CongVanDenBLL.Instance.SearchInTab("LanhDao", isTab1, column, value);
+            // Gọi BLL tìm kiếm
+            DataTable dtResult = BLL.CongVanDenBLL.Instance.SearchInTab("TruongPhong", isTab1, column, value);
 
             // Hiển thị kết quả lên đúng lưới của tab đó
             if (isTab1)

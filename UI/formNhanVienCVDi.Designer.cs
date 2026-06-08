@@ -56,7 +56,7 @@
             this.dgvCongVan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvCongVan.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvCongVan.Location = new System.Drawing.Point(4, 4);
-            this.dgvCongVan.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dgvCongVan.Margin = new System.Windows.Forms.Padding(4);
             this.dgvCongVan.MultiSelect = false;
             this.dgvCongVan.Name = "dgvCongVan";
             this.dgvCongVan.RowHeadersWidth = 51;
@@ -70,7 +70,7 @@
             this.btnThemDraft.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnThemDraft.ForeColor = System.Drawing.SystemColors.InactiveBorder;
             this.btnThemDraft.Location = new System.Drawing.Point(85, 130);
-            this.btnThemDraft.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnThemDraft.Margin = new System.Windows.Forms.Padding(4);
             this.btnThemDraft.Name = "btnThemDraft";
             this.btnThemDraft.Size = new System.Drawing.Size(111, 39);
             this.btnThemDraft.TabIndex = 1;
@@ -83,7 +83,7 @@
             this.btnSuaDraft.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnSuaDraft.ForeColor = System.Drawing.SystemColors.HighlightText;
             this.btnSuaDraft.Location = new System.Drawing.Point(241, 130);
-            this.btnSuaDraft.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSuaDraft.Margin = new System.Windows.Forms.Padding(4);
             this.btnSuaDraft.Name = "btnSuaDraft";
             this.btnSuaDraft.Size = new System.Drawing.Size(127, 39);
             this.btnSuaDraft.TabIndex = 2;
@@ -95,10 +95,10 @@
             this.btnNopDuyet.BackColor = System.Drawing.Color.Red;
             this.btnNopDuyet.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnNopDuyet.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.btnNopDuyet.Location = new System.Drawing.Point(413, 130);
-            this.btnNopDuyet.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnNopDuyet.Location = new System.Drawing.Point(406, 130);
+            this.btnNopDuyet.Margin = new System.Windows.Forms.Padding(4);
             this.btnNopDuyet.Name = "btnNopDuyet";
-            this.btnNopDuyet.Size = new System.Drawing.Size(170, 39);
+            this.btnNopDuyet.Size = new System.Drawing.Size(252, 39);
             this.btnNopDuyet.TabIndex = 3;
             this.btnNopDuyet.Text = "Nộp Trưởng Phòng";
             this.btnNopDuyet.UseVisualStyleBackColor = false;
@@ -120,7 +120,7 @@
             this.btnKiemTraAI.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnKiemTraAI.ForeColor = System.Drawing.SystemColors.HighlightText;
             this.btnKiemTraAI.Location = new System.Drawing.Point(849, 130);
-            this.btnKiemTraAI.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnKiemTraAI.Margin = new System.Windows.Forms.Padding(4);
             this.btnKiemTraAI.Name = "btnKiemTraAI";
             this.btnKiemTraAI.Size = new System.Drawing.Size(252, 39);
             this.btnKiemTraAI.TabIndex = 63;
@@ -133,8 +133,8 @@
             this.btnOpen.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnOpen.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnOpen.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.btnOpen.Location = new System.Drawing.Point(656, 130);
-            this.btnOpen.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnOpen.Location = new System.Drawing.Point(688, 130);
+            this.btnOpen.Margin = new System.Windows.Forms.Padding(4);
             this.btnOpen.Name = "btnOpen";
             this.btnOpen.Size = new System.Drawing.Size(127, 39);
             this.btnOpen.TabIndex = 64;
@@ -148,7 +148,7 @@
             this.tabControl1.Controls.Add(this.tabChoDuyet);
             this.tabControl1.Controls.Add(this.tabDaBanHanh);
             this.tabControl1.Location = new System.Drawing.Point(85, 185);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(1509, 421);
@@ -159,9 +159,9 @@
             // 
             this.tabDuThao.Controls.Add(this.dgvCongVan);
             this.tabDuThao.Location = new System.Drawing.Point(4, 25);
-            this.tabDuThao.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabDuThao.Margin = new System.Windows.Forms.Padding(4);
             this.tabDuThao.Name = "tabDuThao";
-            this.tabDuThao.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabDuThao.Padding = new System.Windows.Forms.Padding(4);
             this.tabDuThao.Size = new System.Drawing.Size(1501, 392);
             this.tabDuThao.TabIndex = 0;
             this.tabDuThao.Text = "Dự thảo & Cần sửa";
@@ -171,9 +171,9 @@
             // 
             this.tabChoDuyet.Controls.Add(this.dgvChoDuyet);
             this.tabChoDuyet.Location = new System.Drawing.Point(4, 25);
-            this.tabChoDuyet.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabChoDuyet.Margin = new System.Windows.Forms.Padding(4);
             this.tabChoDuyet.Name = "tabChoDuyet";
-            this.tabChoDuyet.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabChoDuyet.Padding = new System.Windows.Forms.Padding(4);
             this.tabChoDuyet.Size = new System.Drawing.Size(1501, 392);
             this.tabChoDuyet.TabIndex = 1;
             this.tabChoDuyet.Text = "Đang chờ duyệt";
@@ -185,7 +185,7 @@
             this.dgvChoDuyet.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvChoDuyet.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvChoDuyet.Location = new System.Drawing.Point(4, 4);
-            this.dgvChoDuyet.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dgvChoDuyet.Margin = new System.Windows.Forms.Padding(4);
             this.dgvChoDuyet.Name = "dgvChoDuyet";
             this.dgvChoDuyet.RowHeadersWidth = 51;
             this.dgvChoDuyet.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -196,9 +196,9 @@
             // 
             this.tabDaBanHanh.Controls.Add(this.dgvDaBanHanh);
             this.tabDaBanHanh.Location = new System.Drawing.Point(4, 25);
-            this.tabDaBanHanh.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabDaBanHanh.Margin = new System.Windows.Forms.Padding(4);
             this.tabDaBanHanh.Name = "tabDaBanHanh";
-            this.tabDaBanHanh.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabDaBanHanh.Padding = new System.Windows.Forms.Padding(4);
             this.tabDaBanHanh.Size = new System.Drawing.Size(1501, 392);
             this.tabDaBanHanh.TabIndex = 2;
             this.tabDaBanHanh.Text = "Đã ban hành";
@@ -210,7 +210,7 @@
             this.dgvDaBanHanh.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvDaBanHanh.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvDaBanHanh.Location = new System.Drawing.Point(4, 4);
-            this.dgvDaBanHanh.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dgvDaBanHanh.Margin = new System.Windows.Forms.Padding(4);
             this.dgvDaBanHanh.Name = "dgvDaBanHanh";
             this.dgvDaBanHanh.RowHeadersWidth = 51;
             this.dgvDaBanHanh.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -230,7 +230,7 @@
             this.Controls.Add(this.btnThemDraft);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "formNhanVienCVDi";
             this.Text = "Nhân Viên - Công Văn Đi";
             ((System.ComponentModel.ISupportInitialize)(this.dgvCongVan)).EndInit();

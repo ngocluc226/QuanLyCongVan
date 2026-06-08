@@ -39,7 +39,7 @@ namespace UI
 
             dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TraLoiChoCVDen", HeaderText = "Trả lời cho CV", DataPropertyName = "LienKetCongVanDenId", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
             dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "SoDi", HeaderText = "Số đi", DataPropertyName = "SoDi", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
-            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "SoVanBan", HeaderText = "Số văn bản", DataPropertyName = "SoVanBan", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "SoVanBan", HeaderText = "Số văn bản", DataPropertyName = "SoVanBan", Visible = false });
             dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NgayDi", HeaderText = "Ngày đi", DataPropertyName = "NgayDi", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
             dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TrichYeu", HeaderText = "Nội dung trích yếu", DataPropertyName = "TrichYeu", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
             dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NoiNhan", HeaderText = "Nơi nhận", DataPropertyName = "NoiNhan", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
@@ -61,7 +61,7 @@ namespace UI
 
             dgvChoDuyet.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TraLoiChoCVDen", HeaderText = "Trả lời cho CV", DataPropertyName = "LienKetCongVanDenId", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
             dgvChoDuyet.Columns.Add(new DataGridViewTextBoxColumn() { Name = "SoDi", HeaderText = "Số đi", DataPropertyName = "SoDi", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
-            dgvChoDuyet.Columns.Add(new DataGridViewTextBoxColumn() { Name = "SoVanBan", HeaderText = "Số văn bản", DataPropertyName = "SoVanBan", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
+            dgvChoDuyet.Columns.Add(new DataGridViewTextBoxColumn() { Name = "SoVanBan", HeaderText = "Số văn bản", DataPropertyName = "SoVanBan", Visible = false });
             dgvChoDuyet.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NgayDi", HeaderText = "Ngày đi", DataPropertyName = "NgayDi", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
             dgvChoDuyet.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TrichYeu", HeaderText = "Nội dung trích yếu", DataPropertyName = "TrichYeu", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
             dgvChoDuyet.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NoiNhan", HeaderText = "Nơi nhận", DataPropertyName = "NoiNhan", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });

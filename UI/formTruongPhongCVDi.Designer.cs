@@ -108,7 +108,7 @@ namespace UI
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(579, 41);
             this.label4.TabIndex = 66;
-            this.label4.Text = "DANH SÁCH CÔNG VĂN ĐI CHO DUYỆT";
+            this.label4.Text = "DANH SÁCH CÔNG VĂN ĐI CHỜ DUYỆT";
             // 
             // cboLanhDao
             // 

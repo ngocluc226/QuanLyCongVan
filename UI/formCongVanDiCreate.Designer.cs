@@ -1,4 +1,4 @@
-﻿namespace UI
+namespace UI
 {
     partial class formCongVanDiCreate
     {
@@ -40,7 +40,7 @@
             this.txtTrichYeu = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
             this.cbNoiNhan = new System.Windows.Forms.ComboBox();
-            this.txtNguoiKy = new System.Windows.Forms.TextBox();
+            this.cboNguoiKy = new System.Windows.Forms.ComboBox();
             this.label21 = new System.Windows.Forms.Label();
             this.txtFile = new System.Windows.Forms.TextBox();
             this.btnChonFile = new System.Windows.Forms.Button();
@@ -83,7 +83,7 @@
             this.groupBox7.Controls.Add(this.btnChonFile);
             this.groupBox7.Controls.Add(this.txtFile);
             this.groupBox7.Controls.Add(this.label21);
-            this.groupBox7.Controls.Add(this.txtNguoiKy);
+            this.groupBox7.Controls.Add(this.cboNguoiKy);
             this.groupBox7.Controls.Add(this.cbNoiNhan);
             this.groupBox7.Controls.Add(this.label15);
             this.groupBox7.Controls.Add(this.txtTrichYeu);
@@ -222,14 +222,16 @@
             this.cbNoiNhan.Size = new System.Drawing.Size(164, 27);
             this.cbNoiNhan.TabIndex = 18;
             // 
-            // txtNguoiKy
+            // cboNguoiKy
             // 
-            this.txtNguoiKy.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtNguoiKy.Location = new System.Drawing.Point(444, 79);
-            this.txtNguoiKy.Margin = new System.Windows.Forms.Padding(4);
-            this.txtNguoiKy.Name = "txtNguoiKy";
-            this.txtNguoiKy.Size = new System.Drawing.Size(161, 27);
-            this.txtNguoiKy.TabIndex = 24;
+            this.cboNguoiKy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboNguoiKy.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cboNguoiKy.FormattingEnabled = true;
+            this.cboNguoiKy.Location = new System.Drawing.Point(444, 79);
+            this.cboNguoiKy.Margin = new System.Windows.Forms.Padding(4);
+            this.cboNguoiKy.Name = "cboNguoiKy";
+            this.cboNguoiKy.Size = new System.Drawing.Size(161, 27);
+            this.cboNguoiKy.TabIndex = 24;
             // 
             // label21
             // 
@@ -262,6 +264,7 @@
             this.btnChonFile.TabIndex = 27;
             this.btnChonFile.Text = "^";
             this.btnChonFile.UseVisualStyleBackColor = false;
+            this.btnChonFile.Click += new System.EventHandler(this.btnChonFile_Click);
             // 
             // dtpNgayBanHanh
             // 
@@ -550,7 +553,7 @@
         private System.Windows.Forms.Button btnChonFile;
         private System.Windows.Forms.TextBox txtFile;
         private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.TextBox txtNguoiKy;
+        private System.Windows.Forms.ComboBox cboNguoiKy;
         private System.Windows.Forms.ComboBox cbNoiNhan;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TextBox txtTrichYeu;
