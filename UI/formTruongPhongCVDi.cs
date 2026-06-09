@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Windows.Forms;
 using System.IO;
@@ -237,12 +237,20 @@ namespace UI
                 string path = "";
                 if (tabControl1.SelectedTab == tabChoXuLy)
                 {
-                    if (dgvCongVan.SelectedRows.Count == 0) return;
+                    if (dgvCongVan.SelectedRows.Count == 0)
+                    {
+                        MessageBox.Show("Vui lòng chọn công văn cần xem từ danh sách chờ xử lý!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
                     path = dgvCongVan.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
                 }
                 else
                 {
-                    if (dgvDaXuly.SelectedRows.Count == 0) return;
+                    if (dgvDaXuly.SelectedRows.Count == 0)
+                    {
+                        MessageBox.Show("Vui lòng chọn công văn cần xem từ danh sách đã xử lý!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
                     path = dgvDaXuly.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
                 }
 
