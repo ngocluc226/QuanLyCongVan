@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data;
 using System.Windows.Forms;
 using System.IO;
@@ -79,7 +79,7 @@ namespace UI
                 string nguoiKy = row.Cells["NguoiKy"].Value?.ToString();
                 if (!string.IsNullOrEmpty(nguoiKy))
                 {
-                    cboLanhDao.Text = nguoiKy; // Auto pre-select the leader chosen by employee
+                    cboLanhDao.Text = nguoiKy;
                 }
             }
         }
@@ -159,12 +159,11 @@ namespace UI
                             return;
                         }
 
-                        // Update LanhDaoDuyetId first
                         var cv = CongVanDiBLL.Instance.GetById(id);
                         if (cv != null)
                         {
                             cv.LanhDaoDuyetId = cboLanhDao.SelectedValue.ToString();
-                            cv.NguoiKy = cboLanhDao.Text; // Override NguoiKy to ensure consistency!
+                            cv.NguoiKy = cboLanhDao.Text; 
                             CongVanDiBLL.Instance.Update(cv);
 
                             if (CongVanDiBLL.Instance.ChuyenTrangThai(id, TrangThaiCongVanDi.CHO_KY_LANH_DAO, "Trưởng phòng đã duyệt"))

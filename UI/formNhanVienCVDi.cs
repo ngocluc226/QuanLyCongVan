@@ -21,10 +21,10 @@ namespace UI
             InitEvents();
             InitDataGridView();
             InitDataGridChoDuyet();
-            InitDataGridDaBanHanh();
+            InitDataGridTuChoi();
             Utils.FormatDataGridView(dgvCongVan);
             Utils.FormatDataGridView(dgvChoDuyet);
-            Utils.FormatDataGridView(dgvDaBanHanh);
+            Utils.FormatDataGridView(dgvTuChoi);
         }
 
         private void InitDataGridView()
@@ -71,27 +71,26 @@ namespace UI
             dgvChoDuyet.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TrangThai", HeaderText = "Trạng thái", DataPropertyName = "TrangThai", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
         }
 
-        private void InitDataGridDaBanHanh()
+        private void InitDataGridTuChoi()
         {
-            dgvDaBanHanh.AutoGenerateColumns = false;
-            dgvDaBanHanh.Columns.Clear();
-            dgvDaBanHanh.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvTuChoi.AutoGenerateColumns = false;
+            dgvTuChoi.Columns.Clear();
+            dgvTuChoi.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
-            dgvDaBanHanh.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Id", DataPropertyName = "Id", Visible = false });
-            dgvDaBanHanh.Columns.Add(new DataGridViewTextBoxColumn() { Name = "FileDinhKem", DataPropertyName = "FileDinhKem", Visible = false });
-            dgvDaBanHanh.Columns.Add(new DataGridViewTextBoxColumn() { Name = "LienKetCongVanDenId", DataPropertyName = "LienKetCongVanDenId", Visible = false });
+            dgvTuChoi.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Id", DataPropertyName = "Id", Visible = false });
+            dgvTuChoi.Columns.Add(new DataGridViewTextBoxColumn() { Name = "FileDinhKem", DataPropertyName = "FileDinhKem", Visible = false });
+            dgvTuChoi.Columns.Add(new DataGridViewTextBoxColumn() { Name = "LienKetCongVanDenId", DataPropertyName = "LienKetCongVanDenId", Visible = false });
 
-            dgvDaBanHanh.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TraLoiChoCVDen", HeaderText = "Trả lời cho CV", DataPropertyName = "LienKetCongVanDenId", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
-            dgvDaBanHanh.Columns.Add(new DataGridViewTextBoxColumn() { Name = "SoDi", HeaderText = "Số đi", DataPropertyName = "SoDi", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
-            dgvDaBanHanh.Columns.Add(new DataGridViewTextBoxColumn() { Name = "SoVanBan", HeaderText = "Số văn bản", DataPropertyName = "SoVanBan", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
-            dgvDaBanHanh.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NgayDi", HeaderText = "Ngày đi", DataPropertyName = "NgayDi", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
-            dgvDaBanHanh.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NgayBanHanh", HeaderText = "Ngày ban hành", DataPropertyName = "NgayBanHanh", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
-            dgvDaBanHanh.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TrichYeu", HeaderText = "Nội dung trích yếu", DataPropertyName = "TrichYeu", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
-            dgvDaBanHanh.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NoiNhan", HeaderText = "Nơi nhận", DataPropertyName = "NoiNhan", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
-            dgvDaBanHanh.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NguoiKy", HeaderText = "Người ký", DataPropertyName = "NguoiKy", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
-            dgvDaBanHanh.Columns.Add(new DataGridViewTextBoxColumn() { Name = "DoKhan", HeaderText = "Độ khẩn", DataPropertyName = "DoKhan", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
-            dgvDaBanHanh.Columns.Add(new DataGridViewTextBoxColumn() { Name = "DoMat", HeaderText = "Độ mật", DataPropertyName = "DoMat", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
-            dgvDaBanHanh.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TrangThai", HeaderText = "Trạng thái", DataPropertyName = "TrangThai", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
+            dgvTuChoi.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TraLoiChoCVDen", HeaderText = "Trả lời cho CV", DataPropertyName = "LienKetCongVanDenId", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
+            dgvTuChoi.Columns.Add(new DataGridViewTextBoxColumn() { Name = "SoDi", HeaderText = "Số đi", DataPropertyName = "SoDi", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
+            dgvTuChoi.Columns.Add(new DataGridViewTextBoxColumn() { Name = "SoVanBan", HeaderText = "Số văn bản", DataPropertyName = "SoVanBan", Visible = false });
+            dgvTuChoi.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NgayDi", HeaderText = "Ngày đi", DataPropertyName = "NgayDi", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
+            dgvTuChoi.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TrichYeu", HeaderText = "Nội dung trích yếu", DataPropertyName = "TrichYeu", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
+            dgvTuChoi.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NoiNhan", HeaderText = "Nơi nhận", DataPropertyName = "NoiNhan", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
+            dgvTuChoi.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NguoiKy", HeaderText = "Người ký", DataPropertyName = "NguoiKy", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
+            dgvTuChoi.Columns.Add(new DataGridViewTextBoxColumn() { Name = "DoKhan", HeaderText = "Độ khẩn", DataPropertyName = "DoKhan", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
+            dgvTuChoi.Columns.Add(new DataGridViewTextBoxColumn() { Name = "DoMat", HeaderText = "Độ mật", DataPropertyName = "DoMat", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
+            dgvTuChoi.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TrangThai", HeaderText = "Trạng thái", DataPropertyName = "TrangThai", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
         }
 
         private void InitEvents()
@@ -100,9 +99,11 @@ namespace UI
             this.btnThemDraft.Click += (s, e) => ThemDraft();
             this.btnSuaDraft.Click += (s, e) => SuaDraft();
             this.btnNopDuyet.Click += (s, e) => NopDuyet();
+            this.btnXemLyDo.Click += btnXemLyDo_Click;
+            this.dgvCongVan.SelectionChanged += dgvCongVan_SelectionChanged;
             dgvCongVan.CellFormatting += dgvCongVan_CellFormatting;
             dgvChoDuyet.CellFormatting += dgvCongVan_CellFormatting;
-            dgvDaBanHanh.CellFormatting += dgvCongVan_CellFormatting;
+            dgvTuChoi.CellFormatting += dgvCongVan_CellFormatting;
         }
 
         private void dgvCongVan_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -142,8 +143,7 @@ namespace UI
                 {
                     dgvCongVan.DataSource = BLL.CongVanDiBLL.Instance.GetByNguoiTaoId(
                         DTO.Session.CurrentUser.MaNguoiDung,
-                        DTO.TrangThaiCongVanDi.DU_THAO, 
-                        DTO.TrangThaiCongVanDi.TU_CHOI
+                        DTO.TrangThaiCongVanDi.DU_THAO
                     );
 
                     dgvChoDuyet.DataSource = BLL.CongVanDiBLL.Instance.GetByNguoiTaoId(
@@ -153,9 +153,9 @@ namespace UI
                         DTO.TrangThaiCongVanDi.CHO_BAN_HANH
                     );
 
-                    dgvDaBanHanh.DataSource = BLL.CongVanDiBLL.Instance.GetByNguoiTaoId(
+                    dgvTuChoi.DataSource = BLL.CongVanDiBLL.Instance.GetByNguoiTaoId(
                         DTO.Session.CurrentUser.MaNguoiDung,
-                        DTO.TrangThaiCongVanDi.DA_BAN_HANH
+                        DTO.TrangThaiCongVanDi.TU_CHOI
                     );
                 }
             }
@@ -194,9 +194,13 @@ namespace UI
         {
             try
             {
-                if (dgvCongVan.SelectedRows.Count > 0)
+                DataGridView activeDgv = null;
+                if (tabControl1.SelectedTab == tabDuThao) activeDgv = dgvCongVan;
+                else if (tabControl1.SelectedTab == tabTuChoi) activeDgv = dgvTuChoi;
+
+                if (activeDgv != null && activeDgv.SelectedRows.Count > 0)
                 {
-                    var row = dgvCongVan.SelectedRows[0];
+                    var row = activeDgv.SelectedRows[0];
                     var cv = new DTO.CongVanDi()
                     {
                         Id = Convert.ToInt32(row.Cells["Id"].Value),
@@ -255,6 +259,34 @@ namespace UI
             }
         }
 
+        private void dgvCongVan_SelectionChanged(object sender, EventArgs e)
+        {
+            // Function no longer needed for btnXemLyDo toggling on tabDuThao
+            // because TU_CHOI is now in its own tab.
+        }
+
+        private void btnXemLyDo_Click(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedTab != tabTuChoi || dgvTuChoi.SelectedRows.Count == 0) return;
+            var row = dgvTuChoi.SelectedRows[0];
+            int id = Convert.ToInt32(row.Cells["Id"].Value);
+            string keyword = $"Từ chối cho CV ID {id}";
+            
+            DataTable dtLogs = BLL.LogBLL.Instance.GetAll();
+            foreach (DataRow logRow in dtLogs.Rows)
+            {
+                string hanhDong = logRow["HanhDong"].ToString();
+                if (hanhDong.Contains(keyword))
+                {
+                    string[] parts = hanhDong.Split(new string[] { "Ghi chú: " }, StringSplitOptions.None);
+                    string lyDo = parts.Length > 1 ? parts[1] : hanhDong;
+                    MessageBox.Show("Lý do từ chối:\n\n" + lyDo, "Thông tin", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+            }
+            MessageBox.Show("Không tìm thấy lý do từ chối chi tiết trong lịch sử.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (tabControl1.SelectedTab == tabDuThao)
@@ -262,12 +294,21 @@ namespace UI
                 btnThemDraft.Visible = true;
                 btnSuaDraft.Visible = true;
                 btnNopDuyet.Visible = true;
+                btnXemLyDo.Visible = false;
+            }
+            else if (tabControl1.SelectedTab == tabTuChoi)
+            {
+                btnThemDraft.Visible = false;
+                btnSuaDraft.Visible = true;
+                btnNopDuyet.Visible = false;
+                btnXemLyDo.Visible = true;
             }
             else
             {
                 btnThemDraft.Visible = false;
                 btnSuaDraft.Visible = false;
                 btnNopDuyet.Visible = false;
+                btnXemLyDo.Visible = false;
             }
         }
 
@@ -287,10 +328,10 @@ namespace UI
                     if (dgvChoDuyet.SelectedRows.Count == 0) return;
                     path = dgvChoDuyet.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
                 }
-                else
+                else if (tabControl1.SelectedTab == tabTuChoi)
                 {
-                    if (dgvDaBanHanh.SelectedRows.Count == 0) return;
-                    path = dgvDaBanHanh.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
+                    if (dgvTuChoi.SelectedRows.Count == 0) return;
+                    path = dgvTuChoi.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
                 }
 
                 if (string.IsNullOrEmpty(path))
@@ -322,10 +363,10 @@ namespace UI
                 if (dgvChoDuyet.SelectedRows.Count == 0) return;
                 path = dgvChoDuyet.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
             }
-            else
+            else if (tabControl1.SelectedTab == tabTuChoi)
             {
-                if (dgvDaBanHanh.SelectedRows.Count == 0) return;
-                path = dgvDaBanHanh.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
+                if (dgvTuChoi.SelectedRows.Count == 0) return;
+                path = dgvTuChoi.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
             }
 
             if (string.IsNullOrEmpty(path)) return;
