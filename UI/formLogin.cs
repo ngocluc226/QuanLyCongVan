@@ -29,10 +29,8 @@ namespace UI
                 return;
             }
 
-            // Băm mật khẩu người dùng gõ vào trước khi gọi Login
             string hashedPassword = Utils.HashSHA256(password);
 
-            // Gọi BLL bằng mật khẩu đã mã hóa
             var user = BLL.UserService.Instance.Login(username, hashedPassword);
 
             if (user == null)

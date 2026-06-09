@@ -27,10 +27,8 @@ namespace UI
             dgvCongVan.DataSource = null;
             dgvDaXuly.DataSource = null;
 
-            // Tab 1 (tabChoXuLy): Công văn mới nhập, trạng thái là 'Đã nhập'
             dgvCongVan.DataSource = BLL.CongVanDenBLL.Instance.GetCongVanMoiNhap();
 
-            // Tab 2 (tabDaXuLy): Lịch sử các công văn đã trình đi
             dgvDaXuly.DataSource = BLL.CongVanDenBLL.Instance.GetCongVanDaXuLyVanThu();
 
             LoadLanhDao();
@@ -143,7 +141,6 @@ namespace UI
         private void btnOpen_Click(object sender, EventArgs e)
         {
             string path = "";
-            // Sử dụng chính xác biến tabChoXuLy của bạn
             if (tabControl1.SelectedTab == tabChoXuLy)
             {
                 if (dgvCongVan.SelectedRows.Count == 0) return;
@@ -167,7 +164,6 @@ namespace UI
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Sử dụng chính xác biến tabChoXuLy của bạn
             if (tabControl1.SelectedTab == tabChoXuLy)
             {
                 btnTrinh.Visible = true;
@@ -193,7 +189,6 @@ namespace UI
                 return;
             }
 
-            // Đồng bộ kiểm tra tabChoXuLy cho chức năng tìm kiếm phân vùng
             bool isTabChoXuLy = (tabControl1.SelectedTab == tabChoXuLy);
 
             DataTable dtResult = BLL.CongVanDenBLL.Instance.SearchInTab("VanThu", isTabChoXuLy, column, value);

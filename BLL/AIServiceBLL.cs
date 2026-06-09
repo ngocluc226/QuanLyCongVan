@@ -26,7 +26,6 @@ namespace BLL
         private readonly string _aiEndpoint;
         private readonly string _aiModel;
 
-        // Cấu trúc phục vụ cơ chế xoay tua đa API Key bảo mật
         private readonly string[] _apiKeys;
         private int _currentKeyIndex = 0;
         private readonly object _keyLock = new object();
@@ -55,9 +54,6 @@ namespace BLL
             }
         }
 
-        /// <summary>
-        /// Hàm gọi AI kiểm tra thể thức văn bản hành chính trực tiếp từ tệp tin Word thô
-        /// </summary>
         public async Task<KetQuaKiemTraAI> KiemTraTheThucVanBanAsync(string filePath)
         {
             string activeApiKey = GetNextApiKey();
@@ -77,7 +73,6 @@ namespace BLL
 
             StringBuilder wordContentBuilder = new StringBuilder();
 
-            // --- GIAI ĐOẠN 1: ĐỌC VĂN BẢN THÔ (AN TOÀN TUYỆT ĐỐI - KHÔNG SỬ DỤNG ĐỊNH DẠNG LỖI) ---
             try
             {
                 using (DocX document = DocX.Load(filePath))
@@ -104,7 +99,6 @@ namespace BLL
                 throw new Exception("Tệp tin Word trống hoặc không có nội dung văn bản để kiểm tra!");
             }
 
-            // --- GIAI ĐOẠN 2: TINH CHỈNH PROMPT THÔNG MINH CHO AI TỰ ĐỌC HIỂU CẤU TRÚC ---
             string systemPrompt = @"Bạn là Chuyên gia Kiểm tra Văn bản Hành chính Việt Nam. Nhiệm vụ của bạn là rà soát nội dung dữ liệu văn bản thô trích xuất từ file Word để kết luận xem có tuân thủ quy chuẩn hình thức theo Nghị định 30/2020/NĐ-CP hay không.
 
             QUY TẮC KHẢO SÁT CHỮ VÀ VỊ TRÍ (PHÂN TÍCH THÔNG MINH):
@@ -136,7 +130,6 @@ namespace BLL
 
             string jsonPayload = JsonConvert.SerializeObject(requestPayload);
 
-            // --- GIAI ĐOẠN 3: KẾT NỐI MẠNG VÀ GỌI API ---
             string responseString = "";
             using (HttpClient client = new HttpClient())
             {
@@ -157,7 +150,6 @@ namespace BLL
                 }
             }
 
-            // --- GIAI ĐOẠN 4: ĐẨY DỮ LIỆU ĐẦU RA ---
             var openRouterResponse = JsonConvert.DeserializeAnonymousType(responseString, new
             {
                 choices = new[] { new { message = new { content = "" } } }

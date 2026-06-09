@@ -36,8 +36,6 @@ namespace UI
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            // Determine operation based on whether the ID textbox is enabled.
-            // If it's enabled, we treat this as an Insert; otherwise Update.
             string ma = txtMa.Text.Trim();
             string ten = txtTen.Text.Trim();
 
@@ -48,7 +46,7 @@ namespace UI
             }
 
             bool result;
-            bool doInsert = txtMa.Enabled; // enabled means we're adding
+            bool doInsert = txtMa.Enabled; 
 
             if (doInsert)
                 result = BLL.PhongBanBLL.Instance.Insert(ma, ten);
@@ -60,7 +58,6 @@ namespace UI
                 MessageBox.Show("Th�nh c�ng!");
                 LoadData();
 
-                // Reset state so user can add new entries after saving
                 txtMa.Enabled = true;
                 txtMa.Clear();
                 txtTen.Clear();
@@ -70,14 +67,12 @@ namespace UI
         }
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            // Ensure a row is selected before entering edit mode
             if (dgvPhongBan.CurrentRow == null)
             {
                 MessageBox.Show("Ch?n ph�ng ban c?n s?a");
                 return;
             }
 
-            // isAdd = false;
             txtMa.Enabled = false;
             txtTen.Focus();
         }

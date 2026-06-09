@@ -18,7 +18,6 @@ namespace DAL
                 return _Instance;
             }
         }
-
         private DBHelper()
         {
             _connectionString = @"Server=NGOCLUC-DESKTOP\SQLEXPRESS;Database=QUANLYCONGVAN;Trusted_Connection=True;";
@@ -29,7 +28,7 @@ namespace DAL
         {
             return new SqlConnection(_connectionString);
         }
-
+        // select   
         public DataTable ExecuteQuery(string sql, params SqlParameter[] parameters)
         {
             using (SqlConnection conn = GetConnection())
@@ -47,7 +46,7 @@ namespace DAL
                 return dt;
             }
         }
-
+        // insert, update, delete
         public int ExecuteNonQuery(string sql, params SqlParameter[] parameters)
         {
             using (SqlConnection conn = GetConnection())
@@ -60,7 +59,7 @@ namespace DAL
                 return cmd.ExecuteNonQuery();
             }
         }
-
+        // select count, sum
         public object ExecuteScalar(string sql, params SqlParameter[] parameters)
         {
             using (SqlConnection conn = GetConnection())

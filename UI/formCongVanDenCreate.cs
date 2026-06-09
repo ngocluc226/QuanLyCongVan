@@ -22,7 +22,6 @@ namespace UI
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            // 1. Validate
             if (string.IsNullOrWhiteSpace(txtSoDen.Text))
             {
                 MessageBox.Show("Vui lòng nhập Số đến", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -65,7 +64,6 @@ namespace UI
                 return;
             }
 
-            // 2. Tạo DTO
             DTO.CongVanDen cv = new DTO.CongVanDen()
             {
                 SoDen = txtSoDen.Text.Trim(),
@@ -81,10 +79,8 @@ namespace UI
                 TrangThai = "Mới nhập"
             };
 
-            // 3. Gọi BLL
             bool result = BLL.CongVanDenBLL.Instance.Insert(cv);
 
-            // 4. Kết quả
             if (result)
             {
                 LogBLL.Instance.WriteLog("Thêm công văn", Session.UserName);
@@ -131,23 +127,18 @@ namespace UI
             {
                 string sourcePath = ofd.FileName;
 
-                // Thư mục lưu file trong project
                 string folderPath = Path.Combine(Application.StartupPath, "Files");
 
-                // Tạo thư mục nếu chưa có
                 if (!Directory.Exists(folderPath))
                 {
                     Directory.CreateDirectory(folderPath);
                 }
 
-                // Tạo tên file tránh trùng
                 string fileName = DateTime.Now.Ticks + "_" + Path.GetFileName(sourcePath);
                 string destPath = Path.Combine(folderPath, fileName);
 
-                // Copy file
                 File.Copy(sourcePath, destPath, true);
 
-                // Gán vào textbox (lưu DB)
                 txtFile.Text = destPath;
             }
         }

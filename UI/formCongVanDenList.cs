@@ -22,20 +22,16 @@ namespace UI
         }
         private void LoadData()
         {
-            // 1. Lấy dữ liệu trang hiện tại
             DataTable dt = BLL.CongVanDenBLL.Instance.GetPaged(currentPage, pageSize);
             dgvVanBan.DataSource = dt;
 
-            // 2. Tính toán tổng số trang
             int totalRows = BLL.CongVanDenBLL.Instance.GetTotalCount();
             totalPages = (int)Math.Ceiling((double)totalRows / pageSize);
             if (totalPages == 0) totalPages = 1;
 
-            // 3. Hiển thị thông tin lên giao diện
             lblPageInfo.Text = $"{currentPage}/{totalPages}";
             lblTong.Text = "Tổng số dòng: " + totalRows.ToString();
 
-            // 4. Trạng thái ẩn/hiện nút điều hướng
             btnPrev.Enabled = (currentPage > 1);
             btnNext.Enabled = (currentPage < totalPages);
         }
@@ -44,12 +40,10 @@ namespace UI
             dgvVanBan.AutoGenerateColumns = false;
             dgvVanBan.Columns.Clear();
 
-            // Cấu hình hành vi chọn dòng
             dgvVanBan.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvVanBan.MultiSelect = true;
             dgvVanBan.AllowUserToAddRows = false;
 
-            // 1. Cột Id (Ẩn danh sách nhưng giữ lại để lấy dữ liệu khi Xóa/Mở file)
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "Id",
@@ -57,7 +51,6 @@ namespace UI
                 Visible = false
             });
 
-            // 2. Cột Số đến
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "SoDen",
@@ -66,7 +59,6 @@ namespace UI
                 Width = 80
             });
 
-            // 3. Cột Số văn bản
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "SoVanBan",
@@ -75,7 +67,6 @@ namespace UI
                 Width = 110
             });
 
-            // 4. Cột Ngày đến (Định dạng ngày/tháng/năm)
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "NgayDen",
@@ -85,7 +76,6 @@ namespace UI
                 Width = 100
             });
 
-            // 5. Cột Ngày ban hành
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "NgayBanHanh",
@@ -95,7 +85,6 @@ namespace UI
                 Width = 110
             });
 
-            // 6. Cột Nơi gửi
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "NoiGui",
@@ -104,7 +93,6 @@ namespace UI
                 Width = 130
             });
 
-            // 7. Cột Người ký
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "NguoiKy",
@@ -113,7 +101,6 @@ namespace UI
                 Width = 120
             });
 
-            // 8. Cột Trích yếu (Tự động kéo giãn chiếm hết khoảng trống)
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "TrichYeu",
@@ -122,7 +109,6 @@ namespace UI
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
             });
 
-            // 9. Cột Độ khẩn
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "DoKhan",
@@ -131,7 +117,6 @@ namespace UI
                 Width = 90
             });
 
-            // 10. Cột Độ mật
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "DoMat",
@@ -140,7 +125,6 @@ namespace UI
                 Width = 90
             });
 
-            // 11. Cột Trạng thái
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "TrangThai",
@@ -149,7 +133,6 @@ namespace UI
                 Width = 120
             });
 
-            // 12. Cột Tên File đính kèm (Ẩn đường dẫn thô, chỉ giữ để gọi hàm xem file)
             dgvVanBan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "FileDinhKem",
@@ -205,7 +188,6 @@ namespace UI
             DateTime fromDate = dtpFrom.Value.Date;
             DateTime toDate = dtpTo.Value.Date;
 
-            // Fix lỗi mất dữ liệu trong ngày cuối
             toDate = toDate.AddDays(1).AddSeconds(-1);
 
             if (fromDate > toDate)
@@ -237,7 +219,6 @@ namespace UI
                 return;
             }
 
-            // Nếu bạn lưu relative path
             string fullPath = Path.Combine(Application.StartupPath, path);
 
             formFileViewer f = new formFileViewer(fullPath);

@@ -28,7 +28,6 @@ namespace BLL
             if (string.IsNullOrEmpty(cv.SoDen))
                 return false;
 
-            // Set trạng thái chuẩn
             cv.TrangThai = TrangThaiCongVanDen.DA_NHAP;
 
             LogBLL.Instance.WriteLog("Thêm công văn: " + cv.SoDen, Session.UserName);
@@ -40,7 +39,6 @@ namespace BLL
             string sqlBase = "";
             List<SqlParameter> p = new List<SqlParameter>();
 
-            // Xác định nguồn dữ liệu dựa vào Role và Tab
             switch (role)
             {
                 case "VanThu":
@@ -199,13 +197,11 @@ namespace BLL
 
         public int GetThongBaoNhanVien()
         {
-            // Truyền đúng UserId của người đang đăng nhập vào bộ lọc
             return DAL.CongVanDenDAL.Instance.GetCountChoXuLyByNhanVien(Session.UserId);
         }
 
         public int GetThongBaoTruongPhong()
         {
-            // Truyền đúng Mã phòng ban của Trưởng phòng đang đăng nhập để đếm việc tồn đọng
             return DAL.CongVanDenDAL.Instance.GetCountChoGiaoViecByPhongBan(Session.PhongBan);
         }
 

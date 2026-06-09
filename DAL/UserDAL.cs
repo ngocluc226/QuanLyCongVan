@@ -92,9 +92,6 @@ namespace DAL
                 "pb.TenPhongBan"
     };
 
-            if (!System.Array.Exists(allowedColumns, c => c == column))
-                throw new System.Exception("Cột tìm kiếm không hợp lệ");
-
             string sql = $@"
         SELECT nd.*, pb.TenPhongBan
         FROM NguoiDung nd

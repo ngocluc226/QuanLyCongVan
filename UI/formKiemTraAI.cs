@@ -21,17 +21,14 @@ namespace UI
             btnQuetAI.Enabled = false;
             btnQuetAI.Text = "Đang quét...";
 
-            // Xóa sạch vùng hiển thị cũ trước khi nạp
             txtKetQuaLoi.Clear();
             txtDeXuat.Clear();
             lblDiemSo.Text = "--/100";
 
             try
             {
-                // Gọi hàm xử lý Vision AI bảo vệ 3 lớp
                 KetQuaKiemTraAI ketQua = await AIServiceBLL.Instance.KiemTraTheThucVanBanAsync(_duongDanFileCanQuet);
 
-                // Hiển thị kết quả lên giao diện nếu luồng xử lý sạch sẽ
                 lblDiemSo.Text = $"{ketQua.DiemSo}/100 Điểm";
                 if (ketQua.HopLe)
                 {
@@ -44,7 +41,6 @@ namespace UI
                     lblThongBao.ForeColor = Color.Red;
                 }
 
-                // Đổ danh sách lỗi mượt mà
                 foreach (string loi in ketQua.DanhSachLoi)
                 {
                     txtKetQuaLoi.AppendText("• " + loi + "\n\n");
@@ -53,7 +49,6 @@ namespace UI
             }
             catch (Exception ex)
             {
-                // Hiện thông báo lỗi thông minh (Mạng thật thì báo mạng, code sai thông số thì báo đúng thông số đó)
                 MessageBox.Show(ex.Message, "Thông báo hệ thống", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 lblThongBao.Text = "Yêu cầu kiểm tra cấu hình.";
                 lblThongBao.ForeColor = Color.Orange;

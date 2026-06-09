@@ -79,8 +79,8 @@ namespace UI
         }
         private void LoadData()
         {
-            dgvCongVan.DataSource = BLL.CongVanDenBLL.Instance.GetCongVanChoPhongBan(); // Việc cấp trên giao cho phòng
-            dgvDaXuly.DataSource = BLL.CongVanDenBLL.Instance.GetCongVanDaXuLyTruongPhong(); // Việc mình đã giao cho NV
+            dgvCongVan.DataSource = BLL.CongVanDenBLL.Instance.GetCongVanChoPhongBan();
+            dgvDaXuly.DataSource = BLL.CongVanDenBLL.Instance.GetCongVanDaXuLyTruongPhong(); 
         }
         private void btnOpen_Click(object sender, EventArgs e)
         {
@@ -110,14 +110,11 @@ namespace UI
                 return;
             }
 
-            // 👉 Lấy Id công văn (đảm bảo tên cột đúng với DataTable)
             int congVanId = Convert.ToInt32(dgvCongVan.CurrentRow.Cells["Id"].Value);
 
-            // 👉 Mở form phân công
             formPhanCong f = new formPhanCong(congVanId);
             f.ShowDialog();
 
-            // 👉 Sau khi đóng form → reload lại danh sách
             LoadData();
         }
 
@@ -146,17 +143,14 @@ namespace UI
 
             if (string.IsNullOrEmpty(value))
             {
-                LoadData(); // Nếu để trống thì hiện tất cả như cũ
+                LoadData();
                 return;
             }
 
-            // Kiểm tra đang ở tab nào
             bool isTab1 = (tabControl1.SelectedTab == tabChoXuLy);
 
-            // Gọi BLL tìm kiếm (Ví dụ này cho Role Lãnh đạo, các form khác thay tương ứng)
             DataTable dtResult = BLL.CongVanDenBLL.Instance.SearchInTab("LanhDao", isTab1, column, value);
 
-            // Hiển thị kết quả lên đúng lưới của tab đó
             if (isTab1)
                 dgvCongVan.DataSource = dtResult;
             else

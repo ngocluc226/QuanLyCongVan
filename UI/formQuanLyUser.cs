@@ -32,25 +32,18 @@ namespace UI
             dgvTaiKhoan.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvTaiKhoan.AllowUserToAddRows = false;
 
-            // 1. Mã người dùng
             dgvTaiKhoan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "colMaNguoiDung", HeaderText = "Mã số", DataPropertyName = "MaNguoiDung", Width = 90 });
 
-            // 2. Tên người dùng
             dgvTaiKhoan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "colTenNguoiDung", HeaderText = "Họ và tên", DataPropertyName = "TenNguoiDung", Width = 150 });
 
-            // 3. Tên đăng nhập
             dgvTaiKhoan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "colTenDangNhap", HeaderText = "Tài khoản", DataPropertyName = "TenDangNhap", Width = 110 });
 
-            // 4. Quyền
             dgvTaiKhoan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "colQuyen", HeaderText = "Quyền hạn", DataPropertyName = "Quyen", Width = 110 });
 
-            // 5. Số điện thoại
             dgvTaiKhoan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "colSDT", HeaderText = "Số ĐT", DataPropertyName = "SDT", Width = 100 });
 
-            // 6. Email
             dgvTaiKhoan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "colEmail", HeaderText = "Email", DataPropertyName = "Email", Width = 160 });
 
-            // 7. Tên phòng ban trực thuộc (Kéo giãn phủ lưới)
             dgvTaiKhoan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "colTenPhongBan",
@@ -59,7 +52,6 @@ namespace UI
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
             });
 
-            // 8. CỘT THÊM MỚI (ẨN): Mã phòng ban phục vụ logic đổ ngược dữ liệu khi click Sửa
             dgvTaiKhoan.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "colMaPhongBan",
@@ -126,7 +118,6 @@ namespace UI
             string rawPassword = txtPassword.Text.Trim();
             string hashedPassword = "";
 
-            // Nếu đang thêm mới, hoặc người dùng có nhập mật khẩu mới vào ô TextBox thì tiến hành băm
             if (!string.IsNullOrEmpty(rawPassword))
             {
                 hashedPassword = Utils.HashSHA256(rawPassword);
@@ -250,7 +241,7 @@ namespace UI
         {
             var user = GetUserFromForm();
 
-            // ===== VALIDATE =====
+        
             if (string.IsNullOrEmpty(user.MaNguoiDung))
             {
                 MessageBox.Show("Thiếu mã người dùng");
@@ -269,7 +260,6 @@ namespace UI
                 return;
             }
 
-            // ===== SAVE =====
             if (_isAdding)
                 UserService.Instance.AddUser(user);
             else

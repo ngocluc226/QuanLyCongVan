@@ -42,7 +42,6 @@ namespace BLL
         }
         public int GetThongBaoLanhDao()
         {
-            // Session.UserId sẽ trả về đúng mã của Lãnh đạo đang gõ mật khẩu vào form Login
             return TrinhLanhDaoDAL.Instance.GetCountChoDuyetByLanhDao(Session.UserId);
         }
     }

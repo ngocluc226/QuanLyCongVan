@@ -35,7 +35,6 @@ namespace DAL
                 new SqlParameter("@Id", id)
             );
         }
-        // 🔹 Thêm công văn
         public int Insert(CongVanDen cv)
         {
             string query = @"INSERT INTO CongVanDen 
@@ -59,7 +58,6 @@ namespace DAL
             );
         }
 
-        // 🔹 Xóa công văn
         public int Delete(int id)
         {
             string query = "UPDATE CongVanDen SET TrangThai = @TrangThai WHERE Id = @Id";
@@ -72,21 +70,19 @@ namespace DAL
         }
         public DataTable SearchData(string sqlBase, string column, string value, SqlParameter[] roleParams)
         {
-            // sqlBase là câu lệnh lấy dữ liệu theo Role/Tab đã viết ở câu trước
-            // Chúng ta lồng câu sqlBase vào một Subquery để tìm kiếm
             string sql = $@"SELECT * FROM ({sqlBase}) AS Source 
                     WHERE {column} LIKE @value";
 
             List<SqlParameter> parameters = new SqlParameter[] {
-        new SqlParameter("@value", "%" + value + "%")
-    }.ToList();
+                new SqlParameter("@value", "%" + value + "%")
+                }.ToList();
 
             if (roleParams != null) parameters.AddRange(roleParams);
 
             return DBHelper.Instance.ExecuteQuery(sql, parameters.ToArray());
         }
 
-        // 🔹 Kiểm tra trùng Số đến
+        
         public int CountBySoDen(string soDen)
         {
             string query = "SELECT COUNT(*) FROM CongVanDen WHERE SoDen = @SoDen";
@@ -101,7 +97,7 @@ namespace DAL
 
         public int GetMaxId()
         {
-                       string query = "SELECT ISNULL(MAX(Id), 0) FROM CongVanDen";
+            string query = "SELECT ISNULL(MAX(Id), 0) FROM CongVanDen";
             object result = DBHelper.Instance.ExecuteScalar(query);
             return (result != null) ? Convert.ToInt32(result) : 0;
         }
@@ -117,10 +113,8 @@ namespace DAL
                 new SqlParameter("@ToDate", toDate)
             );
         }
-        // --- VĂN THƯ - Tab 1 (tabChoXuLy): Công văn mới nhập hệ thống ---
         public DataTable GetCongVanMoiNhapVanThu()
         {
-            // Sử dụng SqlParameter và truyền trực tiếp hằng số DTO.TrangThaiCongVanDen.DA_NHAP ("Đã nhập hệ thống")
             string query = "SELECT * FROM CongVanDen WHERE TrangThai = @tt AND TrangThai <> @daXoa ORDER BY NgayDen DESC";
 
             return DBHelper.Instance.ExecuteQuery(query,
@@ -129,10 +123,8 @@ namespace DAL
             );
         }
 
-        // --- VĂN THƯ - Tab 2 (tabDaXuLy): Lịch sử công văn đã trình đi ---
         public DataTable GetCongVanDaXuLyVanThu()
         {
-            // Lấy tất cả công văn có trạng thái KHÁC "Đã nhập hệ thống" và chưa bị xóa
             string query = "SELECT * FROM CongVanDen WHERE TrangThai <> @tt AND TrangThai <> @daXoa ORDER BY NgayDen DESC";
 
             return DBHelper.Instance.ExecuteQuery(query,
@@ -141,7 +133,6 @@ namespace DAL
             );
         }
 
-        // --- LÃNH ĐẠO: Chỉ xem những gì được trình đích danh cho mình ---
         public DataTable GetCongVanChoLanhDao(string maLanhDao)
         {
             string sql = @"SELECT cv.* FROM CongVanDen cv
@@ -149,7 +140,6 @@ namespace DAL
                    WHERE t.LanhDaoId = @ma AND t.TrangThai = N'ChoDuyet' AND cv.TrangThai <> N'Đã xóa'";
             return DBHelper.Instance.ExecuteQuery(sql, new SqlParameter("@ma", maLanhDao));
         }
-
         public DataTable GetCongVanDaXuLyLanhDao(string maLanhDao)
         {
             string sql = @"SELECT DISTINCT cv.* FROM CongVanDen cv
@@ -158,7 +148,6 @@ namespace DAL
             return DBHelper.Instance.ExecuteQuery(sql, new SqlParameter("@ma", maLanhDao));
         }
 
-        // --- TRƯỞNG PHÒNG: Chỉ xem công văn lãnh đạo giao về phòng mình và mình đã giao cho NV ---
         public DataTable GetCongVanChoPhongBan(string maPhong)
         {
             string sql = @"SELECT cv.* FROM CongVanDen cv
@@ -178,7 +167,6 @@ namespace DAL
             return DBHelper.Instance.ExecuteQuery(sql, new SqlParameter("@ma", maTruongPhong));
         }
 
-        // --- NHÂN VIÊN: Chỉ xem công văn đích danh mình được giao ---
         public DataTable GetCongVanTheoNhanVien(string maNV)
         {
             string sql = @"SELECT cv.* FROM CongVanDen cv
@@ -239,17 +227,14 @@ namespace DAL
         WHERE pc.MaNguoiDung = @maNguoiDung 
           AND cv.TrangThai IN (N'Đã phân công', N'Đang xử lý')";
 
-            // Sử dụng ExecuteScalar của DBHelper
             object result = DBHelper.Instance.ExecuteScalar(query,
                 new SqlParameter("@maNguoiDung", maNguoiDung)
             );
 
             return (result != null) ? Convert.ToInt32(result) : 0;
         }
-        // Hàm lấy dữ liệu theo số trang (Mỗi trang 20 dòng)
         public DataTable GetPaged(int pageNumber, int pageSize)
         {
-            // SỬA TẠI ĐÂY: Thêm điều kiện lọc bỏ các văn bản đã xóa mềm khi phân trang
             string query = @"
         SELECT * FROM CongVanDen 
         WHERE TrangThai <> N'Đã xóa'
@@ -265,7 +250,6 @@ namespace DAL
             );
         }
 
-        // Hàm đếm tổng số dòng để tính tổng số trang
         public int GetTotalCount()
         {
             string query = "SELECT COUNT(*) FROM CongVanDen";
@@ -290,7 +274,6 @@ namespace DAL
         
         public DataTable GetCongVanDaXuLyLanhDao()
         {
-            // Lấy các công văn đã được Lãnh đạo phê duyệt/phân công đi (Trạng thái khác Đã nhập và khác Đã trình)
             string query = @"SELECT * FROM CongVanDen 
                      WHERE TrangThai NOT IN (N'Đã nhập', N'Đã trình', N'Đã xóa') 
                      ORDER BY NgayDen DESC";

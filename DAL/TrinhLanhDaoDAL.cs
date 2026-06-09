@@ -18,7 +18,6 @@ namespace DAL
             }
         }
 
-        // 🔹 Thêm mới trình lãnh đạo
         public int Insert(TrinhLanhDao t)
         {
             string query = @"INSERT INTO TrinhLanhDao
@@ -35,7 +34,6 @@ namespace DAL
             );
         }
 
-        // 🔹 Lấy công văn theo lãnh đạo
         public DataTable GetByLanhDao(string lanhDaoId)
         {
             string query = @"
@@ -52,19 +50,14 @@ namespace DAL
                 new SqlParameter("@LanhDaoId", lanhDaoId)
             );
         }
-        /// <summary>
-        /// Đếm số lượng công văn đang trong trạng thái chờ duyệt của RIÊNG vị Lãnh đạo này
-        /// </summary>
         public int GetCountChoDuyetByLanhDao(string lanhDaoId)
         {
-            // Đếm chính xác số dòng trong bảng TrinhLanhDao khớp với mã Lãnh đạo đang đăng nhập
             string query = @"
         SELECT COUNT(*) 
         FROM TrinhLanhDao 
         WHERE LanhDaoId = @LanhDaoId 
           AND TrangThai = N'ChoDuyet'";
 
-            // Gọi thông qua lớp tiện ích DBHelper an toàn của bạn
             object result = DBHelper.Instance.ExecuteScalar(query,
                 new SqlParameter("@LanhDaoId", lanhDaoId)
             );

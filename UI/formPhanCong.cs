@@ -32,10 +32,9 @@ namespace UI
 
             cbPhongBan.SelectedIndexChanged += CbPhongBan_SelectedIndexChanged;
 
-            // 🎯 PHÂN QUYỀN
             if (Session.IsTruongPhong)
             { 
-                rdCaNhan.Checked = true;        // Mặc định là giao cá nhân
+                rdCaNhan.Checked = true;        
                 cbUser.Enabled = true;
                 cbPhongBan.SelectedValue = Session.PhongBan;
                 cbPhongBan.Enabled = false;
@@ -44,12 +43,10 @@ namespace UI
             }
             else if (Session.IsLanhDao)
             {
-                // Lãnh đạo
                 rdPhongBan.Checked = true;
-                cbUser.Enabled = false; // mặc định giao phòng
+                cbUser.Enabled = false;
             }
 
-            // load user lần đầu
             if (cbPhongBan.SelectedValue != null)
             {
                 LoadUsersByPhongBan(cbPhongBan.SelectedValue.ToString());
@@ -86,7 +83,6 @@ namespace UI
 
             if (Session.IsTruongPhong)
             {
-                // chỉ giao user trong phòng mình
                 user = cbUser.SelectedValue?.ToString();
 
                 if (string.IsNullOrEmpty(user))

@@ -30,7 +30,6 @@ namespace UI
 
             string ext = Path.GetExtension(_filePath).ToLower();
 
-            // Ẩn hết trước
             picViewer.Visible = false;
             webViewer.Visible = false;
 
@@ -47,7 +46,6 @@ namespace UI
             }
             else if (ext == ".doc" || ext == ".docx")
             {
-                // Word mở ngoài
                 System.Diagnostics.Process.Start(_filePath);
                 this.Close();
             }
