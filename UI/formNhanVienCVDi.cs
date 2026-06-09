@@ -33,6 +33,7 @@ namespace UI
             dgvCongVan.AutoGenerateColumns = false;
             dgvCongVan.Columns.Clear();
             dgvCongVan.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvCongVan.ReadOnly = true;
 
             dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Id", DataPropertyName = "Id", Visible = false });
             dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "FileDinhKem", DataPropertyName = "FileDinhKem", Visible = false });
@@ -55,6 +56,7 @@ namespace UI
             dgvChoDuyet.AutoGenerateColumns = false;
             dgvChoDuyet.Columns.Clear();
             dgvChoDuyet.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvChoDuyet.ReadOnly = true;
 
             dgvChoDuyet.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Id", DataPropertyName = "Id", Visible = false });
             dgvChoDuyet.Columns.Add(new DataGridViewTextBoxColumn() { Name = "FileDinhKem", DataPropertyName = "FileDinhKem", Visible = false });
@@ -77,6 +79,7 @@ namespace UI
             dgvTuChoi.AutoGenerateColumns = false;
             dgvTuChoi.Columns.Clear();
             dgvTuChoi.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvTuChoi.ReadOnly = true;
 
             dgvTuChoi.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Id", DataPropertyName = "Id", Visible = false });
             dgvTuChoi.Columns.Add(new DataGridViewTextBoxColumn() { Name = "FileDinhKem", DataPropertyName = "FileDinhKem", Visible = false });
@@ -358,21 +361,38 @@ namespace UI
             string path = "";
             if (tabControl1.SelectedTab == tabDuThao)
             {
-                if (dgvCongVan.SelectedRows.Count == 0) return;
+                if (dgvCongVan.SelectedRows.Count == 0)
+                {
+                    MessageBox.Show("Vui lòng chọn công văn cần xem từ danh sách dự thảo!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
                 path = dgvCongVan.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
             }
             else if (tabControl1.SelectedTab == tabChoDuyet)
             {
-                if (dgvChoDuyet.SelectedRows.Count == 0) return;
+                if (dgvChoDuyet.SelectedRows.Count == 0)
+                {
+                    MessageBox.Show("Vui lòng chọn công văn cần xem từ danh sách đang chờ duyệt!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
                 path = dgvChoDuyet.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
             }
             else if (tabControl1.SelectedTab == tabTuChoi)
             {
-                if (dgvTuChoi.SelectedRows.Count == 0) return;
+                if (dgvTuChoi.SelectedRows.Count == 0)
+                {
+                    MessageBox.Show("Vui lòng chọn công văn cần xem từ danh sách bị từ chối!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
                 path = dgvTuChoi.SelectedRows[0].Cells["FileDinhKem"].Value?.ToString();
             }
 
-            if (string.IsNullOrEmpty(path)) return;
+            if (string.IsNullOrEmpty(path))
+            {
+                MessageBox.Show("Công văn này không có file đính kèm để hiển thị!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             string fullPath = Path.Combine(Application.StartupPath, path);
             formFileViewer f = new formFileViewer(fullPath);
             f.ShowDialog();
