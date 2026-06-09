@@ -71,7 +71,9 @@ namespace DAL
             SET SoDi = @SoDi, SoVanBan = @SoVanBan, NgayDi = @NgayDi, NgayBanHanh = @NgayBanHanh, 
                 NoiNhan = @NoiNhan, NguoiKy = @NguoiKy, TrichYeu = @TrichYeu, DoKhan = @DoKhan, 
                 DoMat = @DoMat, FileDinhKem = @FileDinhKem, TrangThai = @TrangThai, LienKetCongVanDenId = @LienKetCongVanDenId,
-                NguoiTaoId = @NguoiTaoId, MaPhongBanTao = @MaPhongBanTao, LanhDaoDuyetId = @LanhDaoDuyetId
+                NguoiTaoId = ISNULL(@NguoiTaoId, NguoiTaoId), 
+                MaPhongBanTao = ISNULL(@MaPhongBanTao, MaPhongBanTao), 
+                LanhDaoDuyetId = ISNULL(@LanhDaoDuyetId, LanhDaoDuyetId)
             WHERE Id = @Id";
 
             return DBHelper.Instance.ExecuteNonQuery(

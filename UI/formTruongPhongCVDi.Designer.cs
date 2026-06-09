@@ -55,6 +55,7 @@ namespace UI
             this.dgvCongVan.Margin = new System.Windows.Forms.Padding(4);
             this.dgvCongVan.MultiSelect = false;
             this.dgvCongVan.Name = "dgvCongVan";
+            this.dgvCongVan.ReadOnly = true;
             this.dgvCongVan.RowHeadersWidth = 51;
             this.dgvCongVan.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvCongVan.Size = new System.Drawing.Size(1545, 536);
@@ -108,7 +109,7 @@ namespace UI
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(579, 41);
             this.label4.TabIndex = 66;
-            this.label4.Text = "DANH SÁCH CÔNG VĂN ĐI CHO DUYỆT";
+            this.label4.Text = "DANH SÁCH CÔNG VĂN ĐI CHỜ DUYỆT";
             // 
             // cboLanhDao
             // 

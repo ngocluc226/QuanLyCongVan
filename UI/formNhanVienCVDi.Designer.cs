@@ -1,4 +1,4 @@
-﻿namespace UI
+namespace UI
 {
     partial class formNhanVienCVDi
     {
@@ -35,19 +35,20 @@
             this.label4 = new System.Windows.Forms.Label();
             this.btnKiemTraAI = new System.Windows.Forms.Button();
             this.btnOpen = new System.Windows.Forms.Button();
+            this.btnXemLyDo = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabDuThao = new System.Windows.Forms.TabPage();
             this.tabChoDuyet = new System.Windows.Forms.TabPage();
             this.dgvChoDuyet = new System.Windows.Forms.DataGridView();
-            this.tabDaBanHanh = new System.Windows.Forms.TabPage();
-            this.dgvDaBanHanh = new System.Windows.Forms.DataGridView();
+            this.tabTuChoi = new System.Windows.Forms.TabPage();
+            this.dgvTuChoi = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCongVan)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabDuThao.SuspendLayout();
             this.tabChoDuyet.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvChoDuyet)).BeginInit();
-            this.tabDaBanHanh.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvDaBanHanh)).BeginInit();
+            this.tabTuChoi.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTuChoi)).BeginInit();
             this.SuspendLayout();
             // 
             // dgvCongVan
@@ -56,9 +57,10 @@
             this.dgvCongVan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvCongVan.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvCongVan.Location = new System.Drawing.Point(4, 4);
-            this.dgvCongVan.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dgvCongVan.Margin = new System.Windows.Forms.Padding(4);
             this.dgvCongVan.MultiSelect = false;
             this.dgvCongVan.Name = "dgvCongVan";
+            this.dgvCongVan.ReadOnly = true;
             this.dgvCongVan.RowHeadersWidth = 51;
             this.dgvCongVan.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvCongVan.Size = new System.Drawing.Size(1493, 384);
@@ -70,7 +72,7 @@
             this.btnThemDraft.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnThemDraft.ForeColor = System.Drawing.SystemColors.InactiveBorder;
             this.btnThemDraft.Location = new System.Drawing.Point(85, 130);
-            this.btnThemDraft.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnThemDraft.Margin = new System.Windows.Forms.Padding(4);
             this.btnThemDraft.Name = "btnThemDraft";
             this.btnThemDraft.Size = new System.Drawing.Size(111, 39);
             this.btnThemDraft.TabIndex = 1;
@@ -83,7 +85,7 @@
             this.btnSuaDraft.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnSuaDraft.ForeColor = System.Drawing.SystemColors.HighlightText;
             this.btnSuaDraft.Location = new System.Drawing.Point(241, 130);
-            this.btnSuaDraft.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSuaDraft.Margin = new System.Windows.Forms.Padding(4);
             this.btnSuaDraft.Name = "btnSuaDraft";
             this.btnSuaDraft.Size = new System.Drawing.Size(127, 39);
             this.btnSuaDraft.TabIndex = 2;
@@ -95,10 +97,10 @@
             this.btnNopDuyet.BackColor = System.Drawing.Color.Red;
             this.btnNopDuyet.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnNopDuyet.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.btnNopDuyet.Location = new System.Drawing.Point(413, 130);
-            this.btnNopDuyet.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnNopDuyet.Location = new System.Drawing.Point(406, 130);
+            this.btnNopDuyet.Margin = new System.Windows.Forms.Padding(4);
             this.btnNopDuyet.Name = "btnNopDuyet";
-            this.btnNopDuyet.Size = new System.Drawing.Size(170, 39);
+            this.btnNopDuyet.Size = new System.Drawing.Size(252, 39);
             this.btnNopDuyet.TabIndex = 3;
             this.btnNopDuyet.Text = "Nộp Trưởng Phòng";
             this.btnNopDuyet.UseVisualStyleBackColor = false;
@@ -120,7 +122,7 @@
             this.btnKiemTraAI.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnKiemTraAI.ForeColor = System.Drawing.SystemColors.HighlightText;
             this.btnKiemTraAI.Location = new System.Drawing.Point(849, 130);
-            this.btnKiemTraAI.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnKiemTraAI.Margin = new System.Windows.Forms.Padding(4);
             this.btnKiemTraAI.Name = "btnKiemTraAI";
             this.btnKiemTraAI.Size = new System.Drawing.Size(252, 39);
             this.btnKiemTraAI.TabIndex = 63;
@@ -133,8 +135,8 @@
             this.btnOpen.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnOpen.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnOpen.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.btnOpen.Location = new System.Drawing.Point(656, 130);
-            this.btnOpen.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnOpen.Location = new System.Drawing.Point(688, 130);
+            this.btnOpen.Margin = new System.Windows.Forms.Padding(4);
             this.btnOpen.Name = "btnOpen";
             this.btnOpen.Size = new System.Drawing.Size(127, 39);
             this.btnOpen.TabIndex = 64;
@@ -142,13 +144,26 @@
             this.btnOpen.UseVisualStyleBackColor = false;
             this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
             // 
+            // btnXemLyDo
+            // 
+            this.btnXemLyDo.BackColor = System.Drawing.Color.DarkOrange;
+            this.btnXemLyDo.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.btnXemLyDo.ForeColor = System.Drawing.SystemColors.HighlightText;
+            this.btnXemLyDo.Location = new System.Drawing.Point(1110, 130);
+            this.btnXemLyDo.Margin = new System.Windows.Forms.Padding(4);
+            this.btnXemLyDo.Name = "btnXemLyDo";
+            this.btnXemLyDo.Size = new System.Drawing.Size(200, 39);
+            this.btnXemLyDo.TabIndex = 66;
+            this.btnXemLyDo.Text = "Xem lý do từ chối";
+            this.btnXemLyDo.UseVisualStyleBackColor = false;
+            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabDuThao);
             this.tabControl1.Controls.Add(this.tabChoDuyet);
-            this.tabControl1.Controls.Add(this.tabDaBanHanh);
+            this.tabControl1.Controls.Add(this.tabTuChoi);
             this.tabControl1.Location = new System.Drawing.Point(85, 185);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(1509, 421);
@@ -159,21 +174,21 @@
             // 
             this.tabDuThao.Controls.Add(this.dgvCongVan);
             this.tabDuThao.Location = new System.Drawing.Point(4, 25);
-            this.tabDuThao.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabDuThao.Margin = new System.Windows.Forms.Padding(4);
             this.tabDuThao.Name = "tabDuThao";
-            this.tabDuThao.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabDuThao.Padding = new System.Windows.Forms.Padding(4);
             this.tabDuThao.Size = new System.Drawing.Size(1501, 392);
             this.tabDuThao.TabIndex = 0;
-            this.tabDuThao.Text = "Dự thảo & Cần sửa";
+            this.tabDuThao.Text = "Dự thảo mới";
             this.tabDuThao.UseVisualStyleBackColor = true;
             // 
             // tabChoDuyet
             // 
             this.tabChoDuyet.Controls.Add(this.dgvChoDuyet);
             this.tabChoDuyet.Location = new System.Drawing.Point(4, 25);
-            this.tabChoDuyet.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabChoDuyet.Margin = new System.Windows.Forms.Padding(4);
             this.tabChoDuyet.Name = "tabChoDuyet";
-            this.tabChoDuyet.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabChoDuyet.Padding = new System.Windows.Forms.Padding(4);
             this.tabChoDuyet.Size = new System.Drawing.Size(1501, 392);
             this.tabChoDuyet.TabIndex = 1;
             this.tabChoDuyet.Text = "Đang chờ duyệt";
@@ -185,43 +200,44 @@
             this.dgvChoDuyet.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvChoDuyet.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvChoDuyet.Location = new System.Drawing.Point(4, 4);
-            this.dgvChoDuyet.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dgvChoDuyet.Margin = new System.Windows.Forms.Padding(4);
             this.dgvChoDuyet.Name = "dgvChoDuyet";
             this.dgvChoDuyet.RowHeadersWidth = 51;
             this.dgvChoDuyet.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvChoDuyet.Size = new System.Drawing.Size(1493, 384);
             this.dgvChoDuyet.TabIndex = 0;
             // 
-            // tabDaBanHanh
+            // tabTuChoi
             // 
-            this.tabDaBanHanh.Controls.Add(this.dgvDaBanHanh);
-            this.tabDaBanHanh.Location = new System.Drawing.Point(4, 25);
-            this.tabDaBanHanh.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tabDaBanHanh.Name = "tabDaBanHanh";
-            this.tabDaBanHanh.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tabDaBanHanh.Size = new System.Drawing.Size(1501, 392);
-            this.tabDaBanHanh.TabIndex = 2;
-            this.tabDaBanHanh.Text = "Đã ban hành";
-            this.tabDaBanHanh.UseVisualStyleBackColor = true;
+            this.tabTuChoi.Controls.Add(this.dgvTuChoi);
+            this.tabTuChoi.Location = new System.Drawing.Point(4, 25);
+            this.tabTuChoi.Margin = new System.Windows.Forms.Padding(4);
+            this.tabTuChoi.Name = "tabTuChoi";
+            this.tabTuChoi.Padding = new System.Windows.Forms.Padding(4);
+            this.tabTuChoi.Size = new System.Drawing.Size(1501, 392);
+            this.tabTuChoi.TabIndex = 2;
+            this.tabTuChoi.Text = "Bị từ chối";
+            this.tabTuChoi.UseVisualStyleBackColor = true;
             // 
-            // dgvDaBanHanh
+            // dgvTuChoi
             // 
-            this.dgvDaBanHanh.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvDaBanHanh.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvDaBanHanh.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvDaBanHanh.Location = new System.Drawing.Point(4, 4);
-            this.dgvDaBanHanh.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.dgvDaBanHanh.Name = "dgvDaBanHanh";
-            this.dgvDaBanHanh.RowHeadersWidth = 51;
-            this.dgvDaBanHanh.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvDaBanHanh.Size = new System.Drawing.Size(1493, 384);
-            this.dgvDaBanHanh.TabIndex = 0;
+            this.dgvTuChoi.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvTuChoi.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvTuChoi.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvTuChoi.Location = new System.Drawing.Point(4, 4);
+            this.dgvTuChoi.Margin = new System.Windows.Forms.Padding(4);
+            this.dgvTuChoi.Name = "dgvTuChoi";
+            this.dgvTuChoi.RowHeadersWidth = 51;
+            this.dgvTuChoi.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvTuChoi.Size = new System.Drawing.Size(1493, 384);
+            this.dgvTuChoi.TabIndex = 0;
             // 
             // formNhanVienCVDi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1636, 656);
+            this.Controls.Add(this.btnXemLyDo);
             this.Controls.Add(this.btnOpen);
             this.Controls.Add(this.btnKiemTraAI);
             this.Controls.Add(this.label4);
@@ -230,7 +246,7 @@
             this.Controls.Add(this.btnThemDraft);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "formNhanVienCVDi";
             this.Text = "Nhân Viên - Công Văn Đi";
             ((System.ComponentModel.ISupportInitialize)(this.dgvCongVan)).EndInit();
@@ -238,8 +254,8 @@
             this.tabDuThao.ResumeLayout(false);
             this.tabChoDuyet.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvChoDuyet)).EndInit();
-            this.tabDaBanHanh.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvDaBanHanh)).EndInit();
+            this.tabTuChoi.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTuChoi)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -254,11 +270,12 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnKiemTraAI;
         private System.Windows.Forms.Button btnOpen;
+        private System.Windows.Forms.Button btnXemLyDo;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabDuThao;
         private System.Windows.Forms.TabPage tabChoDuyet;
-        private System.Windows.Forms.TabPage tabDaBanHanh;
+        private System.Windows.Forms.TabPage tabTuChoi;
         private System.Windows.Forms.DataGridView dgvChoDuyet;
-        private System.Windows.Forms.DataGridView dgvDaBanHanh;
+        private System.Windows.Forms.DataGridView dgvTuChoi;
     }
 }

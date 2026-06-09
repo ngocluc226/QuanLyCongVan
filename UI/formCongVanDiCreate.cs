@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -55,6 +55,11 @@ namespace UI
             txtSoVanBan.Enabled = false;
             dtpNgayBanHanh.Enabled = false;
             cbTrangThai.Enabled = false;
+
+            cboNguoiKy.DataSource = UserService.Instance.GetByRole("LanhDao");
+            cboNguoiKy.DisplayMember = "TenNguoiDung";
+            cboNguoiKy.ValueMember = "MaNguoiDung";
+            cboNguoiKy.SelectedIndex = -1;
             
             // Đổ dữ liệu nếu ở chế độ Sửa
             if (_cvEdit != null)
@@ -62,7 +67,7 @@ namespace UI
                 txtSoDi.Text = _cvEdit.SoDi;
                 dtpNgayDi.Value = _cvEdit.NgayDi;
                 cbNoiNhan.Text = _cvEdit.NoiNhan;
-                txtNguoiKy.Text = _cvEdit.NguoiKy;
+                cboNguoiKy.Text = _cvEdit.NguoiKy;
                 txtTrichYeu.Text = _cvEdit.TrichYeu;
                 cbDoKhan.Text = _cvEdit.DoKhan;
                 cbDoMat.Text = _cvEdit.DoMat;
@@ -98,10 +103,10 @@ namespace UI
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(txtNguoiKy.Text))
+            if (string.IsNullOrWhiteSpace(cboNguoiKy.Text))
             {
-                MessageBox.Show("Vui lòng nhập Người ký", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtNguoiKy.Focus();
+                MessageBox.Show("Vui lòng chọn Người ký", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cboNguoiKy.Focus();
                 return;
             }
 
@@ -144,13 +149,15 @@ namespace UI
                     NgayDi = dtpNgayDi.Value,
                     NgayBanHanh = isNhanVien ? (DateTime?)null : dtpNgayBanHanh.Value,
                     NoiNhan = cbNoiNhan.Text,
-                    NguoiKy = txtNguoiKy.Text.Trim(),
+                    NguoiKy = cboNguoiKy.Text.Trim(),
                     TrichYeu = txtTrichYeu.Text.Trim(),
                     DoKhan = cbDoKhan.Text,
                     DoMat = cbDoMat.Text,
                     FileDinhKem = txtFile.Text,
                     TrangThai = targetTrangThai,
-                    LienKetCongVanDenId = lienKetId
+                    LienKetCongVanDenId = lienKetId,
+                    NguoiTaoId = Session.CurrentUser?.MaNguoiDung,
+                    MaPhongBanTao = Session.CurrentUser?.MaPhongBan
                 };
 
                 bool result = CongVanDiBLL.Instance.Update(cv);
@@ -184,13 +191,15 @@ namespace UI
                     NgayDi = dtpNgayDi.Value,
                     NgayBanHanh = isNhanVien ? (DateTime?)null : dtpNgayBanHanh.Value,
                     NoiNhan = cbNoiNhan.Text,
-                    NguoiKy = txtNguoiKy.Text.Trim(),
+                    NguoiKy = cboNguoiKy.Text.Trim(),
                     TrichYeu = txtTrichYeu.Text.Trim(),
                     DoKhan = cbDoKhan.Text,
                     DoMat = cbDoMat.Text,
                     FileDinhKem = txtFile.Text,
                     TrangThai = targetTrangThai,
-                    LienKetCongVanDenId = lienKetId
+                    LienKetCongVanDenId = lienKetId,
+                    NguoiTaoId = Session.CurrentUser?.MaNguoiDung,
+                    MaPhongBanTao = Session.CurrentUser?.MaPhongBan
                 };
 
                 bool result = CongVanDiBLL.Instance.Insert(cv);
@@ -218,7 +227,7 @@ namespace UI
         private void ClearForm()
         {
             txtSoVanBan.Clear();
-            txtNguoiKy.Clear();
+            cboNguoiKy.SelectedIndex = -1;
             txtTrichYeu.Clear();
             txtFile.Clear();
 

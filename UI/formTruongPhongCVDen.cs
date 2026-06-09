@@ -1,4 +1,4 @@
-﻿using BLL;
+using BLL;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -75,6 +75,7 @@ namespace UI
 
             dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "DoKhan", HeaderText = "Độ khẩn", DataPropertyName = "DoKhan", Width = 100 });
             dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NguoiKy", HeaderText = "Người ký", DataPropertyName = "NguoiKy", Width = 120 });
+            dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "TrangThai", HeaderText = "Trạng thái", DataPropertyName = "TrangThai", Width = 120 });
             dgvCongVan.Columns.Add(new DataGridViewTextBoxColumn() { Name = "FileDinhKem", DataPropertyName = "FileDinhKem", Visible = false });
         }
         private void LoadData()
@@ -149,7 +150,9 @@ namespace UI
 
             bool isTab1 = (tabControl1.SelectedTab == tabChoXuLy);
 
-            DataTable dtResult = BLL.CongVanDenBLL.Instance.SearchInTab("LanhDao", isTab1, column, value);
+
+            DataTable dtResult = BLL.CongVanDenBLL.Instance.SearchInTab("TruongPhong", isTab1, column, value);
+
 
             if (isTab1)
                 dgvCongVan.DataSource = dtResult;
