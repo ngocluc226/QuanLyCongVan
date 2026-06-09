@@ -121,7 +121,7 @@ namespace UI
             this.btnKiemTraAI.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.btnKiemTraAI.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnKiemTraAI.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.btnKiemTraAI.Location = new System.Drawing.Point(849, 130);
+            this.btnKiemTraAI.Location = new System.Drawing.Point(892, 130);
             this.btnKiemTraAI.Margin = new System.Windows.Forms.Padding(4);
             this.btnKiemTraAI.Name = "btnKiemTraAI";
             this.btnKiemTraAI.Size = new System.Drawing.Size(252, 39);
@@ -138,7 +138,7 @@ namespace UI
             this.btnOpen.Location = new System.Drawing.Point(688, 130);
             this.btnOpen.Margin = new System.Windows.Forms.Padding(4);
             this.btnOpen.Name = "btnOpen";
-            this.btnOpen.Size = new System.Drawing.Size(127, 39);
+            this.btnOpen.Size = new System.Drawing.Size(165, 39);
             this.btnOpen.TabIndex = 64;
             this.btnOpen.Text = "Xem văn bản";
             this.btnOpen.UseVisualStyleBackColor = false;
@@ -149,7 +149,7 @@ namespace UI
             this.btnXemLyDo.BackColor = System.Drawing.Color.DarkOrange;
             this.btnXemLyDo.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnXemLyDo.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.btnXemLyDo.Location = new System.Drawing.Point(1110, 130);
+            this.btnXemLyDo.Location = new System.Drawing.Point(1163, 130);
             this.btnXemLyDo.Margin = new System.Windows.Forms.Padding(4);
             this.btnXemLyDo.Name = "btnXemLyDo";
             this.btnXemLyDo.Size = new System.Drawing.Size(200, 39);
