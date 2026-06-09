@@ -60,6 +60,7 @@ namespace UI
             this.dgvCongVan.Margin = new System.Windows.Forms.Padding(4);
             this.dgvCongVan.MultiSelect = false;
             this.dgvCongVan.Name = "dgvCongVan";
+            this.dgvCongVan.ReadOnly = true;
             this.dgvCongVan.RowHeadersWidth = 51;
             this.dgvCongVan.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvCongVan.Size = new System.Drawing.Size(1493, 384);

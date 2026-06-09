@@ -43,55 +43,11 @@ namespace UI
             this.dgvCongVan.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dgvCongVan.MultiSelect = false;
             this.dgvCongVan.Name = "dgvCongVan";
+            this.dgvCongVan.ReadOnly = true;
             this.dgvCongVan.RowHeadersWidth = 51;
             this.dgvCongVan.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvCongVan.Size = new System.Drawing.Size(1489, 400);
             this.dgvCongVan.TabIndex = 0;
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Controls.Add(this.tabChoXuLy);
-            this.tabControl1.Controls.Add(this.tabDaXuLy);
-            this.tabControl1.Location = new System.Drawing.Point(49, 119);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1509, 440);
-            this.tabControl1.TabIndex = 7;
-            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
-            // 
-            // tabChoXuLy
-            // 
-            this.tabChoXuLy.Controls.Add(this.dgvCongVan);
-            this.tabChoXuLy.Location = new System.Drawing.Point(4, 25);
-            this.tabChoXuLy.Name = "tabChoXuLy";
-            this.tabChoXuLy.Padding = new System.Windows.Forms.Padding(3);
-            this.tabChoXuLy.Size = new System.Drawing.Size(1501, 411);
-            this.tabChoXuLy.TabIndex = 0;
-            this.tabChoXuLy.Text = "Chưa xử lý";
-            this.tabChoXuLy.UseVisualStyleBackColor = true;
-            // 
-            // tabDaXuLy
-            // 
-            this.tabDaXuLy.Controls.Add(this.dgvDaXuly);
-            this.tabDaXuLy.Location = new System.Drawing.Point(4, 25);
-            this.tabDaXuLy.Name = "tabDaXuLy";
-            this.tabDaXuLy.Padding = new System.Windows.Forms.Padding(3);
-            this.tabDaXuLy.Size = new System.Drawing.Size(1501, 411);
-            this.tabDaXuLy.TabIndex = 1;
-            this.tabDaXuLy.Text = "Đã xử lý";
-            this.tabDaXuLy.UseVisualStyleBackColor = true;
-            // 
-            // dgvDaXuly
-            // 
-            this.dgvDaXuly.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvDaXuly.ColumnHeadersHeight = 29;
-            this.dgvDaXuly.Location = new System.Drawing.Point(6, 6);
-            this.dgvDaXuly.MultiSelect = false;
-            this.dgvDaXuly.Name = "dgvDaXuly";
-            this.dgvDaXuly.RowHeadersWidth = 51;
-            this.dgvDaXuly.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvDaXuly.Size = new System.Drawing.Size(1489, 400);
-            this.dgvDaXuly.TabIndex = 0;
             // 
             // btnBanHanh
             // 
@@ -152,6 +108,51 @@ namespace UI
             this.label2.Size = new System.Drawing.Size(136, 23);
             this.label2.TabIndex = 3;
             this.label2.Text = "Ngày ban hành:";
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabChoXuLy);
+            this.tabControl1.Controls.Add(this.tabDaXuLy);
+            this.tabControl1.Location = new System.Drawing.Point(49, 119);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(1509, 440);
+            this.tabControl1.TabIndex = 7;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
+            // 
+            // tabChoXuLy
+            // 
+            this.tabChoXuLy.Controls.Add(this.dgvCongVan);
+            this.tabChoXuLy.Location = new System.Drawing.Point(4, 25);
+            this.tabChoXuLy.Name = "tabChoXuLy";
+            this.tabChoXuLy.Padding = new System.Windows.Forms.Padding(3);
+            this.tabChoXuLy.Size = new System.Drawing.Size(1501, 411);
+            this.tabChoXuLy.TabIndex = 0;
+            this.tabChoXuLy.Text = "Chưa xử lý";
+            this.tabChoXuLy.UseVisualStyleBackColor = true;
+            // 
+            // tabDaXuLy
+            // 
+            this.tabDaXuLy.Controls.Add(this.dgvDaXuly);
+            this.tabDaXuLy.Location = new System.Drawing.Point(4, 25);
+            this.tabDaXuLy.Name = "tabDaXuLy";
+            this.tabDaXuLy.Padding = new System.Windows.Forms.Padding(3);
+            this.tabDaXuLy.Size = new System.Drawing.Size(1501, 411);
+            this.tabDaXuLy.TabIndex = 1;
+            this.tabDaXuLy.Text = "Đã xử lý";
+            this.tabDaXuLy.UseVisualStyleBackColor = true;
+            // 
+            // dgvDaXuly
+            // 
+            this.dgvDaXuly.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvDaXuly.ColumnHeadersHeight = 29;
+            this.dgvDaXuly.Location = new System.Drawing.Point(6, 6);
+            this.dgvDaXuly.MultiSelect = false;
+            this.dgvDaXuly.Name = "dgvDaXuly";
+            this.dgvDaXuly.RowHeadersWidth = 51;
+            this.dgvDaXuly.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvDaXuly.Size = new System.Drawing.Size(1489, 400);
+            this.dgvDaXuly.TabIndex = 0;
             // 
             // formVanThuCVDi
             // 
